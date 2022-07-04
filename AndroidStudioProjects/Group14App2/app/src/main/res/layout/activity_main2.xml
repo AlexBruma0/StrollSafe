@@ -4,47 +4,47 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".PWD_activity">
 
-    <TextView
-        android:id="@+id/textView"
+    <Button
+        android:id="@+id/backbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Welcome to stroll safe!"
+        android:text="Back"
+        tools:layout_editor_absoluteX="0dp"
+        tools:layout_editor_absoluteY="6dp" />
+
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Welcome to PWD MODE"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/SOS"
+        android:layout_width="162dp"
+        android:layout_height="128dp"
+        android:text="SOS"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.973" />
+
+    <Button
+        android:id="@+id/healthinfo"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="health information"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.228" />
-
-    <Button
-        android:id="@+id/PWD_button"
-        android:layout_width="157dp"
-        android:layout_height="78dp"
-        android:text="PWD MODE"
-        android:onClick="PWD"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.393" />
-
-    <Button
-        android:id="@+id/Caregiver"
-        android:layout_width="169dp"
-        android:layout_height="86dp"
-        android:text="CareGiver mode"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.617" /><![CDATA[
-
-    app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.393" />
-]]>
+        app:layout_constraintVertical_bias="0.625" />
 </androidx.constraintlayout.widget.ConstraintLayout>

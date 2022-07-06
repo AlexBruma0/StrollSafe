@@ -1,4 +1,8 @@
-package com.example.strollsafe;
+package com.example.strollsafe.pwd;
+
+import com.example.strollsafe.pwd.Address;
+import com.example.strollsafe.pwd.EmergencyContact;
+
 public class PWD{
 
     private String  lastName;

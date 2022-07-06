@@ -1,4 +1,4 @@
-package com.example.strollsafe;
+package com.example.strollsafe.pwd;
 
 public class Address{
 

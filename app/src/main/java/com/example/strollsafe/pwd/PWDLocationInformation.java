@@ -21,8 +21,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
+import android.os.Looper;
 import android.util.Log;
-import android.view.View;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,7 +32,6 @@ import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
 import com.google.android.gms.location.LocationResult;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 import java.util.List;
 import com.example.strollsafe.R;
@@ -70,6 +69,7 @@ public class PWDLocationInformation extends AppCompatActivity {
     static String[] PERMISSIONS;
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,30 +116,23 @@ public class PWDLocationInformation extends AppCompatActivity {
         };
 
         // GPS switch
-        sw_gps.setOnClickListener(new View.OnClickListener() {
-            @SuppressLint("SetTextI18n")
-            @Override
-            public void onClick(View view) {
-                if (sw_gps.isChecked()) { // if switch is turned on, use GPS sensors
-                    locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
-                    tv_sensor.setText("Using GPS sensor");
-                } else { // if switch is turned off, use towers and WIFI
-                    locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
-                    tv_sensor.setText("Using towers + WIFI");
-                }
-
+        sw_gps.setOnClickListener(view -> {
+            if (sw_gps.isChecked()) { // if switch is turned on, use GPS sensors
+                locationRequest.setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY);
+                tv_sensor.setText("Using GPS sensor");
+            } else { // if switch is turned off, use towers and WIFI
+                locationRequest.setPriority(LocationRequest.PRIORITY_BALANCED_POWER_ACCURACY);
+                tv_sensor.setText("Using towers + WIFI");
             }
+
         });
 
         // get constant location updates
-        sw_locationsupdates.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (sw_locationsupdates.isChecked()) { // tracking is turned on
-                    startLocationUpdates();
-                } else { // tracking is turned off
-                    stopLocationUpdates();
-                }
+        sw_locationsupdates.setOnClickListener(view -> {
+            if (sw_locationsupdates.isChecked()) { // tracking is turned on
+                startLocationUpdates();
+            } else { // tracking is turned off
+                stopLocationUpdates();
             }
         });
 
@@ -160,7 +153,7 @@ public class PWDLocationInformation extends AppCompatActivity {
             requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
         }
         fusedLocationProviderClient.requestLocationUpdates(locationRequest,
-                locationCallback, null);
+                locationCallback, Looper.getMainLooper());
         updateGPS();
     } // end of startLocationUpdates()
 
@@ -208,8 +201,6 @@ public class PWDLocationInformation extends AppCompatActivity {
                     updateGPS();
                 } else { // permission is not granted
                     Log.d("permissionDenied", "fine location permission denied");
-                    Toast.makeText(this, "This app requires permission " +
-                            "to be granted to work properly", Toast.LENGTH_SHORT).show();
                 }
 
                 if (grantResults[2] == PackageManager.PERMISSION_GRANTED) {
@@ -217,8 +208,6 @@ public class PWDLocationInformation extends AppCompatActivity {
                     updateGPS();
                 } else { // permission is not granted
                     Log.d("permissionDenied", "Internet location permission denied");
-                    Toast.makeText(this, "This app requires permission " +
-                            "to be granted to work properly", Toast.LENGTH_SHORT).show();
                 }
         }
     } // end of onRequestPermissionResult()
@@ -237,29 +226,24 @@ public class PWDLocationInformation extends AppCompatActivity {
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this,
-                    new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                Log.d("GPSStatus", "GPS is on");
+                    location -> {
+                        if (location != null) {
+                            Log.d("GPSStatus", "GPS is on");
 //                                updateUIValues(location);
-                                updateLocationArray(location);
-                            } else {
-                                if (ActivityCompat.checkSelfPermission(
-                                        PWDLocationInformation.this,
-                                        Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                                        PackageManager.PERMISSION_GRANTED) {
+                            updateLocationArray(location);
+                        } else {
+                            if (ActivityCompat.checkSelfPermission(
+                                    PWDLocationInformation.this,
+                                    Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                                    PackageManager.PERMISSION_GRANTED) {
 
-                                    requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
-                                }
-                                fusedLocationProviderClient.requestLocationUpdates(locationRequest,
-                                        locationCallback, null);
+                                requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
                             }
+                            fusedLocationProviderClient.requestLocationUpdates(locationRequest,
+                                    locationCallback, Looper.getMainLooper());
                         }
                     });
         } else { // no permissions, must be requested
-//            requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-//                    PERMISSIONS_CODE_ALL);
             requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
         }
     } // end of updateGPS()

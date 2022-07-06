@@ -1,10 +1,12 @@
-package com.example.strollsafe;
+package com.example.strollsafe.caregiver;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+
+import com.example.strollsafe.R;
 
 public class PWDlist extends AppCompatActivity {
 

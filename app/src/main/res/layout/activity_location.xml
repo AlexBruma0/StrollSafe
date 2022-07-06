@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".LocationActivity">
+    tools:context=".caregiver.LocationActivity">
 
     <Button
         android:id="@+id/backbutton"
@@ -19,7 +19,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/PWDPosition"
         android:layout_width="53dp"
         android:layout_height="18dp"
         android:text="soon to be location"

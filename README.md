@@ -14,19 +14,19 @@ services or the caregiver
 - Health information for the person with dementia in case they need medical services while without a
 caregiver
 
-#Getting Started
+# Getting Started
 These instructions will allow you to have a local copy of the application on your device, which can
 be ran with the help of Android Studio.
 
-###Downloading
+### Downloading
 To download the application clone the reposition and import it into Android Studio.
 
-###Running The Application
+### Running The Application
 You can then can build the project and run it on an Android Virtual Device running Android 7 or 
 later, or on a physical device with developer mode enabled running Android 7 or later.
 
 
-#Database
+# Database
 For Stroll Safe we have chosen the NoSQL database solution as it offers us more flexibility of 
 storing and transferring non-primitive data types. MongoDB's Realm and Atlas will serve as the 
 backend of Stroll Safe as it offers us the ability to sync data across devices easily and keep local 
@@ -35,7 +35,7 @@ handled by MongoDB:
 
 ![Alt Text](https://webassets.mongodb.com/_com_assets/cms/realm_animation_slow2x-xq4zpqsi2z.gif)
 
-#Troubleshooting
+# Troubleshooting
 Majority of the issues can be resolved by simply following these two steps:
 ```
 1. Build -> Clean Project 

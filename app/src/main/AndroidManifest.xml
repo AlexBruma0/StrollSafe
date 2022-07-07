@@ -19,6 +19,11 @@
         android:theme="@style/Theme.StrollSafe"
         tools:targetApi="31">
         <activity
+            android:name=".pwd.PWD_signup"
+            android:exported="false"
+            android:label="@string/title_activity_pwd_signup"
+            android:theme="@style/Theme.StrollSafe.NoActionBar" />
+        <activity
             android:name=".caregiver.PWDlist"
             android:exported="false" />
         <activity

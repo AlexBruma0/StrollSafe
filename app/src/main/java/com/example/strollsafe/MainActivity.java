@@ -7,16 +7,8 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
 
 import com.example.strollsafe.caregiver.CaregiverActivity;
 import com.example.strollsafe.pwd.PWD_activity;
@@ -38,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
         configureCaregiver();
     }
     public void configurePWD(){
-        Button PWD = (Button) findViewById(R.id.PWD_button);
+        Button PWD = (Button) findViewById(R.id.button_new_PWD);
         PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
@@ -47,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
     public void configureCaregiver(){
-        Button PWD = (Button) findViewById(R.id.Caregiver);
+        Button PWD = (Button) findViewById(R.id.button_new_caregiver);
         PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {

@@ -11,7 +11,7 @@ import android.widget.Button;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.strollsafe.caregiver.CaregiverActivity;
-import com.example.strollsafe.pwd.PWD_activity;
+import com.example.strollsafe.pwd.PWD_signup;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -26,15 +26,15 @@ public class MainActivity extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         setContentView(R.layout.activity_main);
 
-        configurePWD();
+        configureNewPWD();
         configureCaregiver();
     }
-    public void configurePWD(){
+    public void configureNewPWD(){
         Button PWD = (Button) findViewById(R.id.button_new_PWD);
         PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, PWD_activity.class));
+                startActivity(new Intent(MainActivity.this, PWD_signup.class));
             }
         });
     }

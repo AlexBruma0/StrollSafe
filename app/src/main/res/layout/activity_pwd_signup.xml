@@ -23,6 +23,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Patient's Name"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@id/pwdBackButton"
         app:layout_constraintTop_toBottomOf="@+id/pwdBackButton" />
 
@@ -33,12 +34,12 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:ems="10"
+        android:ems="7"
         android:hint="Last Name"
         android:importantForAutofill="no"
+        android:inputType="textPersonName"
         app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-        app:layout_constraintTop_toBottomOf="@id/tv_Name"
-        android:inputType="textPersonName" />
+        app:layout_constraintTop_toBottomOf="@id/tv_Name" />
 
 
     <EditText
@@ -47,13 +48,102 @@
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        android:ems="10"
+        android:ems="7"
         android:hint="First Name"
         android:importantForAutofill="no"
         app:layout_constraintStart_toStartOf="@id/pwdBackButton"
         app:layout_constraintTop_toBottomOf="@id/et_lastName"
         android:inputType="textPersonName" />
 
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:text="Address"
+        android:textSize="20sp"
+        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+        app:layout_constraintTop_toBottomOf="@id/et_firstName" />
+
+    <EditText
+        android:id="@+id/et_addressLine1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:hint="i.e. 8888 University Drive"
+        android:importantForAutofill="no"
+        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+        app:layout_constraintTop_toBottomOf="@id/tv_address"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/et_addressLine2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:hint="suite/appartment number"
+        android:importantForAutofill="no"
+        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+        app:layout_constraintTop_toBottomOf="@id/et_addressLine1"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/et_addressCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:hint="City"
+        android:importantForAutofill="no"
+        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+        app:layout_constraintTop_toBottomOf="@id/et_addressLine2"
+        android:inputType="textPersonName" />
+
+
+    <EditText
+        android:id="@+id/et_addressRegion"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:hint="Province/Territory"
+        android:importantForAutofill="no"
+        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+        app:layout_constraintTop_toBottomOf="@id/et_addressCity"
+        android:inputType="textPersonName" />
+
+
+    <EditText
+        android:id="@+id/et_addressPostalCode"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:hint="Postal Code"
+        android:importantForAutofill="no"
+        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+        app:layout_constraintTop_toBottomOf="@id/et_addressRegion"
+        android:inputType="textPersonName" />
+
+    <EditText
+        android:id="@+id/et_addressCountry"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true"
+        android:ems="10"
+        android:hint="Country"
+        android:importantForAutofill="no"
+        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+        app:layout_constraintTop_toBottomOf="@id/et_addressPostalCode"
+        android:inputType="textPersonName" />
 
     <Button
         android:id="@+id/btnMain"

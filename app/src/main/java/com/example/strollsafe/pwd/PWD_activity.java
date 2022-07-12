@@ -20,7 +20,7 @@ public class PWD_activity extends AppCompatActivity {
     }
 
     public void configureBack() {
-        Button PWD = (Button) findViewById(R.id.pwdBackButton);
+        Button PWD = (Button) findViewById(R.id.btn_backToMain);
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

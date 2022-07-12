@@ -17,7 +17,7 @@
             android:layout_marginStart="40dp">
 
             <Button
-                android:id="@+id/pwdBackButton"
+                android:id="@+id/btn_backToMain"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="@string/pwdBackButtonText"
@@ -27,14 +27,14 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
-                android:id="@+id/tv_Name"
+                android:id="@+id/tv_label_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Patient"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-                app:layout_constraintTop_toBottomOf="@id/pwdBackButton" />
+                app:layout_constraintStart_toStartOf="@id/btn_backToMain"
+                app:layout_constraintTop_toBottomOf="@id/btn_backToMain" />
 
             <EditText
                 android:id="@+id/et_PWD_LastName"
@@ -44,8 +44,8 @@
                 android:hint="Last Name"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
-                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-                app:layout_constraintTop_toBottomOf="@id/tv_Name" />
+                app:layout_constraintStart_toStartOf="@id/btn_backToMain"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_name" />
 
             <EditText
                 android:id="@+id/et_PWD_FirstName"
@@ -54,7 +54,7 @@
                 android:ems="10"
                 android:hint="First Name"
                 android:importantForAutofill="no"
-                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintStart_toStartOf="@id/btn_backToMain"
                 app:layout_constraintTop_toBottomOf="@id/et_PWD_LastName"
                 android:inputType="textPersonName" />
 
@@ -65,19 +65,19 @@
                 android:ems="10"
                 android:hint="DD/MM/YYYY"
                 android:importantForAutofill="no"
-                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintStart_toStartOf="@id/btn_backToMain"
                 app:layout_constraintTop_toBottomOf="@id/et_PWD_FirstName"
                 android:inputType="date" />
 
 
             <TextView
-            android:id="@+id/tv_address"
+            android:id="@+id/tv_label_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:text="Address"
             android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintStart_toStartOf="@id/btn_backToMain"
             app:layout_constraintTop_toBottomOf="@id/et_PWD_FirstName" />
 
         <EditText
@@ -87,8 +87,8 @@
             android:ems="10"
             android:hint="i.e. 8888 University Drive"
             android:importantForAutofill="no"
-            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-            app:layout_constraintTop_toBottomOf="@id/tv_address"
+            app:layout_constraintStart_toStartOf="@id/btn_backToMain"
+            app:layout_constraintTop_toBottomOf="@id/tv_label_address"
             android:inputType="textPersonName" />
 
         <EditText
@@ -98,7 +98,7 @@
             android:ems="10"
             android:hint="suite/appartment number"
             android:importantForAutofill="no"
-            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintStart_toStartOf="@id/btn_backToMain"
             app:layout_constraintTop_toBottomOf="@id/et_addressLine1"
             android:inputType="textPersonName" />
 
@@ -109,7 +109,7 @@
             android:ems="10"
             android:hint="City"
             android:importantForAutofill="no"
-            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintStart_toStartOf="@id/btn_backToMain"
             app:layout_constraintTop_toBottomOf="@id/et_addressLine2"
             android:inputType="textPersonName" />
 
@@ -121,7 +121,7 @@
             android:ems="10"
             android:hint="Province/Territory"
             android:importantForAutofill="no"
-            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintStart_toStartOf="@id/btn_backToMain"
             app:layout_constraintTop_toBottomOf="@id/et_addressCity"
             android:inputType="textPersonName" />
 
@@ -133,7 +133,7 @@
             android:ems="10"
             android:hint="Postal Code"
             android:importantForAutofill="no"
-            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintStart_toStartOf="@id/btn_backToMain"
             app:layout_constraintTop_toBottomOf="@id/et_addressRegion"
             android:inputType="textPersonName" />
 
@@ -144,18 +144,18 @@
             android:ems="10"
             android:hint="Country"
             android:importantForAutofill="no"
-            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintStart_toStartOf="@id/btn_backToMain"
             app:layout_constraintTop_toBottomOf="@id/et_addressPostalCode"
             android:inputType="textPersonName" />
 
             <TextView
-                android:id="@+id/tv_EmergencyContact"
+                android:id="@+id/tv_label_EmergencyContact"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:text="Primary Emergency Contact"
                 android:textSize="20sp"
-                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintStart_toStartOf="@id/btn_backToMain"
                 app:layout_constraintTop_toBottomOf="@+id/et_addressCountry" />
 
             <EditText
@@ -166,8 +166,8 @@
                 android:hint="Last Name"
                 android:importantForAutofill="no"
                 android:inputType="textPersonName"
-                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-                app:layout_constraintTop_toBottomOf="@id/tv_EmergencyContact" />
+                app:layout_constraintStart_toStartOf="@id/btn_backToMain"
+                app:layout_constraintTop_toBottomOf="@id/tv_label_EmergencyContact" />
 
 
             <EditText
@@ -177,7 +177,7 @@
                 android:ems="10"
                 android:hint="First Name"
                 android:importantForAutofill="no"
-                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintStart_toStartOf="@id/btn_backToMain"
                 app:layout_constraintTop_toBottomOf="@id/et_emergencyContact_lastName"
                 android:inputType="textPersonName" />
 
@@ -188,7 +188,7 @@
                 android:ems="10"
                 android:hint="xxx-xxx-xxxx"
                 android:importantForAutofill="no"
-                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintStart_toStartOf="@id/btn_backToMain"
                 app:layout_constraintTop_toBottomOf="@id/et_emergencyContact_firstName"
                 android:inputType="phone" />
 
@@ -199,7 +199,7 @@
                 android:ems="10"
                 android:hint="Email"
                 android:importantForAutofill="no"
-                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintStart_toStartOf="@id/btn_backToMain"
                 app:layout_constraintTop_toBottomOf="@id/et_emergencyContact_phoneNumber"
                 android:inputType="textEmailAddress" />
 
@@ -214,8 +214,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.85" />
-
-
         </LinearLayout>
     </ScrollView>
 

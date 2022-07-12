@@ -83,7 +83,7 @@ public class PWDLocationInformation extends AppCompatActivity {
         tv_speed = this.findViewById(R.id.tv_speed);
         tv_sensor = this.findViewById(R.id.tv_sensor);
         tv_updates = this.findViewById(R.id.tv_updates);
-        tv_address = this.findViewById(R.id.tv_address);
+        tv_address = this.findViewById(R.id.tv_label_address);
         sw_locationsupdates = this.findViewById(R.id.sw_locationsupdates);
         sw_gps = this.findViewById(R.id.sw_gps);
 

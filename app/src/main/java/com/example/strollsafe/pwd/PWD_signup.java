@@ -36,7 +36,7 @@ public class PWD_signup extends AppCompatActivity {
         configureBack();
 
         btnMain = findViewById(R.id.btnMain);
-        txtMain = findViewById(R.id.txtMain);
+
 
         btnMain.setOnClickListener(new View.OnClickListener() {
             @Override

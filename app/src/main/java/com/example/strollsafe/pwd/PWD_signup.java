@@ -3,22 +3,13 @@ package com.example.strollsafe.pwd;
 import android.os.Bundle;
 
 import com.example.strollsafe.R;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.strollsafe.databinding.ActivityPwdSignupBinding;
 
 import java.util.Locale;
 import java.util.Random;
@@ -35,13 +26,13 @@ public class PWD_signup extends AppCompatActivity {
         setContentView(R.layout.activity_pwd_signup);
         configureBack();
 
-        btnMain = findViewById(R.id.btnMain);
-
+        btnMain = findViewById(R.id.btn_createUser);
 
         btnMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                txtMain.setText(getRandomString(4));
+                String uniqueCode = getRandomString(4);
+                Log.d("newPWDInfo", uniqueCode);
             }
         });
     } // end of onCreate()

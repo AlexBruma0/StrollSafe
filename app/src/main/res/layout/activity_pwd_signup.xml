@@ -6,155 +6,220 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/pwdBackButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/pwdBackButtonText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.021"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:orientation="vertical"
+            android:layout_height="match_parent"
+            android:layout_marginStart="40dp">
+
+            <Button
+                android:id="@+id/pwdBackButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/pwdBackButtonText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.021"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/tv_Name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Patient"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintTop_toBottomOf="@id/pwdBackButton" />
+
+            <EditText
+                android:id="@+id/et_PWD_LastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Last Name"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintTop_toBottomOf="@id/tv_Name" />
+
+            <EditText
+                android:id="@+id/et_PWD_FirstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="First Name"
+                android:importantForAutofill="no"
+                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintTop_toBottomOf="@id/et_PWD_LastName"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/et_PWD_dateOfBirth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="DD/MM/YYYY"
+                android:importantForAutofill="no"
+                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintTop_toBottomOf="@id/et_PWD_FirstName"
+                android:inputType="date" />
 
 
-    <TextView
-        android:id="@+id/tv_Name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Patient's Name"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-        app:layout_constraintTop_toBottomOf="@+id/pwdBackButton" />
+            <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Address"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintTop_toBottomOf="@id/et_PWD_FirstName" />
+
+        <EditText
+            android:id="@+id/et_addressLine1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="i.e. 8888 University Drive"
+            android:importantForAutofill="no"
+            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintTop_toBottomOf="@id/tv_address"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/et_addressLine2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="suite/appartment number"
+            android:importantForAutofill="no"
+            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintTop_toBottomOf="@id/et_addressLine1"
+            android:inputType="textPersonName" />
+
+        <EditText
+            android:id="@+id/et_addressCity"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="City"
+            android:importantForAutofill="no"
+            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintTop_toBottomOf="@id/et_addressLine2"
+            android:inputType="textPersonName" />
 
 
-    <EditText
-        android:id="@+id/et_lastName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:ems="7"
-        android:hint="Last Name"
-        android:importantForAutofill="no"
-        android:inputType="textPersonName"
-        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-        app:layout_constraintTop_toBottomOf="@id/tv_Name" />
+        <EditText
+            android:id="@+id/et_addressRegion"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Province/Territory"
+            android:importantForAutofill="no"
+            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintTop_toBottomOf="@id/et_addressCity"
+            android:inputType="textPersonName" />
 
 
-    <EditText
-        android:id="@+id/et_firstName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:ems="7"
-        android:hint="First Name"
-        android:importantForAutofill="no"
-        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-        app:layout_constraintTop_toBottomOf="@id/et_lastName"
-        android:inputType="textPersonName" />
+        <EditText
+            android:id="@+id/et_addressPostalCode"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Postal Code"
+            android:importantForAutofill="no"
+            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintTop_toBottomOf="@id/et_addressRegion"
+            android:inputType="textPersonName" />
 
-    <TextView
-        android:id="@+id/tv_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Address"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-        app:layout_constraintTop_toBottomOf="@id/et_firstName" />
+        <EditText
+            android:id="@+id/et_addressCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:ems="10"
+            android:hint="Country"
+            android:importantForAutofill="no"
+            app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+            app:layout_constraintTop_toBottomOf="@id/et_addressPostalCode"
+            android:inputType="textPersonName" />
 
-    <EditText
-        android:id="@+id/et_addressLine1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:hint="i.e. 8888 University Drive"
-        android:importantForAutofill="no"
-        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-        app:layout_constraintTop_toBottomOf="@id/tv_address"
-        android:inputType="textPersonName" />
+            <TextView
+                android:id="@+id/tv_EmergencyContact"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="Primary Emergency Contact"
+                android:textSize="20sp"
+                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintTop_toBottomOf="@+id/et_addressCountry" />
 
-    <EditText
-        android:id="@+id/et_addressLine2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:hint="suite/appartment number"
-        android:importantForAutofill="no"
-        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-        app:layout_constraintTop_toBottomOf="@id/et_addressLine1"
-        android:inputType="textPersonName" />
-
-    <EditText
-        android:id="@+id/et_addressCity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:hint="City"
-        android:importantForAutofill="no"
-        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-        app:layout_constraintTop_toBottomOf="@id/et_addressLine2"
-        android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/et_emergencyContact_lastName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Last Name"
+                android:importantForAutofill="no"
+                android:inputType="textPersonName"
+                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintTop_toBottomOf="@id/tv_EmergencyContact" />
 
 
-    <EditText
-        android:id="@+id/et_addressRegion"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:hint="Province/Territory"
-        android:importantForAutofill="no"
-        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-        app:layout_constraintTop_toBottomOf="@id/et_addressCity"
-        android:inputType="textPersonName" />
+            <EditText
+                android:id="@+id/et_emergencyContact_firstName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="First Name"
+                android:importantForAutofill="no"
+                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintTop_toBottomOf="@id/et_emergencyContact_lastName"
+                android:inputType="textPersonName" />
+
+            <EditText
+                android:id="@+id/et_emergencyContact_phoneNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="xxx-xxx-xxxx"
+                android:importantForAutofill="no"
+                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintTop_toBottomOf="@id/et_emergencyContact_firstName"
+                android:inputType="phone" />
+
+            <EditText
+                android:id="@+id/et_emergencyContact_email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:hint="Email"
+                android:importantForAutofill="no"
+                app:layout_constraintStart_toStartOf="@id/pwdBackButton"
+                app:layout_constraintTop_toBottomOf="@id/et_emergencyContact_phoneNumber"
+                android:inputType="textEmailAddress" />
+
+            <Button
+                android:id="@+id/btnMain"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Create"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.498"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.85" />
 
 
-    <EditText
-        android:id="@+id/et_addressPostalCode"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:hint="Postal Code"
-        android:importantForAutofill="no"
-        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-        app:layout_constraintTop_toBottomOf="@id/et_addressRegion"
-        android:inputType="textPersonName" />
+        </LinearLayout>
+    </ScrollView>
 
-    <EditText
-        android:id="@+id/et_addressCountry"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_centerVertical="true"
-        android:ems="10"
-        android:hint="Country"
-        android:importantForAutofill="no"
-        app:layout_constraintStart_toStartOf="@id/pwdBackButton"
-        app:layout_constraintTop_toBottomOf="@id/et_addressPostalCode"
-        android:inputType="textPersonName" />
 
-    <Button
-        android:id="@+id/btnMain"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Generate"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.85" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,7 +1,7 @@
 package com.example.strollsafe.pwd;
 
-import com.example.strollsafe.pwd.Address;
-import com.example.strollsafe.pwd.EmergencyContact;
+import com.example.strollsafe.utils.Address;
+import com.example.strollsafe.utils.EmergencyContact;
 
 public class PWD{
 

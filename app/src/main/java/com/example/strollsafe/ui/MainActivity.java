@@ -1,4 +1,4 @@
-package com.example.strollsafe;
+package com.example.strollsafe.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,8 +10,7 @@ import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import com.example.strollsafe.caregiver.CaregiverActivity;
-import com.example.strollsafe.pwd.PWD_signup;
+import com.example.strollsafe.R;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -34,7 +33,7 @@ public class MainActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, PWD_signup.class));
+                startActivity(new Intent(MainActivity.this, PWDSignupActivity.class));
             }
         });
     }
@@ -43,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, CaregiverActivity.class));
+                startActivity(new Intent(MainActivity.this, NewCaregiverActivity.class));
             }
         });
     }

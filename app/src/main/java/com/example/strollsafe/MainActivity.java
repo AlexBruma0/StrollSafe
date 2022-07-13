@@ -28,14 +28,17 @@ import java.util.concurrent.atomic.AtomicReference;
 
 
 public class MainActivity extends AppCompatActivity {
+    // Global variables for the database access
     RealmConfiguration config;
     Realm database;
     App app;
     private final String appId = "strollsafe-pjbnn";
 
+    // Shared preferences for storing caregiver information locally
     SharedPreferences caregiverPreferences = getSharedPreferences("CAREGIVER", MODE_PRIVATE);
-    SharedPreferences.Editor caregiverPreferencesEditor = caregiverRreferences.edit();
+    SharedPreferences.Editor caregiverPreferencesEditor = caregiverPreferences.edit();
 
+    // Shared preferences for storing PWD information locally
     SharedPreferences pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
     SharedPreferences.Editor pwdPreferenceEditor = pwdPreferences.edit();
 
@@ -54,18 +57,6 @@ public class MainActivity extends AppCompatActivity {
         configureCaregiver();
 
 
-
-    }
-
-    public void addObject() {
-        database.executeTransaction(t -> {
-//            Caregiver caregiver = new Caregiver();
-//            t.insert(caregiver);
-
-//            Caregiver testCaregiver = database.createObject(Caregiver.class);
-//            testCaregiver.setFirstName("Brittany");
-//            testCaregiver.setLastName("Spears");
-        });
 
     }
 
@@ -89,12 +80,25 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
+    // Setup the database
     public void setupRealm() {
         Realm.init(this);
         app = new App(new AppConfiguration.Builder(appId).build());
     }
 
+    // Before we can login into an account we must register it first
+    public void createUserLogin(String email, String password) {
+        app.getEmailPassword().registerUserAsync(email, password, it -> {
+            if (it.isSuccess()) {
+                Log.i("EXAMPLE", "Successfully registered user.");
+            } else {
+                Log.e("EXAMPLE", "Failed to register user: " + it.getError().getErrorMessage());
+            }
+        });
+
+    }
+
+    // Logs into the databased given a user name and password
     public void login(String email, String password) {
         AtomicReference<User> user = new AtomicReference<User>();
         Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
@@ -125,5 +129,23 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void addObject() {
+        database.executeTransaction(t -> {
+            // Adding objects to the database
+//            Caregiver caregiver = new Caregiver();
+//            t.insert(caregiver);
+//
+//            Caregiver testCaregiver = database.createObject(Caregiver.class);
+//            testCaregiver.setFirstName("Brittany");
+//            testCaregiver.setLastName("Spears");
+        });
+
+    }
+
+    public void retrieveFromDatabase() {
+//        RealmResults<PWD> caregiverRealmResults = database.where(PWD.class).findAll();
+//        Log.d("",caregiverRealmResults.asJSON());
+
+    }
 
 }

@@ -19,7 +19,7 @@ android {
     }
 
     buildTypes {
-        def appId = "strollsafe-samni"
+        def appId = "strollsafe-pjbnn"
         debug {
             buildConfigField "String", "MONGODB_REALM_APP_ID", "\"${appId}\""
         }
@@ -39,10 +39,9 @@ android {
     dataBinding{
         enabled=true
     }
-}
-
-realm {
-    syncEnabled = true
+    realm {
+        syncEnabled = true
+    }
 }
 
 dependencies {

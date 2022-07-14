@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".caregiver.CaregiverActivity">
+    tools:context=".ui.CaregiverActivity">
 
     <Button
         android:id="@+id/Backbutton2"

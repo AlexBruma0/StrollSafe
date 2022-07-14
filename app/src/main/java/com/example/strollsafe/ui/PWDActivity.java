@@ -1,4 +1,4 @@
-package com.example.strollsafe.pwd;
+package com.example.strollsafe.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -10,8 +10,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.strollsafe.R;
-
-public class PWD_activity extends AppCompatActivity {
+public class PWDActivity extends AppCompatActivity {
     SharedPreferences pwdPreferences;
     SharedPreferences.Editor pwdPreferenceEditor;
 
@@ -42,7 +41,7 @@ public class PWD_activity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PWD_activity.this, PWDLocationInformation.class));
+                startActivity(new Intent(PWDActivity.this, PWDLocationInformationActivity.class));
             }
         });
     }

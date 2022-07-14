@@ -1,37 +1,16 @@
-package com.example.strollsafe.pwd;
+package com.example.strollsafe.ui;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-
-import com.example.strollsafe.MainActivity;
-import com.example.strollsafe.R;
-import com.example.strollsafe.caregiver.CaregiverActivity;
-import com.google.android.material.snackbar.Snackbar;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.strollsafe.databinding.ActivityPwdSignupBinding;
-
-import java.util.Locale;
-import java.util.Objects;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicReference;
-
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.mongodb.App;
@@ -40,76 +19,75 @@ import io.realm.mongodb.Credentials;
 import io.realm.mongodb.User;
 import io.realm.mongodb.sync.SyncConfiguration;
 
-public class PWD_signup extends AppCompatActivity {
+import com.example.strollsafe.caregiver.Caregiver;
+import com.example.strollsafe.pwd.PWD_login;
+import com.example.strollsafe.R;
 
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+
+
+public class MainActivity extends AppCompatActivity {
+    // Global variables for the database access
     RealmConfiguration config;
     Realm database;
     App app;
     private final String appId = "strollsafe-pjbnn";
-    private Button btnMain;
-    private TextView txtMain;
+
+    // Shared preferences for storing caregiver information locally
+    SharedPreferences caregiverPreferences;
+    SharedPreferences.Editor caregiverPreferencesEditor;
+
+    // Shared preferences for storing PWD information locally
     SharedPreferences pwdPreferences;
     SharedPreferences.Editor pwdPreferenceEditor;
-    private EditText FirstName;
-    private EditText LastName;
-    private EditText PhoneNumber;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        caregiverPreferences = getSharedPreferences("CAREGIVER", MODE_PRIVATE);
+        caregiverPreferencesEditor = caregiverPreferences.edit();
+
         pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
         pwdPreferenceEditor = pwdPreferences.edit();
+        
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getSupportActionBar().hide();
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        setContentView(R.layout.activity_main);
+
         setupRealm();
-        setContentView(R.layout.activity_pwd_signup);
-        configureBack();
-        configureSignUp();
-        login("1234@gmail.com","123456");
-    } // end of onCreate()
+        configureNewPWD();
+        configureCaregiver();
 
-    private static String getRandomString(int i){
-        final String characters = "abcdefghiklmnopqrstuvwxyz0123456789";
-        StringBuilder result = new StringBuilder();
-        while( i > 0 ){
-            Random rand = new Random();
-            result.append(characters.charAt(rand.nextInt(characters.length())));
-            i--;
-        }
-        return result.toString().toUpperCase(Locale.ROOT);
+
+
     }
 
-    public void configureBack() {
-        Button PWD = (Button) findViewById(R.id.pwdBackButton);
-        PWD.setOnClickListener(new View.OnClickListener() {
+    public void configureNewPWD(){
+        Button PWD = (Button) findViewById(R.id.button_new_PWD);
+        PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                finish();
+                //startActivity(new Intent(MainActivity.this, PWD_login.class));
+                startActivity(new Intent(MainActivity.this, PWDSignupActivity.class));
             }
         });
     }
-    public void configureSignUp(){
-        Button PWD = (Button) findViewById(R.id.btnMain);
-        PWD.setOnClickListener(new View.OnClickListener() {
+    public void configureCaregiver(){
+        Button PWD = (Button) findViewById(R.id.button_new_caregiver);
+        PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                String code = getRandomString(4);
-                FirstName = (EditText) findViewById(R.id.editFirstNamePWD);
-                LastName = (EditText) findViewById(R.id.editLastNamePWD);
-                PhoneNumber = (EditText) findViewById(R.id.editPhoneNumber);
-                pwdPreferenceEditor.putString("code",code);
-                pwdPreferenceEditor.putString("F_name",FirstName.getText().toString());
-                pwdPreferenceEditor.putString("L_name",LastName.getText().toString());
-                pwdPreferenceEditor.putString("Phone",PhoneNumber.getText().toString());
-                pwdPreferenceEditor.apply();
-                PWD account = new PWD(FirstName.getText().toString(),LastName.getText().toString(),PhoneNumber.getText().toString(),code);
-                //createUserLogin("1234@gmail.com","123456");
-
-
-                database.executeTransaction(transaction -> {
-                    transaction.insert(account);
-                });
-                startActivity(new Intent(PWD_signup.this, PWD_activity.class));
+                startActivity(new Intent(MainActivity.this, NewCaregiverActivity.class));
             }
         });
     }
+
+
+    // Setup the database
     public void setupRealm() {
         Realm.init(this);
         app = new App(new AppConfiguration.Builder(appId).build());
@@ -157,4 +135,24 @@ public class PWD_signup extends AppCompatActivity {
             }
         });
     }
+
+    public void addObject() {
+        database.executeTransaction(t -> {
+            // Adding objects to the database
+//            Caregiver caregiver = new Caregiver();
+//            t.insert(caregiver);
+//
+//            Caregiver testCaregiver = database.createObject(Caregiver.class);
+//            testCaregiver.setFirstName("Brittany");
+//            testCaregiver.setLastName("Spears");
+        });
+
+    }
+
+    public void retrieveFromDatabase() {
+//        RealmResults<PWD> caregiverRealmResults = database.where(PWD.class).findAll();
+//        Log.d("",caregiverRealmResults.asJSON());
+
+    }
+
 }

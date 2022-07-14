@@ -1,4 +1,4 @@
-package com.example.strollsafe.caregiver;
+package com.example.strollsafe.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -42,7 +42,7 @@ public class CaregiverActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(CaregiverActivity.this, PWDlist.class));
+                startActivity(new Intent(CaregiverActivity.this, PWDListActivity.class));
             }
         });
     }

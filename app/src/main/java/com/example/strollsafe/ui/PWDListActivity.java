@@ -1,4 +1,4 @@
-package com.example.strollsafe.caregiver;
+package com.example.strollsafe.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -8,7 +8,7 @@ import android.widget.Button;
 
 import com.example.strollsafe.R;
 
-public class PWDlist extends AppCompatActivity {
+public class PWDListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

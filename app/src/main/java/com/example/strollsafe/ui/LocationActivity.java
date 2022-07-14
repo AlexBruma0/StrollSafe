@@ -1,4 +1,4 @@
-package com.example.strollsafe.caregiver;
+package com.example.strollsafe.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 

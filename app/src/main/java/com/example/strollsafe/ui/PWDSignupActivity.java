@@ -1,4 +1,4 @@
-package com.example.strollsafe.pwd;
+package com.example.strollsafe.ui;
 
 import android.os.Bundle;
 
@@ -23,7 +23,7 @@ import com.example.strollsafe.databinding.ActivityPwdSignupBinding;
 import java.util.Locale;
 import java.util.Random;
 
-public class PWD_signup extends AppCompatActivity {
+public class PWDSignupActivity extends AppCompatActivity {
 
 
     private Button btnMain;

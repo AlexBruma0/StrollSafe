@@ -1,4 +1,4 @@
-package com.example.strollsafe.pwd;
+package com.example.strollsafe.utils;
 
 public class EmergencyContact {
 

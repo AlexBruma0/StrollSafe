@@ -8,7 +8,7 @@
 * Last modified by: Alvin Tsang
 *
 * */
-package com.example.strollsafe.pwd;
+package com.example.strollsafe.ui;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,6 +27,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.strollsafe.pwd.PWDLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -36,7 +37,7 @@ import com.google.android.gms.location.LocationServices;
 import java.util.List;
 import com.example.strollsafe.R;
 
-public class PWDLocationInformation extends AppCompatActivity {
+public class PWDLocationInformationActivity extends AppCompatActivity {
 
     public static final int DEFAULT_UPDATE_INTERVAL = 30; // seconds
     public static final int FAST_UPDATE_INTERVAL = 10; // seconds
@@ -219,10 +220,10 @@ public class PWDLocationInformation extends AppCompatActivity {
      */
     private void updateGPS() {
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(
-                PWDLocationInformation.this);
+                PWDLocationInformationActivity.this);
 
         // dealing with permissions
-        if (ActivityCompat.checkSelfPermission(PWDLocationInformation.this,
+        if (ActivityCompat.checkSelfPermission(PWDLocationInformationActivity.this,
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
 
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(this,
@@ -233,7 +234,7 @@ public class PWDLocationInformation extends AppCompatActivity {
                             updateLocationArray(location);
                         } else {
                             if (ActivityCompat.checkSelfPermission(
-                                    PWDLocationInformation.this,
+                                    PWDLocationInformationActivity.this,
                                     Manifest.permission.ACCESS_COARSE_LOCATION) !=
                                     PackageManager.PERMISSION_GRANTED) {
 
@@ -256,7 +257,7 @@ public class PWDLocationInformation extends AppCompatActivity {
         double longitude = location.getLongitude();
         float accuracy = location.getAccuracy();
         String address;
-        Geocoder geocoder = new Geocoder(PWDLocationInformation.this);
+        Geocoder geocoder = new Geocoder(PWDLocationInformationActivity.this);
         try {
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
                     location.getLongitude(), 1);
@@ -296,7 +297,7 @@ public class PWDLocationInformation extends AppCompatActivity {
             tv_speed.setText("Not available");
         }
 
-        Geocoder geocoder = new Geocoder(PWDLocationInformation.this);
+        Geocoder geocoder = new Geocoder(PWDLocationInformationActivity.this);
         try {
             List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
                     location.getLongitude(), 1);

@@ -19,15 +19,15 @@
         android:theme="@style/Theme.StrollSafe"
         tools:targetApi="31">
         <activity
-            android:name=".pwd.PWD_signup"
+            android:name=".ui.PWDSignupActivity"
             android:exported="false"
             android:label="@string/title_activity_pwd_signup"
             android:theme="@style/Theme.StrollSafe.NoActionBar" />
         <activity
-            android:name=".caregiver.PWDlist"
+            android:name=".ui.PWDListActivity"
             android:exported="false" />
         <activity
-            android:name=".caregiver.LocationActivity"
+            android:name=".ui.LocationActivity"
             android:exported="false" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
@@ -45,16 +45,19 @@
             android:value="YOUR_API_KEY" />
 
         <activity
-            android:name=".caregiver.CaregiverActivity"
+            android:name=".ui.CaregiverActivity"
             android:exported="false" />
         <activity
-            android:name=".pwd.PWD_activity"
+            android:name=".ui.PWDActivity"
             android:exported="false" />
         <activity
-            android:name=".pwd.PWDLocationInformation"
+            android:name=".ui.PWDLocationInformationActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.NewCaregiverActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.MainActivity"
             android:exported="true"
             android:label="@string/app_name">
             <intent-filter>

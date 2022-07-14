@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         caregiverPreferences = getSharedPreferences("CAREGIVER", MODE_PRIVATE);
         caregiverPreferencesEditor = caregiverPreferences.edit();
+
         pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
         pwdPreferenceEditor = pwdPreferences.edit();
         

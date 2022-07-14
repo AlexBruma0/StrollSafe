@@ -10,13 +10,15 @@ import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 public class PWD extends RealmObject {
-    @PrimaryKey
-    private ObjectId _id = new ObjectId();
-    private String PWDCode;
+
+    //@PrimaryKey private ObjectId _id = new ObjectId();
+    @PrimaryKey private String _id;
     @Required
+    private String PWDCode;
     private String  lastName;
     private String firstName;
     private String phoneNumber;
+    private String email;
     //private Address homeAddress;
 
 
@@ -25,6 +27,7 @@ public class PWD extends RealmObject {
 
     }
     public PWD(String fName, String lName, String PN, String code){
+        this._id = code;
         this.firstName = fName;
         this.lastName = lName;
         this.phoneNumber = PN;
@@ -47,12 +50,12 @@ public class PWD extends RealmObject {
         return phoneNumber;
     }
 
+//    public ObjectId get_id() {
+//        return _id;
+//    }
+
     public void setFirstName(String firstName) {
         this.firstName = firstName;
-    }
-
-    public void setPWDCode(String PWDCode) {
-        this.PWDCode = PWDCode;
     }
 
     public void setLastName(String lastName) {

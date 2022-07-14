@@ -8,8 +8,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-import com.example.strollsafe.MainActivity;
+import com.example.strollsafe.ui.MainActivity;
 import com.example.strollsafe.R;
+import com.example.strollsafe.ui.PWDSignupActivity;
 
 public class PWD_login extends AppCompatActivity {
 
@@ -27,7 +28,7 @@ public class PWD_login extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PWD_login.this, PWD_signup.class));;
+                startActivity(new Intent(PWD_login.this, PWDSignupActivity.class));;
             }
         });
     }

@@ -51,7 +51,7 @@
             android:name=".ui.CaregiverActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.PWD_activity"
+            android:name=".ui.PWDActivity"
             android:exported="false" />
         <activity
             android:name=".ui.PWDLocationInformationActivity"

@@ -100,7 +100,7 @@ public class PWDSignupActivity extends AppCompatActivity {
                 pwdPreferenceEditor.putString("L_name",LastName.getText().toString());
                 pwdPreferenceEditor.putString("Phone",PhoneNumber.getText().toString());
                 pwdPreferenceEditor.apply();
-                PWD account = new PWD(FirstName.getText().toString(),LastName.getText().toString(),PhoneNumber.getText().toString(),code);
+                PWD account = new PWD(FirstName.getText().toString(),LastName.getText().toString(),PhoneNumber.getText().toString(),"XFN8");
                 //createUserLogin("1234@gmail.com","123456");
 
 

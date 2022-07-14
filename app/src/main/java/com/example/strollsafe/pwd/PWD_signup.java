@@ -1,3 +1,11 @@
+/*
+ * PWD_signup.java
+ *
+ * Last modified on July 14, 2022
+ * Last modified by: Alvin Tsang
+ * */
+
+
 package com.example.strollsafe.pwd;
 
 import android.os.Bundle;
@@ -16,6 +24,8 @@ import java.util.Locale;
 import java.util.Random;
 
 public class PWD_signup extends AppCompatActivity {
+
+
 
     // back button
     private Button btn_backToMain;
@@ -54,13 +64,23 @@ public class PWD_signup extends AppCompatActivity {
         btn_createUser.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
+
+
+
+
+
+
+
+
+
                 String uniqueCode = getRandomString(4);
                 Log.d("newPWDInfo", uniqueCode);
             }
         });
         configureBack();
     } // end of onCreate()
-    
+
     private static String getRandomString(int i){
         final String characters = "abcdefghiklmnopqrstuvwxyz0123456789";
         StringBuilder result = new StringBuilder();

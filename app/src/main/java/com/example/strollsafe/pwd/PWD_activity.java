@@ -3,18 +3,26 @@ package com.example.strollsafe.pwd;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.example.strollsafe.R;
 
 public class PWD_activity extends AppCompatActivity {
+    SharedPreferences pwdPreferences;
+    SharedPreferences.Editor pwdPreferenceEditor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
+        pwdPreferenceEditor = pwdPreferences.edit();
         setContentView(R.layout.activity_pwd);
+        TextView code = findViewById(R.id.viewPWDCODE);
+        code.setText(pwdPreferences.getString("code","error"));
         configureBack();
         configurePWDLocationInformation();
     }

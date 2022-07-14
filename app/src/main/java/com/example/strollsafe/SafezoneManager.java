@@ -9,24 +9,49 @@ import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.LocationServices;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class GeofencingManager {
+public class SafezoneManager {
+
+    public GeofencingClient getGeofencingClient() {
+        return geofencingClient;
+    }
+
+    public void setGeofencingClient(GeofencingClient geofencingClient) {
+        this.geofencingClient = geofencingClient;
+    }
+
+    public List<Geofence> getGeofenceList() {
+        return geofenceList;
+    }
+
+    public void setGeofenceList(List<Geofence> geofenceList) {
+        this.geofenceList = geofenceList;
+    }
+
+    public Location getSfuAvacadoArea() {
+        return sfuAvacadoArea;
+    }
+
+    public void setSfuAvacadoArea(Location sfuAvacadoArea) {
+        this.sfuAvacadoArea = sfuAvacadoArea;
+    }
 
     private GeofencingClient geofencingClient;
-    private ArrayList<Geofence> geofenceList = new ArrayList<>();
+    private List<Geofence> geofenceList = new ArrayList<>();
     Location sfuAvacadoArea = new Location(49.278965, -122.916582);
 
 
-    public GeofencingManager(Context context) {
+    public SafezoneManager(Context context) {
         geofencingClient = LocationServices.getGeofencingClient(context);
 
     }
 
     public void createGeofence() {
         geofenceList.add(new Geofence.Builder()
-                .setRequestId("NAME")
+                .setRequestId("avocado")
                 .setCircularRegion(sfuAvacadoArea.getLatitude(), sfuAvacadoArea.getLongitude(), 10)
-                .setExpirationDuration(1000)
+                .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
                         Geofence.GEOFENCE_TRANSITION_EXIT)
                 .build());

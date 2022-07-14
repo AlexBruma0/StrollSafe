@@ -35,17 +35,22 @@ public class MainActivity extends AppCompatActivity {
     private final String appId = "strollsafe-pjbnn";
 
     // Shared preferences for storing caregiver information locally
-    SharedPreferences caregiverPreferences = getSharedPreferences("CAREGIVER", MODE_PRIVATE);
-    SharedPreferences.Editor caregiverPreferencesEditor = caregiverPreferences.edit();
+    SharedPreferences caregiverPreferences;
+    SharedPreferences.Editor caregiverPreferencesEditor;
 
     // Shared preferences for storing PWD information locally
-    SharedPreferences pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
-    SharedPreferences.Editor pwdPreferenceEditor = pwdPreferences.edit();
+    SharedPreferences pwdPreferences;
+    SharedPreferences.Editor pwdPreferenceEditor;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        caregiverPreferences = getSharedPreferences("CAREGIVER", MODE_PRIVATE);
+        caregiverPreferencesEditor = caregiverPreferences.edit();
+        pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
+        pwdPreferenceEditor = pwdPreferences.edit();
+        
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,

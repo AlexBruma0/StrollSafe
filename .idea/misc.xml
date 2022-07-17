@@ -24,8 +24,17 @@
         <entry key="app/src/main/res/drawable/buttonshapewhitebg.xml" value="0.196" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_caregiver.xml" value="0.20555555555555555" />
+        <entry key="app/src/main/res/layout/activity_listofpwd.xml" value="0.37447916666666664" />
         <entry key="app/src/main/res/layout/activity_location.xml" value="0.36041666666666666" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.2580780029296875" />
+        <entry key="app/src/main/res/layout/activity_new_care_giver.xml" value="0.37552083333333336" />
+        <entry key="app/src/main/res/layout/activity_pwd.xml" value="0.20555555555555555" />
+        <entry key="app/src/main/res/layout/activity_pwd_location_information.xml" value="0.20555555555555555" />
+        <entry key="app/src/main/res/layout/activity_pwd_login.xml" value="0.37552083333333336" />
+        <entry key="app/src/main/res/layout/activity_pwd_signup.xml" value="0.37552083333333336" />
+        <entry key="app/src/main/res/layout/activity_pwdlist.xml" value="0.20555555555555555" />
+        <entry key="app/src/main/res/layout/listofpwd.xml" value="0.37447916666666664" />
       </map>
     </option>
   </component>

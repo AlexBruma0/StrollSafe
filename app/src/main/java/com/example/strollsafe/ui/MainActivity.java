@@ -61,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
         setupRealm();
         configureNewPWD();
         configureCaregiver();
+        configureLoginButton();
 
 
 
@@ -82,6 +83,15 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 startActivity(new Intent(MainActivity.this, NewCaregiverActivity.class));
+            }
+        });
+    }
+    public void configureLoginButton(){
+        Button PWD = (Button) findViewById(R.id.button_toLogin);
+        PWD.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, ListOfPWDActivity.class));
             }
         });
     }

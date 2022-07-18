@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.Button;
 
 import com.example.strollsafe.R;
+import com.example.strollsafe.pwd.Location.PWDLocationInformation;
 
 public class PWD_activity extends AppCompatActivity {
 

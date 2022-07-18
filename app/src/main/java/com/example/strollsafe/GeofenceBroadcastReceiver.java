@@ -24,6 +24,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
     private final String TAG = "GBR";
 
     public void onReceive(Context context, Intent intent) {
+        Log.e(TAG, "TEST");
         GeofencingEvent geofencingEvent = GeofencingEvent.fromIntent(intent);
         if (geofencingEvent.hasError()) {
             String errorMessage = GeofenceStatusCodes
@@ -47,7 +48,7 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             String geofenceTransitionDetails = getGeofenceTransitionDetails(geofencingEvent);
 
             // Send notification and log the transition details.
-            sendNotification(geofenceTransitionDetails);
+            //sendNotification(geofenceTransitionDetails);
             Log.i(TAG, geofenceTransitionDetails);
         } else {
             // Log the error.
@@ -77,24 +78,24 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         return String.format("%s: %s", transitionString, TextUtils.join(", ", triggeringIDs));
     }
 
-    private void sendNotification(String notificationDetails) {
-
+//    private void sendNotification(String notificationDetails) {
+//
 //        Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
 //        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+////
+////        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
+////
+////        builder.setColor(Notification.COLOR_DEFAULT)
+////                .setContentTitle(notificationDetails)
+////                .setContentText("Click notification to remove")
+////                .setContentIntent(pendingIntent)
+////                .setDefaults(Notification.DEFAULT_SOUND)
+////                .setSmallIcon(R.mipmap.ic_launcher)
+////                .setVibrate(new long[]{1000, 1000})
+////                .setAutoCancel(true);
 //
-//        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-//
-//        builder.setColor(Notification.COLOR_DEFAULT)
-//                .setContentTitle(notificationDetails)
-//                .setContentText("Click notification to remove")
-//                .setContentIntent(pendingIntent)
-//                .setDefaults(Notification.DEFAULT_SOUND)
-//                .setSmallIcon(R.mipmap.ic_launcher)
-//                .setVibrate(new long[]{1000, 1000})
-//                .setAutoCancel(true);
-
-//        NotificationManager notificationManager =
-//                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-//        notificationManager.notify(generateRandom(), builder.build());
-    }
+////        NotificationManager notificationManager =
+////                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+////        notificationManager.notify(generateRandom(), builder.build());
+//    }
 }

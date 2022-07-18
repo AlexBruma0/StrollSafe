@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "281925688404",
+    "project_id": "strollsafe-854e8",
+    "storage_bucket": "strollsafe-854e8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:281925688404:android:ff0c71f7eb28c84ffaa1c1",
+        "android_client_info": {
+          "package_name": "com.example.strollsafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "281925688404-a1qk1uor65ur4qh7loi0q59o5lk10nmn.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAe8L4rhEIkHyZxafKTbON4FHerFatBJw4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "281925688404-a1qk1uor65ur4qh7loi0q59o5lk10nmn.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

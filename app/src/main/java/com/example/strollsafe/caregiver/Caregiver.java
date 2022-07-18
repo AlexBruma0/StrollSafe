@@ -12,7 +12,7 @@ public class Caregiver extends RealmObject {
     private String lastName;
     private String firstName;
     private String phoneNumber;
-    private String[] PWDCodes;
+    //private String[] PWDCodes;
 
     public Caregiver() {
 
@@ -57,11 +57,11 @@ public class Caregiver extends RealmObject {
         this.phoneNumber = phoneNumber;
     }
 
-    public String[] getPWDCodes() {
-        return PWDCodes;
-    }
+//    public String[] getPWDCodes() {
+//        return PWDCodes;
+//    }
 
-    public void setPWDCodes(String[] PWDCodes) {
-        this.PWDCodes = PWDCodes;
-    }
+//    public void setPWDCodes(String[] PWDCodes) {
+//        this.PWDCodes = PWDCodes;
+//    }
 }

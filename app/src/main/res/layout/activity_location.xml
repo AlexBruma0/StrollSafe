@@ -10,9 +10,6 @@
         android:id="@+id/backbutton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="7dp"
-        android:layout_marginTop="16dp"
-        android:layout_marginBottom="551dp"
         android:text="back"
         app:layout_constraintBottom_toTopOf="@+id/safezone"
         app:layout_constraintStart_toStartOf="parent"
@@ -32,12 +29,10 @@
         android:id="@+id/safezone"
         android:layout_width="133dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="31dp"
+        android:onClick="addGeofence"
         android:text="add safe zone"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.116"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/backbutton"
-        app:layout_constraintVertical_bias="0.951" />
+        app:layout_constraintHorizontal_bias="0.388"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

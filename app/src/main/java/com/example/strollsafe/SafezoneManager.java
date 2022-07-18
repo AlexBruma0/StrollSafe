@@ -1,9 +1,7 @@
 package com.example.strollsafe;
 
 import android.content.Context;
-import android.os.Bundle;
 
-import com.google.android.gms.common.internal.Constants;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.LocationServices;
@@ -29,17 +27,17 @@ public class SafezoneManager {
         this.geofenceList = geofenceList;
     }
 
-    public Location getSfuAvacadoArea() {
-        return sfuAvacadoArea;
+    public Location getSfuMiddleAq() {
+        return sfuMiddleAq;
     }
 
-    public void setSfuAvacadoArea(Location sfuAvacadoArea) {
-        this.sfuAvacadoArea = sfuAvacadoArea;
+    public void setSfuMiddleAq(Location sfuMiddleAq) {
+        this.sfuMiddleAq = sfuMiddleAq;
     }
 
     private GeofencingClient geofencingClient;
     private List<Geofence> geofenceList = new ArrayList<>();
-    Location sfuAvacadoArea = new Location(49.278965, -122.916582);
+    Location sfuMiddleAq = new Location(49.278965, -122.916582);
 
 
     public SafezoneManager(Context context) {
@@ -50,7 +48,7 @@ public class SafezoneManager {
     public void createGeofence() {
         geofenceList.add(new Geofence.Builder()
                 .setRequestId("avocado")
-                .setCircularRegion(sfuAvacadoArea.getLatitude(), sfuAvacadoArea.getLongitude(), 10)
+                .setCircularRegion(sfuMiddleAq.getLatitude(), sfuMiddleAq.getLongitude(), 10)
                 .setExpirationDuration(Geofence.NEVER_EXPIRE)
                 .setTransitionTypes(Geofence.GEOFENCE_TRANSITION_ENTER |
                         Geofence.GEOFENCE_TRANSITION_EXIT)

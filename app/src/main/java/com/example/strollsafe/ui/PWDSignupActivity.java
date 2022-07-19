@@ -54,6 +54,8 @@ public class PWDSignupActivity extends AppCompatActivity {
     private EditText FirstName;
     private EditText LastName;
     private EditText PhoneNumber;
+    private EditText email;
+    private EditText password;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +65,6 @@ public class PWDSignupActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pwd_signup);
         configureBack();
         configureSignUp();
-        login("1234@gmail.com","123456");
     } // end of onCreate()
 
     private static String getRandomString(int i){
@@ -95,15 +96,22 @@ public class PWDSignupActivity extends AppCompatActivity {
                 FirstName = (EditText) findViewById(R.id.editFirstNamePWD);
                 LastName = (EditText) findViewById(R.id.editLastNamePWD);
                 PhoneNumber = (EditText) findViewById(R.id.editPhoneNumber);
+                email = (EditText) findViewById(R.id.editEmailAddress);
+                password = (EditText) findViewById(R.id.editPassword);
+
+
                 pwdPreferenceEditor.putString("code",code);
                 pwdPreferenceEditor.putString("F_name",FirstName.getText().toString());
                 pwdPreferenceEditor.putString("L_name",LastName.getText().toString());
                 pwdPreferenceEditor.putString("Phone",PhoneNumber.getText().toString());
+                pwdPreferenceEditor.putString("email",email.getText().toString());
+                pwdPreferenceEditor.putString("password", password.getText().toString());
+
+                PWD account = new PWD(FirstName.getText().toString(),LastName.getText().toString(),PhoneNumber.getText().toString(),code,"email","password");
+                pwdPreferenceEditor.putString("id",account.get_id().toString());
                 pwdPreferenceEditor.apply();
-                PWD account = new PWD(FirstName.getText().toString(),LastName.getText().toString(),PhoneNumber.getText().toString(),"XFN8");
-                //createUserLogin("1234@gmail.com","123456");
-
-
+                createUserLogin(email.getText().toString(),password.getText().toString());
+                login(email.getText().toString(),password.getText().toString());
                 database.executeTransaction(transaction -> {
                     transaction.insert(account);
                 });

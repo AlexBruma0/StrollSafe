@@ -51,6 +51,10 @@ public class MainActivity extends AppCompatActivity {
 
         pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
         pwdPreferenceEditor = pwdPreferences.edit();
+
+        if(pwdPreferences.contains("email")){
+            startActivity(new Intent(MainActivity.this,PWDActivity.class));
+        }
         
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getSupportActionBar().hide();

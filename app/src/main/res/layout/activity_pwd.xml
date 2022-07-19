@@ -6,13 +6,16 @@
     android:layout_height="match_parent">
 
     <Button
-        android:id="@+id/pwdBackButton"
+        android:id="@+id/pwdSignOut"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/pwdBackButtonText"
+        android:text="Sign Out"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.013"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.01" />
 
     <Button
         android:id="@+id/GPSInfoButton"
@@ -20,11 +23,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="133dp"
         android:layout_marginTop="194dp"
-        android:layout_marginEnd="134dp"
         android:text="See GPS Info"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.028"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/pwdBackButton" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.566" />
 
     <TextView
         android:id="@+id/textView6"
@@ -33,10 +38,10 @@
         android:text="Your PWD CODE"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.458"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.554" />
+        app:layout_constraintVertical_bias="0.553" />
 
     <TextView
         android:id="@+id/viewPWDCODE"

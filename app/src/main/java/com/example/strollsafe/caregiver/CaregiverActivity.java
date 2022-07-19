@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.strollsafe.MapsActivity;
 import com.example.strollsafe.R;
 
 public class CaregiverActivity extends AppCompatActivity {
@@ -33,7 +34,7 @@ public class CaregiverActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(CaregiverActivity.this, LocationActivity.class));
+                startActivity(new Intent(CaregiverActivity.this, MapsActivity.class));
             }
         });
     }

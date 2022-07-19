@@ -15,4 +15,5 @@
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="title_activity_pwd_signup">activity_PWD_signup</string>
     <string name="geofence_transition_invalid_type">INVALID</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

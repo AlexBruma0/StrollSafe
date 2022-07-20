@@ -51,6 +51,7 @@ public class PWDActivity extends AppCompatActivity {
         setupRealm();
         configureSignout();
         configurePWDLocationInformation();
+        //was testing an update timer
 //        Timer timer = new Timer();
 //        TimerTask update = new TimerTask() {
 //            @Override

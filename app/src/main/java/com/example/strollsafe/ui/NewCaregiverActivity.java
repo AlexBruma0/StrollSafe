@@ -2,33 +2,58 @@ package com.example.strollsafe.ui;
 
 import android.app.DatePickerDialog;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.strollsafe.R;
+import com.example.strollsafe.caregiver.Caregiver;
+import com.example.strollsafe.utils.DatabaseManager;
+
+import org.bson.types.ObjectId;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
+import java.util.Map;
+import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
+
+import io.realm.Realm;
+import io.realm.RealmConfiguration;
+import io.realm.mongodb.App;
+import io.realm.mongodb.Credentials;
+import io.realm.mongodb.User;
+import io.realm.mongodb.sync.SyncConfiguration;
 
 public class NewCaregiverActivity extends AppCompatActivity {
     private int mYear,mMonth,mDay;
+    DatabaseManager databaseManager;
+    App app;
+    private User user;
+    private final String APP_ID = "strollsafe-pjbnn";
+    private RealmConfiguration config;
+    Realm realmDatabase;
+    String TAG = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        databaseManager = new DatabaseManager(this);
+        app = databaseManager.getApp();
         setContentView(R.layout.activity_new_care_giver);
 
         final TextView pickDate = (TextView) findViewById(R.id.caregiverBirthday);
         final TextView textView = (TextView) findViewById(R.id.caregiverBirthday);
 
         final Calendar myCalendar = Calendar.getInstance();
-        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener()
-        {
+        final DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
             @Override
             public void onDateSet(DatePicker view, int year, int monthOfYear,
                                   int dayOfMonth) {
@@ -41,12 +66,9 @@ public class NewCaregiverActivity extends AppCompatActivity {
                 SimpleDateFormat sdf = new SimpleDateFormat(myFormat, Locale.CANADA);
                 textView.setText(sdf.format(myCalendar.getTime()));
             }
-
-
         };
 
         pickDate.setOnClickListener(new View.OnClickListener() {
-
             @Override
             public void onClick(View v) {
                 // TODO Auto-generated method stub
@@ -83,6 +105,70 @@ public class NewCaregiverActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void login(View view) {
+        EditText emailEditText = findViewById(R.id.caregiverEmail);
+        EditText passwordEditText = findViewById(R.id.caregiverPassword);
+        EditText firstNameEditText = findViewById(R.id.caregiverFirstName);
+        EditText lastNameEditText = findViewById(R.id.caregiverLastName);
+        EditText phoneNumberEditText = findViewById(R.id.caregiverPhoneNumber);
+
+        String email = emailEditText.getText().toString();
+        String password = passwordEditText.getText().toString();
+        String firstName = firstNameEditText.getText().toString();
+        String lastName = lastNameEditText.getText().toString();
+        String phoneNumber = phoneNumberEditText.getText().toString();
+
+        app.getEmailPassword().registerUserAsync(email, password, createResult -> {
+            if (createResult.isSuccess()) {
+                Log.i(TAG, "Successfully registered user: " + email);
+                Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
+                AtomicReference<User> user = new AtomicReference<User>();
+
+                app.loginAsync(emailPasswordCredentials, loginResult -> {
+                    if (loginResult.isSuccess()) {
+                        Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
+                        user.set(app.currentUser());
+                            config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
+                            .name(APP_ID)
+                            .schemaVersion(2)
+                            .allowQueriesOnUiThread(true)
+                            .allowWritesOnUiThread(true)
+                            .build();
+
+                        Realm.getInstanceAsync(config, new Realm.Callback() {
+                            @Override
+                            public void onSuccess(@NonNull Realm realm) {
+                                Log.v(
+                                        "EXAMPLE",
+                                        "Successfully opened a realm with reads and writes allowed on the UI thread."
+                                );
+                                realmDatabase = realm;
+                                realmDatabase.executeTransaction(transaction -> {
+                                    Caregiver caregiver = transaction.createObject(Caregiver.class, new ObjectId());
+                                    caregiver.setEmail(email);
+                                    caregiver.setFirstName(firstName);
+                                    caregiver.setLastName(lastName);
+                                    caregiver.setPhoneNumber(phoneNumber);
+                                });
+                            }
+                        });
+                    } else {
+                        Log.e(TAG + "asyncLoginToRealm", "email: " + loginResult.getError().toString());
+                        Toast.makeText(this, "email: " + loginResult.getError().toString(), Toast.LENGTH_SHORT).show();
+                    }
+                });
+            } else {
+                Log.e(TAG, "Failed to register user: " + email + "\t" + createResult.getError().getErrorMessage());
+                Toast.makeText(this, "Failed to register user: " + email + "\t" + createResult.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+
+
+
+        //databaseManager.createRealmUserAndLoginAsync(email, password);
+
     }
 
 }

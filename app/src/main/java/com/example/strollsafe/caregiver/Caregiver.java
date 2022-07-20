@@ -1,18 +1,20 @@
 package com.example.strollsafe.caregiver;
 
+import org.bson.types.ObjectId;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
 
 public class Caregiver extends RealmObject {
-    @PrimaryKey
-    private String email;
 
-    @Required
+    @PrimaryKey private ObjectId _id = new ObjectId();
+
+
     private String lastName;
     private String firstName;
     private String phoneNumber;
-    //private String[] PWDCodes;
+    private String email;
 
     public Caregiver() {
 
@@ -57,11 +59,4 @@ public class Caregiver extends RealmObject {
         this.phoneNumber = phoneNumber;
     }
 
-//    public String[] getPWDCodes() {
-//        return PWDCodes;
-//    }
-//
-//    public void setPWDCodes(String[] PWDCodes) {
-//        this.PWDCodes = PWDCodes;
-//    }
 }

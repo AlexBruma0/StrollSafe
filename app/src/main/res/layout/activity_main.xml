@@ -127,8 +127,9 @@
             android:id="@+id/button_toLogin"
             android:layout_width="match_parent"
             android:layout_height="40dp"
-            android:text="Already have an account? Log in here!"
+            android:text="@string/loginButtonText"
             android:textAlignment="center"
+            android:onClick="loginOnClick"
             android:textAllCaps="false"
             android:textColor="#ffdddd"
             android:textSize="12sp" />

@@ -21,6 +21,9 @@ import io.realm.mongodb.sync.SyncConfiguration;
 /**
  * The DatabaseManager class is responsible for handling the login, account creation and login, and
  * various database configuration functions.
+ *
+ * @author Steve Statia
+ * @since 2022-07-19
  */
 public class DatabaseManager {
     private Realm realmDatabase;

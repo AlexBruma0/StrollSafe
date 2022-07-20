@@ -107,7 +107,8 @@ public class NewCaregiverActivity extends AppCompatActivity {
         });
     }
 
-    public void login(View view) {
+
+    public void createUserLoginAndUploadObjectFromFields(View view) {
         EditText emailEditText = findViewById(R.id.caregiverEmail);
         EditText passwordEditText = findViewById(R.id.caregiverPassword);
         EditText firstNameEditText = findViewById(R.id.caregiverFirstName);
@@ -164,11 +165,6 @@ public class NewCaregiverActivity extends AppCompatActivity {
                 Toast.makeText(this, "Failed to register user: " + email + "\t" + createResult.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
-
-
-        //databaseManager.createRealmUserAndLoginAsync(email, password);
-
     }
 
 }

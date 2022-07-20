@@ -3,6 +3,8 @@ package com.example.strollsafe.utils;
 import android.content.Context;
 import android.util.Log;
 
+import org.bson.Document;
+
 import androidx.annotation.NonNull;
 
 import java.util.Objects;
@@ -16,6 +18,9 @@ import io.realm.mongodb.AppConfiguration;
 import io.realm.mongodb.AppException;
 import io.realm.mongodb.Credentials;
 import io.realm.mongodb.User;
+import io.realm.mongodb.mongo.MongoClient;
+import io.realm.mongodb.mongo.MongoCollection;
+import io.realm.mongodb.mongo.MongoDatabase;
 import io.realm.mongodb.sync.SyncConfiguration;
 
 /**
@@ -26,6 +31,8 @@ import io.realm.mongodb.sync.SyncConfiguration;
  * @since 2022-07-19
  */
 public class DatabaseManager {
+    public static final String CAREGIVER_ACCOUNT_TYPE = "caregiver";
+    public final String PWD_ACCOUNT_TYPE = "pwd";
     private Realm realmDatabase;
     private App app;
     private final String APP_ID = "strollsafe-pjbnn";
@@ -65,14 +72,37 @@ public class DatabaseManager {
      * @param email
      * @param password
      */
-    public void createRealmUserAndLoginAsync(String email, String password) {
-        app.getEmailPassword().registerUserAsync(email, password, it -> {
-            if (it.isSuccess()) {
+    public void createRealmUserAndLoginAsync(String email, String password, String accountType, String phoneNumber, String address, String firstName, String lastName) {
+        app.getEmailPassword().registerUserAsync(email, password, registerResult -> {
+            if (registerResult.isSuccess()) {
                 Log.i(TAG, "Successfully registered user: " + email);
                 Log.i(TAG, "Logging in...");
-                asyncLoginToRealm(email, password);
+                try {
+                    Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
+                    AtomicReference<User> user = new AtomicReference<User>();
+                    app.loginAsync(emailPasswordCredentials, loginResult -> {
+                        if (loginResult.isSuccess()) {
+                            Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
+                            user.set(app.currentUser());
+                            isUserLoggedIn = true;
+                            RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
+                                    .name(APP_ID)
+                                    .schemaVersion(2)
+                                    .allowQueriesOnUiThread(true)
+                                    .allowWritesOnUiThread(true)
+                                    .build();
+                            getRealmInstance(config);
+                            addCustomerUserData(user.get(), accountType, email, phoneNumber, address, firstName, lastName);
+                        } else {
+                            Log.e(TAG + "asyncLoginToRealm", "email: " + loginResult.getError().toString());
+                            isUserLoggedIn = false;
+                        }
+                    });
+                } catch (Exception e) {
+                    Log.e(TAG + "asyncLoginToRealm", "" + e.getLocalizedMessage());
+                }
             } else {
-                Log.e(TAG, "Failed to register user: " + email + "\t" + it.getError().getErrorMessage());
+                Log.e(TAG, "Failed to register user: " + email + "\t" + registerResult.getError().getErrorMessage());
             }
         });
     }
@@ -196,5 +226,20 @@ public class DatabaseManager {
                 realmDatabase = realm;
             }
         });
+    }
+
+    public void addCustomerUserData(User currentUser, String accountType, String email, String phoneNumber, String address, String firstName, String lastName) {
+        MongoClient mongoClient = currentUser.getMongoClient("mongodb-atlas");
+        MongoDatabase mongoDatabase = mongoClient.getDatabase("strollSafeTest");
+        MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("users");
+        mongoCollection.insertOne(new Document("userId", currentUser.getId()).append(accountType, "caregiver").append("email", email).append("phoneNumber", phoneNumber).append("address", address).append("firstName", firstName).append("lastName", lastName))
+                .getAsync(result -> {
+                    if (result.isSuccess()) {
+                        Log.v("EXAMPLE", "Inserted custom user data document. _id of inserted document: "
+                                + result.get().getInsertedId());
+                    } else {
+                        Log.e("EXAMPLE", "Unable to insert custom user data. Error: " + result.getError());
+                    }
+                });
     }
 }

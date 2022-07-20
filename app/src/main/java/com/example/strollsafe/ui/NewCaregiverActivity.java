@@ -115,12 +115,14 @@ public class NewCaregiverActivity extends AppCompatActivity {
         EditText firstNameEditText = findViewById(R.id.caregiverFirstName);
         EditText lastNameEditText = findViewById(R.id.caregiverLastName);
         EditText phoneNumberEditText = findViewById(R.id.caregiverPhoneNumber);
+        EditText addressEditText = findViewById(R.id.caregiverAddress);
 
         String email = emailEditText.getText().toString();
         String password = passwordEditText.getText().toString();
         String firstName = firstNameEditText.getText().toString();
         String lastName = lastNameEditText.getText().toString();
         String phoneNumber = phoneNumberEditText.getText().toString();
+        String address = addressEditText.getText().toString();
 
         app.getEmailPassword().registerUserAsync(email, password, createResult -> {
             if (createResult.isSuccess()) {
@@ -151,6 +153,7 @@ public class NewCaregiverActivity extends AppCompatActivity {
                                     caregiver.setLastName(lastName);
                                     caregiver.setPhoneNumber(phoneNumber);
                                 });
+                                databaseManager.addCustomerUserData(user.get(), DatabaseManager.CAREGIVER_ACCOUNT_TYPE, email, phoneNumber, address, firstName, lastName);
                                 startActivity(new Intent(NewCaregiverActivity.this, CaregiverActivity.class));
                             }
                         });

@@ -19,6 +19,15 @@
         android:theme="@style/Theme.StrollSafe"
         tools:targetApi="31">
         <activity
+            android:name=".ui.test2"
+            android:exported="false" />
+        <activity
+            android:name=".test"
+            android:exported="false" />
+        <activity
+            android:name=".ui.PWDLoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.PWDSignupActivity"
             android:exported="false"
             android:label="@string/title_activity_pwd_signup"
@@ -58,14 +67,14 @@
             android:exported="false" />
         <activity
             android:name=".ui.SettingsActivity"
-            android:theme="@style/Theme.StrollSafe.NoActionBar"
+            android:exported="false"
             android:label="@string/settings"
-            android:exported="false" />
+            android:theme="@style/Theme.StrollSafe.NoActionBar" />
         <activity
             android:name=".ui.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.StrollSafe.NoActionBar"
-            android:label="@string/app_name">
+            android:label="@string/app_name"
+            android:theme="@style/Theme.StrollSafe.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

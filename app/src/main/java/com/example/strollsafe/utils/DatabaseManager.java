@@ -3,17 +3,20 @@ package com.example.strollsafe.utils;
 import android.content.Context;
 import android.util.Log;
 
+import androidx.annotation.NonNull;
+
+import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.realm.Realm;
-import io.realm.RealmAsyncTask;
 import io.realm.RealmConfiguration;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;
 import io.realm.mongodb.AppException;
 import io.realm.mongodb.Credentials;
 import io.realm.mongodb.User;
+import io.realm.mongodb.sync.SyncConfiguration;
 
 /**
  * The DatabaseManager class is responsible for handling the login, account creation and login, and
@@ -22,11 +25,8 @@ import io.realm.mongodb.User;
 public class DatabaseManager {
     private Realm realmDatabase;
     private App app;
-    private User user;
     private final String APP_ID = "strollsafe-pjbnn";
-    private RealmConfiguration config;
-    private final String TAG = "LoginManager/";
-
+    private final String TAG = "DatabaseManager/";
     private boolean isUserLoggedIn = false;
 
     /**
@@ -88,6 +88,13 @@ public class DatabaseManager {
                     Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
                     user.set(app.currentUser());
                     isUserLoggedIn = true;
+                    RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
+                            .name(APP_ID)
+                            .schemaVersion(2)
+                            .allowQueriesOnUiThread(true)
+                            .allowWritesOnUiThread(true)
+                            .build();
+                    getRealmInstance(config);
                 } else {
                     Log.e(TAG + "asyncLoginToRealm", "email: " + it.getError().toString());
                     isUserLoggedIn = false;
@@ -110,6 +117,13 @@ public class DatabaseManager {
                 try {
                     AtomicReference<User> user = new AtomicReference<User>();
                     user.set(app.login(emailPasswordCredentials));
+                    RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
+                            .name(APP_ID)
+                            .schemaVersion(2)
+                            .allowQueriesOnUiThread(true)
+                            .allowWritesOnUiThread(true)
+                            .build();
+                    getRealmInstance(config);
 
                 } catch (AppException e) {
                     Log.e("AUTH", "ERROR:" + e.getErrorMessage());
@@ -171,21 +185,13 @@ public class DatabaseManager {
         return app;
     }
 
-//    config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
-//            .name(appId)
-//                            .schemaVersion(2)
-//                            .allowQueriesOnUiThread(true)
-//                            .allowWritesOnUiThread(true)
-//                            .build();
-//
-//                    Realm.getInstanceAsync(config, new Realm.Callback() {
-//        @Override
-//        public void onSuccess(@NonNull Realm realm) {
-//            Log.v(
-//                    "EXAMPLE",
-//                    "Successfully opened a realm with reads and writes allowed on the UI thread."
-//            );
-//            realmDatabase = realm;
-//        }
-//    });
+    private void getRealmInstance(RealmConfiguration configuration) {
+        Realm.getInstanceAsync(configuration, new Realm.Callback() {
+            @Override
+            public void onSuccess(@NonNull Realm realm) {
+                Log.v(TAG, "Successfully opened a realm with the given config.");
+                realmDatabase = realm;
+            }
+        });
+    }
 }

@@ -6,22 +6,21 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.databinding.Observable;
-import androidx.databinding.ObservableBoolean;
-import androidx.databinding.ObservableInt;
+
+import androidx.appcompat.widget.Toolbar;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.mongodb.App;
 import io.realm.mongodb.AppConfiguration;
-import io.realm.mongodb.AppException;
 import io.realm.mongodb.Credentials;
 import io.realm.mongodb.User;
 import io.realm.mongodb.sync.SyncConfiguration;
@@ -33,7 +32,6 @@ import com.example.strollsafe.utils.DatabaseManager;
 import org.bson.types.ObjectId;
 
 import java.util.Objects;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -66,17 +64,32 @@ public class MainActivity extends AppCompatActivity {
 
         pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
         pwdPreferenceEditor = pwdPreferences.edit();
-        
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getSupportActionBar().hide();
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_main);
+        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(topBar);
 
 
         configureNewPWD();
         configureCaregiver();
-        styleLoginButton();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_options, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.optionsMenuItem:
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void configureNewPWD(){
@@ -119,28 +132,6 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void styleLoginButton() {
-        Button button = (Button) findViewById(R.id.button_toLogin);
-        if(databaseManager.isUserLoggedIn()) {
-            button.setText("LOGOUT");
-        } else {
-            button.setText(getString(R.string.loginButtonText));
-        }
-    }
-
-
-    // Setup the database
-    public void setupRealm() {
-        Realm.init(this);
-        app = new App(new AppConfiguration.Builder(appId).build());
-    }
-
-    // Before we can login into an account we must register it first
-    public void createUserLogin(String email, String password) {
-
-
-    }
-
     // Logs into the databased given a user name and password
     public void login(String email, String password) {
         try {
@@ -177,17 +168,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void addObject() {
-        Log.e("ADD OBJECT", "to the database");
         database.executeTransaction(t -> {
-            // Adding objects to the database
+//             Adding objects to the database
 //            Caregiver caregiver = new Caregiver();
 //            t.insert(caregiver);
 //
-            Caregiver testCaregiver = database.createObject(Caregiver.class, new ObjectId());
-            testCaregiver.setFirstName("Brittany");
-            testCaregiver.setLastName("Spears");
-            database.insert(testCaregiver);
-            Log.e("Object added", testCaregiver.toString());
+//            Caregiver testCaregiver = database.createObject(Caregiver.class, new ObjectId());
+//            testCaregiver.setFirstName("Brittany");
+//            testCaregiver.setLastName("Spears");
+//            database.insert(testCaregiver);
+//            Log.e("Object added", testCaregiver.toString());
         });
 
     }
@@ -196,12 +186,6 @@ public class MainActivity extends AppCompatActivity {
 //        RealmResults<PWD> caregiverRealmResults = database.where(PWD.class).findAll();
 //        Log.d("",caregiverRealmResults.asJSON());
 
-    }
-
-    public void test() {
-        String email = "login@gmail.com";
-        String password = "44444444";
-        login(email, password);
     }
 
 }

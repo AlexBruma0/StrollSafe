@@ -57,8 +57,14 @@
             android:name=".ui.NewCaregiverActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.SettingsActivity"
+            android:theme="@style/Theme.StrollSafe.NoActionBar"
+            android:label="@string/settings"
+            android:exported="false" />
+        <activity
             android:name=".ui.MainActivity"
             android:exported="true"
+            android:theme="@style/Theme.StrollSafe.NoActionBar"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

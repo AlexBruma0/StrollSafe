@@ -4,13 +4,16 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.mongodb.App;
@@ -49,19 +52,32 @@ public class MainActivity extends AppCompatActivity {
 
         pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
         pwdPreferenceEditor = pwdPreferences.edit();
-        
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getSupportActionBar().hide();
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
         setContentView(R.layout.activity_main);
+        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(topBar);
 
         setupRealm();
         configureNewPWD();
         configureCaregiver();
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_options, menu);
+        return true;
+    }
 
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.optionsMenuItem:
+                startActivity(new Intent(MainActivity.this, SettingsActivity.class));
+                return true;
 
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void configureNewPWD(){

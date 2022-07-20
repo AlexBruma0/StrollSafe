@@ -6,26 +6,15 @@
     android:layout_height="match_parent"
     android:background="#5B43A047"
     android:backgroundTint="@color/colorPrimary"
-    android:backgroundTintMode="add">
+    android:backgroundTintMode="add"
+    android:visibility="visible">
 
 
     <ImageButton
-        android:id="@+id/imageButton4"
-        android:layout_width="49dp"
-        android:layout_height="40dp"
-        app:tint="#190505"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.955"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.34"
-        app:srcCompat="@android:drawable/ic_dialog_map" />
-
-    <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/quit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/app_name"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.045"
@@ -35,81 +24,101 @@
         app:srcCompat="@android:drawable/btn_dialog" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/NAME1"
         android:layout_width="203dp"
         android:layout_height="83dp"
         android:text="PWD NAME HERE"
         android:textColor="@color/colorAccent"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.418"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.362"
-        app:strokeColor="@color/black" />
-
-    <Button
-        android:id="@+id/button"
-        android:layout_width="203dp"
-        android:layout_height="83dp"
-        android:text="PWD NAME HERE"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.152"
+        app:layout_constraintVertical_bias="0.185"
         app:strokeColor="@color/black" />
 
     <ImageButton
-        android:id="@+id/imageButton2"
+        android:id="@+id/delete1"
+        android:layout_width="47dp"
+        android:layout_height="46dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.109"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.178"
+        app:srcCompat="@android:drawable/ic_delete" />
+
+    <ImageButton
+        android:id="@+id/Map1"
+        android:layout_width="87dp"
+        android:layout_height="81dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.919"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.184"
+        app:srcCompat="@android:drawable/ic_dialog_map"
+        app:tint="#190505" />
+
+    <ImageButton
+        android:id="@+id/delete2"
+        android:layout_width="47dp"
+        android:layout_height="46dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.109"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.364"
+        app:srcCompat="@android:drawable/ic_delete" />
+
+    <ImageButton
+        android:id="@+id/Map2"
+        android:layout_width="87dp"
+        android:layout_height="81dp"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.919"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.384"
+        app:srcCompat="@android:drawable/ic_dialog_map"
+        app:tint="#190505" />
+
+    <ImageButton
+        android:id="@+id/NewPWD"
         android:layout_width="67dp"
         android:layout_height="55dp"
-        app:tint="@color/black"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.953"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.976"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:tint="@color/black" />
 
-    <ImageButton
-        android:id="@+id/imageButton5"
-        android:layout_width="49dp"
-        android:layout_height="43dp"
-        app:tint="#090808"
+    <Button
+        android:id="@+id/NAME2"
+        android:layout_width="203dp"
+        android:layout_height="83dp"
+        android:text="PWD NAME HERE"
+        android:textColor="@color/colorAccent"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.955"
+        app:layout_constraintHorizontal_bias="0.418"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.203"
-        app:srcCompat="@android:drawable/ic_dialog_info" />
-
-    <ImageButton
-        android:id="@+id/imageButton6"
-        android:layout_width="49dp"
-        android:layout_height="43dp"
-        app:tint="#090808"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.955"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.399"
-        app:srcCompat="@android:drawable/ic_dialog_info" />
-
-    <ImageButton
-        android:id="@+id/imageButton3"
-        android:layout_width="49dp"
-        android:layout_height="40dp"
-        app:tint="#190505"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.955"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.144"
-        app:srcCompat="@android:drawable/ic_dialog_map" />
+        app:layout_constraintVertical_bias="0.385"
+        app:strokeColor="@color/black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
+

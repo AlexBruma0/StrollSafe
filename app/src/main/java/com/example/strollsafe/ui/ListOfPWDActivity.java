@@ -14,26 +14,35 @@ import com.example.strollsafe.R;
 
 public class ListOfPWDActivity extends AppCompatActivity {
     public static final String TEXT = "text";
+    public static final String SHARED_PREFS = "sharedPrefs";
+
     private Button button;
     private String text;
+
     @Override
+
 
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listofpwd);
+
+        button = (Button) findViewById(R.id.NAME1);
+
         configureBack();
         configureMap();
         configureDelete();
         configureNew();
+        configureName();
     }
+
 
     public void configureBack(){
         ImageButton PWD = (ImageButton) findViewById(R.id.quit);
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                finish();
+                startActivity(new Intent(ListOfPWDActivity.this, MainActivity.class));
             }
         });
     }
@@ -68,18 +77,30 @@ public class ListOfPWDActivity extends AppCompatActivity {
         ImageButton newPWD = (ImageButton) findViewById(R.id.NewPWD);
 //        ImageButton delete = (ImageButton) findViewById(R.id.delete1);
 //        ImageButton map = (ImageButton) findViewById(R.id.Map1);
-//        Button name = (Button) findViewById(R.id.NAME1);
+        Button name = (Button) findViewById(R.id.NAME1);
         newPWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                 startActivity(new Intent(ListOfPWDActivity.this, PWDListActivity.class));
-//                name.setVisibility(View.VISIBLE);
-//                name.setText("name");
-//                delete.setVisibility(View.VISIBLE);
-//                map.setVisibility(View.VISIBLE);
+
+                startActivity(new Intent(ListOfPWDActivity.this, PWDListActivity.class));
             }
         });
     }
+    public void configureName(){
+        Button name = (Button) findViewById(R.id.NAME1);
+        ImageButton delete = (ImageButton) findViewById(R.id.delete1);
+        ImageButton map = (ImageButton) findViewById(R.id.Map1);
+        name.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = getIntent();
+                name.setText(i.getStringExtra("cool"));
+                delete.setVisibility(View.VISIBLE);
+                map.setVisibility(View.VISIBLE);
+            }
+        });
+    }
+
     public void saveData(){
         SharedPreferences pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
         SharedPreferences.Editor PreferenceEditor = pwdPreferences.edit();

@@ -10,8 +10,10 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import com.example.strollsafe.R;
+import com.example.strollsafe.utils.DatabaseManager;
 
 public class SettingsActivity extends AppCompatActivity {
+    DatabaseManager databaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -19,6 +21,8 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
         Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(topBar);
+
+        databaseManager = new DatabaseManager(this);
     }
 
     @Override

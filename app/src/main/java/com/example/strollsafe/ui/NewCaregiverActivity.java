@@ -141,10 +141,7 @@ public class NewCaregiverActivity extends AppCompatActivity {
                         Realm.getInstanceAsync(config, new Realm.Callback() {
                             @Override
                             public void onSuccess(@NonNull Realm realm) {
-                                Log.v(
-                                        "EXAMPLE",
-                                        "Successfully opened a realm with reads and writes allowed on the UI thread."
-                                );
+                                Log.v(TAG, "Successfully opened a realm with reads and writes allowed on the UI thread.");
                                 realmDatabase = realm;
                                 realmDatabase.executeTransaction(transaction -> {
                                     Caregiver caregiver = transaction.createObject(Caregiver.class, new ObjectId());

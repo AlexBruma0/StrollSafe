@@ -1,6 +1,7 @@
 package com.example.strollsafe.ui;
 
 import android.app.DatePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -150,6 +151,7 @@ public class NewCaregiverActivity extends AppCompatActivity {
                                     caregiver.setLastName(lastName);
                                     caregiver.setPhoneNumber(phoneNumber);
                                 });
+                                startActivity(new Intent(NewCaregiverActivity.this, CaregiverActivity.class));
                             }
                         });
                     } else {

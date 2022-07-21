@@ -36,6 +36,9 @@
             android:name=".ui.PWDListActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.ListOfPWDActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.LocationActivity"
             android:exported="false" />
         <!--

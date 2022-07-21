@@ -1,29 +1,23 @@
 package com.example.strollsafe.ui;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.strollsafe.R;
-import com.example.strollsafe.pwd.PWD;
+import com.example.strollsafe.ui.Location.PWDLocationInformationActivity;
 import com.example.strollsafe.utils.DatabaseManager;
-
-import java.util.Objects;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.mongodb.App;
-import io.realm.mongodb.sync.SyncConfiguration;
 
 public class ListOfPWDActivity extends AppCompatActivity {
     public static final String TEXT = "text";

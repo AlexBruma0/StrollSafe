@@ -1,4 +1,4 @@
-package com.example.strollsafe.ui;
+package com.example.strollsafe.ui.Location;
 
 import androidx.appcompat.app.AppCompatActivity;
 

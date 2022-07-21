@@ -11,6 +11,7 @@
  *
  * */
 
+
 package com.example.strollsafe.ui.location;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -66,4 +67,5 @@ public class ShowSavedLocationsList extends AppCompatActivity {
                 android.R.layout.simple_expandable_list_item_1, savedAddresses));
 
     } // end of onCreate()
+
 } // end of ShowSavedLocationsList.java

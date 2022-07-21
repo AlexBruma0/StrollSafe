@@ -6,6 +6,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,66 +42,47 @@ public class CaregiverLoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_caregiver_login);
 
-        Button caregiverLoginBtn=findViewById(R.id.caregiverLoginBtn);
+    }
 
-        caregiverLoginBtn.setOnClickListener(new View.OnClickListener() {
+    public void caregiverLoginOnClick(View view) {
+            EditText caregiverLoginEmail = findViewById(R.id.caregiverLoginEmail);
+            EditText caregiverLoginPassword = findViewById(R.id.caregiverLoginPassword);
+            String password = caregiverLoginPassword.getText().toString();
+            String email = caregiverLoginEmail.getText().toString();
 
-            @Override
-            public void onClick(View v) {
-                EditText caregiverLoginEmail=findViewById(R.id.caregiverLoginEmail);
-                EditText caregiverLoginPassword=findViewById(R.id.caregiverLoginPassword);
-                String password=caregiverLoginPassword.getText().toString();
-                String email=caregiverLoginEmail.getText().toString();
-                try {
-                    Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
-                    AtomicReference<User> user = new AtomicReference<User>();
-                    app.loginAsync(emailPasswordCredentials, it -> {
-                        if (it.isSuccess()) {
-                            Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
-                            user.set(app.currentUser());
-                            boolean isUserLoggedIn;
-                            isUserLoggedIn = true;
-                            RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
-                                    .name(APP_ID)
-                                    .schemaVersion(2)
-                                    .allowQueriesOnUiThread(true)
-                                    .allowWritesOnUiThread(true)
-                                    .build();
-                            Realm.getInstanceAsync(config, new Realm.Callback() {
-                                @Override
-                                public void onSuccess(@NonNull Realm realm) {
-                                    Log.v(TAG, "Successfully opened a realm with the given config.");
-                                    realmDatabase = realm;
-                                    // CODE TO EXECUTE AFTER LOGIN
-                                    configureCaregiverLoginButton();
-                                    //startActivity(new Intent(CaregiverLoginActivity.this, CaregiverActivity.class));
+            try {
+                Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
+                AtomicReference<User> user = new AtomicReference<User>();
+                app.loginAsync(emailPasswordCredentials, it -> {
+                    if (it.isSuccess()) {
+                        Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
+                        user.set(app.currentUser());
+                        RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
+                                .name(APP_ID)
+                                .schemaVersion(2)
+                                .allowQueriesOnUiThread(true)
+                                .allowWritesOnUiThread(true)
+                                .build();
+                        Realm.getInstanceAsync(config, new Realm.Callback() {
+                            @Override
+                            public void onSuccess(@NonNull Realm realm) {
+                                Log.v(TAG, "Successfully opened a realm with the given config.");
+                                realmDatabase = realm;
+                                // CODE TO EXECUTE AFTER LOGIN
+                                startActivity(new Intent(CaregiverLoginActivity.this, CaregiverActivity.class));
 
-                                }
-                            });
-                        } else {
-                            Log.e(TAG + "asyncLoginToRealm", "email: " + it.getError().toString());
-                            boolean isUserLoggedIn = false;
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e(TAG + "asyncLoginToRealm", "" + e.getLocalizedMessage());
-                }
-
+                            }
+                        });
+                    } else {
+                        Log.e(TAG + "asyncLoginToRealm", "" + it.getError().toString());
+                        Toast.makeText(this, "" + it.getError().toString(), Toast.LENGTH_LONG).show();
+                    }
+                });
+            } catch (Exception e) {
+                Log.e(TAG + "asyncLoginToRealm", "" + e.getLocalizedMessage());
+                Toast.makeText(this, "" + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
             }
-        });
-
-
-
 
     }
 
-    public void configureCaregiverLoginButton() {
-        Button PWD = (Button) findViewById(R.id.button_toLogin);
-        PWD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(CaregiverLoginActivity.this, CaregiverLoginActivity.class));
-            }
-        });
-    }
 }

@@ -15,7 +15,6 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.strollsafe.databinding.ActivityMapsBinding;
 
@@ -46,7 +45,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mapFragment.getMapAsync(this);
         }
 
-        MyLocations myApplication = (MyLocations) getApplicationContext();
+        PWDLocations myApplication = (PWDLocations) getApplicationContext();
         savedLocations = myApplication.getMyLocations();
     }
 
@@ -88,23 +87,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 lastLocationPlaced = latLng;
             }
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocationPlaced, ZOOM_FACTOR));
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(@NonNull Marker marker) {
-                    Integer clicks = (Integer) marker.getTag();
-                    if (clicks == null) {
-                        clicks = 0;
+            mMap.setOnMarkerClickListener(marker -> {
+                Integer clicks = (Integer) marker.getTag();
+                if (clicks == null) {
+                    clicks = 0;
 
-                    }
-                    clicks++;
-                    marker.setTag(clicks);
-                    Toast.makeText(MapsActivity.this, "Marker " + marker.getTitle() +
-                            " was clicked " + clicks + " times", Toast.LENGTH_SHORT).show();
-
-
-                    return false;
                 }
+                clicks++;
+                marker.setTag(clicks);
+                Toast.makeText(MapsActivity.this, "Marker " + marker.getTitle() +
+                        " was clicked " + clicks + " times", Toast.LENGTH_SHORT).show();
 
+
+                return false;
             });
         }
     }

@@ -31,20 +31,26 @@ public class CaregiverLoginActivity extends AppCompatActivity {
     Realm realmDatabase;
     private RealmConfiguration config;
     private User user;
-
+    DatabaseManager databaseManager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        databaseManager = new DatabaseManager(this);
+        app = databaseManager.getApp();
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_caregiver_login);
-        EditText caregiverLoginEmail=findViewById(R.id.caregiverLoginEmail);
-        EditText caregiverLoginPassword=findViewById(R.id.caregiverLoginEmail);
+
         Button caregiverLoginBtn=findViewById(R.id.caregiverLoginBtn);
-        String email=caregiverLoginEmail.getText().toString();
-        String password=caregiverLoginPassword.getText().toString();
+
         caregiverLoginBtn.setOnClickListener(new View.OnClickListener() {
+
             @Override
             public void onClick(View v) {
+                EditText caregiverLoginEmail=findViewById(R.id.caregiverLoginEmail);
+                EditText caregiverLoginPassword=findViewById(R.id.caregiverLoginEmail);
+                String password=caregiverLoginPassword.getText().toString();
+                String email=caregiverLoginEmail.getText().toString();
                 try {
                     Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
                     AtomicReference<User> user = new AtomicReference<User>();
@@ -66,7 +72,8 @@ public class CaregiverLoginActivity extends AppCompatActivity {
                                     Log.v(TAG, "Successfully opened a realm with the given config.");
                                     realmDatabase = realm;
                                     // CODE TO EXECUTE AFTER LOGIN
-                                    startActivity(new Intent(CaregiverLoginActivity.this, CaregiverActivity.class));
+                                    configureCaregiverLoginButton();
+                                    //startActivity(new Intent(CaregiverLoginActivity.this, CaregiverActivity.class));
 
                                 }
                             });
@@ -85,5 +92,15 @@ public class CaregiverLoginActivity extends AppCompatActivity {
 
 
 
+    }
+
+    public void configureCaregiverLoginButton() {
+        Button PWD = (Button) findViewById(R.id.button_toLogin);
+        PWD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(CaregiverLoginActivity.this, CaregiverLoginActivity.class));
+            }
+        });
     }
 }

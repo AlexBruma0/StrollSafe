@@ -29,6 +29,10 @@
         <activity
             android:name=".ui.LocationActivity"
             android:exported="false" />
+        <activity
+            android:name=".ui.CaregiverLoginActivity"
+            android:exported="false"
+            tools:ignore="DuplicateActivity" />
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 

@@ -56,6 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         configureNewPwdButton();
         configureNewCaregiverButton();
+        configureCaregiverLoginButton();
 
         // Setup the shared preferences
         caregiverPreferences = getSharedPreferences("CAREGIVER", MODE_PRIVATE);
@@ -106,6 +107,15 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void configureCaregiverLoginButton(){
+        Button PWD = (Button) findViewById(R.id.button_toLogin);
+        PWD.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MainActivity.this, CaregiverLoginActivity.class));
+            }
+        });
+    }
 
 
     public void addObject() {

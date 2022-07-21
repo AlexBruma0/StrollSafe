@@ -18,8 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.location.Address;
 import android.location.Geocoder;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 
 import android.location.Location;
 import android.os.Bundle;
@@ -27,9 +25,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.strollsafe.R;
-
-
 import com.example.strollsafe.pwd.location.PWDLocations;
+
 
 import java.util.ArrayList;
 import java.util.List;

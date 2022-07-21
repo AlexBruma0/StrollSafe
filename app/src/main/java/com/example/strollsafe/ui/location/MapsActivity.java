@@ -25,7 +25,6 @@ import android.widget.Toast;
 import com.example.strollsafe.R;
 
 import com.example.strollsafe.pwd.location.PWDLocations;
-
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;

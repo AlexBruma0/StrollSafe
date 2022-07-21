@@ -37,6 +37,7 @@ import android.widget.Toast;
 import com.example.strollsafe.pwd.location.PWDLocations;
 
 
+
 import com.example.strollsafe.pwd.PWDLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -93,7 +94,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
     LocationCallback locationCallback;
 
     static String[] PERMISSIONS;
-
 
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
@@ -201,19 +201,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                         MapsActivity.class);
                 startActivity(intent);
             }
-        });
-
-
-        btn_showWayPoints.setOnClickListener(view -> {
-            Intent intent = new Intent(PWDLocationInformationActivity.this,
-                    ShowSavedLocationsList.class);
-            startActivity(intent);
-        });
-
-        btn_showMap.setOnClickListener(view -> {
-            Intent intent = new Intent(PWDLocationInformationActivity.this,
-                    MapsActivity.class);
-            startActivity(intent);
         });
 
         updateGPS();

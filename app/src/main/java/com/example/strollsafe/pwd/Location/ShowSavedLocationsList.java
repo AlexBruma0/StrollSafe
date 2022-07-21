@@ -1,3 +1,16 @@
+/**
+ * ShowSavedLocationsList.java
+ *
+ * Description: Show the list of saved locations as addresses
+ *
+ * Created on: July 18, 2022
+ * Created by: Alvin Tsang
+ *
+ * Last modified on; July 21, 2022
+ * Last modified by: Alvin Tsang
+ *
+ * */
+
 package com.example.strollsafe.pwd.Location;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,10 +40,11 @@ public class ShowSavedLocationsList extends AppCompatActivity {
 
         lv_wayPoints = findViewById(R.id.lv_wayPoints);
 
+        // get list of saved locations
         PWDLocations myApplication = (PWDLocations) getApplicationContext();
         ArrayList<Location> savedLocations = myApplication.getMyLocations();
 
-        // convert location to a street address if possible
+        // convert locations to a street address if possible
         ArrayList<String> savedAddresses = new ArrayList<>();
         for (Location location: savedLocations) {
             Geocoder geocoder = new Geocoder(ShowSavedLocationsList.this);
@@ -48,5 +62,5 @@ public class ShowSavedLocationsList extends AppCompatActivity {
         lv_wayPoints.setAdapter(new ArrayAdapter<String>(this,
                 android.R.layout.simple_expandable_list_item_1, savedAddresses));
 
-    }
-}
+    } // end of onCreate()
+} // end of ShowSavedLocationsList.java

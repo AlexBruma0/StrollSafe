@@ -112,7 +112,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 marker.setTag(clicks);
                 Toast.makeText(MapsActivity.this, "Marker " + marker.getTitle() +
                         " was clicked " + clicks + " times", Toast.LENGTH_SHORT).show();
-                
+
                 return false;
             });
         }

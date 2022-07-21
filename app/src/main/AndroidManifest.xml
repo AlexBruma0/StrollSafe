@@ -8,7 +8,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
-        android:name=".pwd.Location.MyLocations"
+        android:name=".pwd.Location.PWDLocations"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -35,11 +35,11 @@
             android:value="AIzaSyAYvwlsvkTacsCUXqWSw_kw2GQzhsNHIJQ" />
 
         <activity
-            android:name=".MapsActivity"
+            android:name=".pwd.Location.MapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".ShowSavedLocationsList"
+            android:name=".pwd.Location.ShowSavedLocationsList"
             android:exported="false" />
         <activity
             android:name=".caregiver.PWDlist"

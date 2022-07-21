@@ -24,7 +24,6 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Looper;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -32,8 +31,6 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.strollsafe.MapsActivity;
-import com.example.strollsafe.ShowSavedLocationsList;
 import com.example.strollsafe.pwd.PWDLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -94,8 +91,6 @@ public class PWDLocationInformation extends AppCompatActivity {
 
 
 
-
-
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @SuppressLint("SetTextI18n")
     @Override
@@ -145,7 +140,7 @@ public class PWDLocationInformation extends AppCompatActivity {
         };
 
         // add a waypoint to list
-        MyLocations myApplication = (MyLocations) getApplicationContext();
+        PWDLocations myApplication = (PWDLocations) getApplicationContext();
         savedLocations = myApplication.getMyLocations();
         btn_newWayPoint.setOnClickListener(new View.OnClickListener() {
             @Override

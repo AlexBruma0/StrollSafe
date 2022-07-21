@@ -1,4 +1,4 @@
-package com.example.strollsafe;
+package com.example.strollsafe.pwd.Location;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -7,7 +7,7 @@ import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
-import com.example.strollsafe.pwd.Location.MyLocations;
+import com.example.strollsafe.R;
 
 import java.util.ArrayList;
 
@@ -22,8 +22,10 @@ public class ShowSavedLocationsList extends AppCompatActivity {
 
         lv_wayPoints = findViewById(R.id.lv_wayPoints);
 
-        MyLocations myApplication = (MyLocations) getApplicationContext();
+        PWDLocations myApplication = (PWDLocations) getApplicationContext();
         ArrayList<Location> savedLocations = myApplication.getMyLocations();
+
+
         lv_wayPoints.setAdapter(new ArrayAdapter<Location>(this,
                 android.R.layout.simple_expandable_list_item_1, savedLocations));
 

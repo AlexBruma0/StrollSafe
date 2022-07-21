@@ -1,4 +1,4 @@
-package com.example.strollsafe;
+package com.example.strollsafe.pwd.Location;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.FragmentActivity;
@@ -9,7 +9,7 @@ import android.location.Location;
 import android.os.Bundle;
 import android.widget.Toast;
 
-import com.example.strollsafe.pwd.Location.MyLocations;
+import com.example.strollsafe.R;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -46,7 +46,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mapFragment.getMapAsync(this);
         }
 
-        MyLocations myApplication = (MyLocations) getApplicationContext();
+        PWDLocations myApplication = (PWDLocations) getApplicationContext();
         savedLocations = myApplication.getMyLocations();
     }
 

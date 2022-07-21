@@ -48,7 +48,7 @@ public class CaregiverLoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 EditText caregiverLoginEmail=findViewById(R.id.caregiverLoginEmail);
-                EditText caregiverLoginPassword=findViewById(R.id.caregiverLoginEmail);
+                EditText caregiverLoginPassword=findViewById(R.id.caregiverLoginPassword);
                 String password=caregiverLoginPassword.getText().toString();
                 String email=caregiverLoginEmail.getText().toString();
                 try {

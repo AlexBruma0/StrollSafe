@@ -2,13 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.strollsafe">
-    <!-- Permission to use network location provider for our Android app -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Permission to get last known location -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION " /> <!-- Internet permission for use of network provider -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- Requesting background location access -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION " />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".pwd.Location.MyLocations"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -18,12 +18,7 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StrollSafe"
         tools:targetApi="31">
-        <activity
-            android:name=".ui.test2"
-            android:exported="false" />
-        <activity
-            android:name=".test"
-            android:exported="false" />
+
         <activity
             android:name=".ui.PWDLoginActivity"
             android:exported="false" />
@@ -41,6 +36,7 @@
         <activity
             android:name=".ui.LocationActivity"
             android:exported="false" />
+
         <!--
              TODO: Before you run your application, you need a Google Maps API key.
 
@@ -54,10 +50,14 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
+            android:value="AIzaSyAYvwlsvkTacsCUXqWSw_kw2GQzhsNHIJQ" />
 
         <activity
             android:name=".ui.CaregiverActivity"
+            android:exported="false"
+            android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".pwd.Location.ShowSavedLocationsList"
             android:exported="false" />
         <activity
             android:name=".ui.PWDActivity"

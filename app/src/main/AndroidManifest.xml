@@ -42,16 +42,16 @@
             android:name=".pwd.Location.ShowSavedLocationsList"
             android:exported="false" />
         <activity
-            android:name=".caregiver.PWDlist"
+            android:name=".ui.ListOfPWDActivity"
             android:exported="false" />
         <activity
-            android:name=".caregiver.LocationActivity"
+            android:name=".ui.LocationActivity"
             android:exported="false" />
         <activity
             android:name=".caregiver.CaregiverActivity"
             android:exported="false" />
         <activity
-            android:name=".pwd.PWD_activity"
+            android:name=".ui.PWDActivity"
             android:exported="false" />
         <activity android:name=".pwd.Location.PWDLocationInformation" />
         <activity

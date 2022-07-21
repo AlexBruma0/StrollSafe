@@ -1,4 +1,4 @@
-package com.example.strollsafe.ui;
+package com.example.strollsafe.ui.location;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -26,7 +26,4 @@ public class LocationActivity extends AppCompatActivity {
             }
         });
     }
-
-
-
-}
+} // end of LocationActivity.java

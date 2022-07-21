@@ -11,7 +11,7 @@
  *
  * */
 
-package com.example.strollsafe.ui.location;
+package com.example.strollsafe.ui.Location;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,7 +23,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import com.example.strollsafe.R;
-import com.example.strollsafe.pwd.location.PWDLocations;
+import com.example.strollsafe.pwd.Location.PWDLocations;
 
 import java.util.ArrayList;
 import java.util.List;

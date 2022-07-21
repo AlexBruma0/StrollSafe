@@ -9,6 +9,7 @@
 *
 * */
 
+
 package com.example.strollsafe.ui.location;
 
 import androidx.annotation.NonNull;
@@ -34,9 +35,9 @@ import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
-import com.example.strollsafe.pwd.PWDLocation;
 import com.example.strollsafe.pwd.location.PWDLocations;
+import com.example.strollsafe.pwd.PWDLocation;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
 import com.google.android.gms.location.LocationRequest;
@@ -79,10 +80,9 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
     private Button btn_showMap;
 
     // current location
-    Location currentLocation;
+    private Location currentLocation;
     // list of saved locations
-    ArrayList<Location> savedLocations;
-
+    private ArrayList<Location> savedLocations;
 
     // Google's API for location services
     FusedLocationProviderClient fusedLocationProviderClient;
@@ -92,7 +92,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
     LocationCallback locationCallback;
 
     static String[] PERMISSIONS;
-
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @SuppressLint("SetTextI18n")
@@ -145,12 +144,16 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
         // add a waypoint to list
         PWDLocations myApplication = (PWDLocations) getApplicationContext();
         savedLocations = myApplication.getMyLocations();
-        btn_newWayPoint.setOnClickListener(v -> {
-            // add location to list
-            savedLocations = myApplication.getMyLocations();
-            savedLocations.add(currentLocation);
-            updateUIValues(currentLocation);
+        btn_newWayPoint.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // add location to list
+                savedLocations = myApplication.getMyLocations();
+                savedLocations.add(currentLocation);
+                updateUIValues(currentLocation);
+            }
         });
+
 
         // gps switch
         sw_gps.setOnClickListener(new View.OnClickListener() {
@@ -198,6 +201,14 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                 Intent intent = new Intent(PWDLocationInformationActivity.this,
                         MapsActivity.class);
                 startActivity(intent);
+            }
+        });
+
+        sw_locationsupdates.setOnClickListener(view1 -> {
+            if (sw_locationsupdates.isChecked()) { // tracking is turned on
+                startLocationUpdates();
+            } else { // tracking is turned off
+                stopLocationUpdates();
             }
         });
 
@@ -254,7 +265,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                     updateGPS();
                 } else { // permission is not granted, exit program
                     Log.d("permission", "Fine permission denied");
-                    finish();
                 }
 
                 if (grantResults[1] == PackageManager.PERMISSION_GRANTED) {
@@ -275,40 +285,44 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
      *              from the fused client and update the UI
      */
     private void updateGPS() {
+
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(
                 PWDLocationInformationActivity.this);
-
         // dealing with permissions
         if (ActivityCompat.checkSelfPermission(PWDLocationInformationActivity.this,
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
         {
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(
-            this, new OnSuccessListener<Location>() {
-                        @RequiresApi(api = Build.VERSION_CODES.M)
-                        @Override
-                        public void onSuccess(Location location) {
-                            if (location != null) {
-                                Log.d("GPSStatus", "GPS is on");
-                                updateUIValues(location);
-                                currentLocation = location;
-                            } else {
-                                if (ActivityCompat.checkSelfPermission(
-                                        PWDLocationInformationActivity.this,
+                    this, new OnSuccessListener<Location>()
+            {
+
+                @RequiresApi(api = Build.VERSION_CODES.M)
+                @Override
+                public void onSuccess(Location location) {
+                    if (location != null) {
+                        Log.d("GPSStatus", "GPS is on");
+                        updateUIValues(location);
+                        currentLocation = location;
+                    } else {
+                        if (ActivityCompat.checkSelfPermission(
+                                PWDLocationInformationActivity.this,
                                         Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                                        PackageManager.PERMISSION_GRANTED) {
+                                        PackageManager.PERMISSION_GRANTED)
+                        {
                                     requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
-                                }
-                                fusedLocationProviderClient.requestLocationUpdates(locationRequest,
-                                        locationCallback, null);
-                            }
                         }
-                    });
+                            fusedLocationProviderClient.requestLocationUpdates(locationRequest,
+                                    locationCallback, null);
+                    }
+                }
+            });
 
         } else { // no permissions, must be requested
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // os version greater than marshmallow
-                            requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
+                requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
             }
         }
+
     } // end of updateGPS()
 
 

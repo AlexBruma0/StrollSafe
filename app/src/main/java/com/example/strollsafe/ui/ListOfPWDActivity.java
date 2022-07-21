@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.PWD;
+import com.example.strollsafe.ui.location.PWDLocationInformationActivity;
 import com.example.strollsafe.utils.DatabaseManager;
 
 import java.util.Objects;

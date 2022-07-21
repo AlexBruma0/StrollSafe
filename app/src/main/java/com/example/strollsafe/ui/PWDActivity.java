@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.PWD;
+import com.example.strollsafe.ui.location.PWDLocationInformationActivity;
 import com.example.strollsafe.utils.DatabaseManager;
 
 import org.bson.types.ObjectId;

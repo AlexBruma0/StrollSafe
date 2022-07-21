@@ -8,7 +8,7 @@
 *
 * */
 
-package com.example.strollsafe.pwd.Location;
+package com.example.strollsafe.pwd.location;
 
 import android.app.Application;
 import android.location.Location;

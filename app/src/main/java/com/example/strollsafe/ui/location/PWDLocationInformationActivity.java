@@ -9,7 +9,7 @@
 *
 * */
 
-package com.example.strollsafe.ui;
+package com.example.strollsafe.ui.location;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -26,14 +26,16 @@ import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
+
+import android.view.View;
+
 import android.widget.Button;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.strollsafe.pwd.Location.MapsActivity;
-import com.example.strollsafe.pwd.Location.PWDLocations;
-import com.example.strollsafe.pwd.Location.ShowSavedLocationsList;
+import com.example.strollsafe.pwd.location.PWDLocations;
+
 
 import com.example.strollsafe.pwd.PWDLocation;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -91,7 +93,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
     LocationCallback locationCallback;
 
     static String[] PERMISSIONS;
-
 
 
 
@@ -153,39 +154,65 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
             updateUIValues(currentLocation);
         });
 
+        // gps switch
+        sw_gps.setOnClickListener(new View.OnClickListener() {
+            @SuppressLint("SetTextI18n")
+            @Override
+            public void onClick(View view) {
+                if (sw_gps.isChecked()) { // if switch is turned on, use GPS sensors
+                    locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
+                    tv_sensor.setText("Using GPS sensor");
+                } else { // if swtich is turned off, use towers and WIFI
+                    locationRequest.setPriority(Priority.PRIORITY_BALANCED_POWER_ACCURACY);
+                    tv_sensor.setText("Using towers + WIFI");
+                }
 
-
-
-        // GPS switch
-        sw_gps.setOnClickListener(view -> {
-            if (sw_gps.isChecked()) { // if switch is turned on, use GPS sensors
-                locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
-                tv_sensor.setText("Using GPS sensor");
-            } else { // if swtich is turned off, use towers and WIFI
-                locationRequest.setPriority(Priority.PRIORITY_BALANCED_POWER_ACCURACY);
-                tv_sensor.setText("Using towers + WIFI");
             }
-
         });
 
 
         // get constant location updates
-        sw_locationsupdates.setOnClickListener(view -> {
-            if (sw_locationsupdates.isChecked()) { // tracking is turned on
-                startLocationUpdates();
-            } else { // tracking is turned off
-                stopLocationUpdates();
+        sw_locationsupdates.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.M)
+            @Override
+            public void onClick(View view) {
+                if (sw_locationsupdates.isChecked()) { // tracking is turned on
+                    startLocationUpdates();
+                } else { // tracking is turned off
+                    stopLocationUpdates();
+                }
+            }
+        });
+
+
+        btn_showWayPoints.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PWDLocationInformationActivity.this,
+                        ShowSavedLocationsList.class);
+                startActivity(intent);
+            }
+        });
+
+        btn_showMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(PWDLocationInformationActivity.this,
+                        MapsActivity.class);
+                startActivity(intent);
             }
         });
 
 
         btn_showWayPoints.setOnClickListener(view -> {
-            Intent intent = new Intent(PWDLocationInformationActivity.this, ShowSavedLocationsList.class);
+            Intent intent = new Intent(PWDLocationInformationActivity.this,
+                    ShowSavedLocationsList.class);
             startActivity(intent);
         });
 
         btn_showMap.setOnClickListener(view -> {
-            Intent intent = new Intent(PWDLocationInformationActivity.this, MapsActivity.class);
+            Intent intent = new Intent(PWDLocationInformationActivity.this,
+                    MapsActivity.class);
             startActivity(intent);
         });
 
@@ -200,7 +227,9 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void startLocationUpdates() {
         tv_updates.setText("Location is being tracked");
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this,
+                Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                PackageManager.PERMISSION_GRANTED) {
             requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
         }
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
@@ -239,8 +268,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                     Log.d("permission", "Fine permission granted");
                     updateGPS();
                 } else { // permission is not granted, exit program
-                    Toast.makeText(this, "This app requires permission to be granted to work properly",
-                            Toast.LENGTH_SHORT).show();
                     Log.d("permission", "Fine permission denied");
                     finish();
                 }
@@ -271,50 +298,31 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
         {
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(
-                    this, location ->
-            {
-                if (location != null) {
-                    Log.d("GPSStatus", "GPS is on");
-                    // updateUIValues(location);
-                    updateLocationArray(location);
-                } else {
-                    if (ActivityCompat.checkSelfPermission(PWDLocationInformationActivity.this,
-                            Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                            PackageManager.PERMISSION_GRANTED)
-                    {
-                        requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
-
-                        new OnSuccessListener<Location>() {
-                            @RequiresApi(api = Build.VERSION_CODES.M)
-                            @Override
-                            public void onSuccess(Location location) {
-                                if (location != null) {
-                                    Log.d("GPSStatus", "GPS is on");
-                                    updateUIValues(location);
-                                    currentLocation = location;
-                                } else {
-                                    if (ActivityCompat.checkSelfPermission(
-                                            PWDLocationInformationActivity.this,
-                                            Manifest.permission.ACCESS_COARSE_LOCATION) !=
-                                            PackageManager.PERMISSION_GRANTED)
-                                    {
-                                        requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
-                                    }
-                                        fusedLocationProviderClient.requestLocationUpdates(locationRequest,
-                                                locationCallback, null);
+            this, new OnSuccessListener<Location>() {
+                        @RequiresApi(api = Build.VERSION_CODES.M)
+                        @Override
+                        public void onSuccess(Location location) {
+                            if (location != null) {
+                                Log.d("GPSStatus", "GPS is on");
+                                updateUIValues(location);
+                                currentLocation = location;
+                            } else {
+                                if (ActivityCompat.checkSelfPermission(
+                                        PWDLocationInformationActivity.this,
+                                        Manifest.permission.ACCESS_COARSE_LOCATION) !=
+                                        PackageManager.PERMISSION_GRANTED) {
+                                    requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
                                 }
-
+                                fusedLocationProviderClient.requestLocationUpdates(locationRequest,
+                                        locationCallback, null);
                             }
-                        };
-
-                    } else { // no permissions, must be requested
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // os version greater than marshmallow
-                            requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
-
                         }
-                    }
-                }
-            });
+                    });
+
+        } else { // no permissions, must be requested
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // os version greater than marshmallow
+                            requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
+            }
         }
     } // end of updateGPS()
 

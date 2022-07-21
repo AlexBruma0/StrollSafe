@@ -1,3 +1,16 @@
+/**
+ * ShowSavedLocationsList.java
+ *
+ * Description: Show the list of saved locations as addresses
+ *
+ * Created on: July 18, 2022
+ * Created by: Alvin Tsang
+ *
+ * Last modified on; July 21, 2022
+ * Last modified by: Alvin Tsang
+ *
+ * */
+
 package com.example.strollsafe.pwd.Location;
 
 import androidx.annotation.NonNull;
@@ -48,7 +61,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         PWDLocations myApplication = (PWDLocations) getApplicationContext();
         savedLocations = myApplication.getMyLocations();
-    }
+    } // end of onCreate()
 
     /**
      * Manipulates the map once available.
@@ -63,10 +76,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (savedLocations.size() < 1) {
-            Toast.makeText(MapsActivity.this, "No waypoints saved", Toast.LENGTH_SHORT).show();
+        if (savedLocations.size() < 1) { // if no saved locations, map will not display
+            Toast.makeText(MapsActivity.this, "No waypoints saved",
+                    Toast.LENGTH_SHORT).show();
             finish();
         } else {
+            // convert all locations to LatLng
             for (Location location : savedLocations) {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
@@ -82,31 +97,25 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     markerOptions.title("Lat: " + location.getLatitude() + "\n" +
                             "Lon: " + location.getLongitude());
                 }
-
-
+                // place location as a pin on the map
                 mMap.addMarker(markerOptions);
                 lastLocationPlaced = latLng;
             }
+            // when maps is opened, zoom in to the last saved location
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocationPlaced, ZOOM_FACTOR));
-            mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(@NonNull Marker marker) {
-                    Integer clicks = (Integer) marker.getTag();
-                    if (clicks == null) {
-                        clicks = 0;
+            mMap.setOnMarkerClickListener(marker -> {
+                Integer clicks = (Integer) marker.getTag();
+                if (clicks == null) {
+                    clicks = 0;
 
-                    }
-                    clicks++;
-                    marker.setTag(clicks);
-                    Toast.makeText(MapsActivity.this, "Marker " + marker.getTitle() +
-                            " was clicked " + clicks + " times", Toast.LENGTH_SHORT).show();
-
-
-                    return false;
                 }
+                clicks++;
+                marker.setTag(clicks);
+                Toast.makeText(MapsActivity.this, "Marker " + marker.getTitle() +
+                        " was clicked " + clicks + " times", Toast.LENGTH_SHORT).show();
 
+                return false;
             });
         }
-    }
-
-}
+    } // end of onMapReady()
+}// end of MapsActivity.java

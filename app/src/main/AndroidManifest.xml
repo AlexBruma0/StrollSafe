@@ -2,13 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.strollsafe">
-    <!-- Permission to use network location provider for our Android app -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Permission to get last known location -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION " /> <!-- Internet permission for use of network provider -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- Requesting background location access -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION " />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".pwd.Location.MyLocations"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -54,12 +54,15 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
+            android:value="AIzaSyAYvwlsvkTacsCUXqWSw_kw2GQzhsNHIJQ" />
 
         <activity
+
             android:name=".ui.CaregiverHomeActivity"
             android:label="@string/caregiverHomeLabel"
-            android:theme="@style/Theme.StrollSafe.NoActionBar"
+            android:theme="@style/Theme.StrollSafe.NoActionBar" />
+        <activity
+            android:name=".pwd.Location.ShowSavedLocationsList"
             android:exported="false" />
         <activity
             android:name=".ui.PWDActivity"

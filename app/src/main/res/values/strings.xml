@@ -26,4 +26,5 @@
     <string name="newCaregiverLabel">Create Caregiver Account</string>
     <string name="caregiverHomeLabel">Caregiver Home</string>
     <string name="caregiverLoginLabel">Caregiver Login</string>
+    <string name="title_activity_maps">MapsActivity</string>
 </resources>

@@ -3,13 +3,16 @@ package com.example.strollsafe.ui;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.utils.DatabaseManager;
@@ -41,7 +44,27 @@ public class CaregiverLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_caregiver_login);
+        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(topBar);
 
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_options, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.optionsMenuItem:
+                startActivity(new Intent(CaregiverLoginActivity.this, SettingsActivity.class));
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void caregiverLoginOnClick(View view) {
@@ -69,7 +92,7 @@ public class CaregiverLoginActivity extends AppCompatActivity {
                                 Log.v(TAG, "Successfully opened a realm with the given config.");
                                 realmDatabase = realm;
                                 // CODE TO EXECUTE AFTER LOGIN
-                                startActivity(new Intent(CaregiverLoginActivity.this, CaregiverActivity.class));
+                                startActivity(new Intent(CaregiverLoginActivity.this, CaregiverHomeActivity.class));
 
                             }
                         });

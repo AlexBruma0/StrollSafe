@@ -23,4 +23,7 @@
     <string name="first_name_hint">First name</string>
     <string name="loginButtonText">Caregiver Login</string>
     <string name="settings">Settings</string>
+    <string name="newCaregiverLabel">Create Caregiver Account</string>
+    <string name="caregiverHomeLabel">Caregiver Home</string>
+    <string name="caregiverLoginLabel">Caregiver Login</string>
 </resources>

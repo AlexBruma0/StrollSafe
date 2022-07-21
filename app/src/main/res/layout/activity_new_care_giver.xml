@@ -95,11 +95,11 @@
                 android:inputType="textPassword" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/caregiverSignUpBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:onClick="createUserLoginAndUploadObjectFromFields"
-                android:text="Button" />
+                android:text="Sign Up" />
 
 
         </LinearLayout>

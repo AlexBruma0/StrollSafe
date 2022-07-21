@@ -2,6 +2,8 @@ package com.example.strollsafe.pwd.Location;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -12,6 +14,7 @@ import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.Location.PWDLocations;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ShowSavedLocationsList extends AppCompatActivity {
 
@@ -27,9 +30,23 @@ public class ShowSavedLocationsList extends AppCompatActivity {
         PWDLocations myApplication = (PWDLocations) getApplicationContext();
         ArrayList<Location> savedLocations = myApplication.getMyLocations();
 
-
-        lv_wayPoints.setAdapter(new ArrayAdapter<Location>(this,
-                android.R.layout.simple_expandable_list_item_1, savedLocations));
+        // convert location to a street address if possible
+        ArrayList<String> savedAddresses = new ArrayList<>();
+        for (Location location: savedLocations) {
+            Geocoder geocoder = new Geocoder(ShowSavedLocationsList.this);
+            try {
+                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
+                        location.getLongitude(), 1);
+                savedAddresses.add(addresses.get(0).getAddressLine(0));
+            } catch (Exception e) {
+                String address = "Lat: " + location.getLatitude() + "Lon: " + location.getLongitude() +
+                        "\n" + "Unable to get street address";
+                savedAddresses.add(address);
+            }
+        }
+        // save all locations as a list and display for the user
+        lv_wayPoints.setAdapter(new ArrayAdapter<String>(this,
+                android.R.layout.simple_expandable_list_item_1, savedAddresses));
 
     }
 }

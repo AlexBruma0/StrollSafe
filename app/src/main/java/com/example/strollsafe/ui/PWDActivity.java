@@ -1,12 +1,10 @@
 package com.example.strollsafe.ui;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -14,23 +12,13 @@ import android.widget.TextView;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.PWD;
+
+import com.example.strollsafe.ui.location.PWDLocationInformationActivity;
 import com.example.strollsafe.utils.DatabaseManager;
-
-import org.bson.types.ObjectId;
-
-import java.util.Objects;
-import java.util.Timer;
-import java.util.TimerTask;
-import java.util.concurrent.atomic.AtomicReference;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
-import io.realm.RealmQuery;
 import io.realm.mongodb.App;
-import io.realm.mongodb.AppConfiguration;
-import io.realm.mongodb.Credentials;
-import io.realm.mongodb.User;
-import io.realm.mongodb.sync.SyncConfiguration;
 
 public class PWDActivity extends AppCompatActivity {
     SharedPreferences pwdPreferences;

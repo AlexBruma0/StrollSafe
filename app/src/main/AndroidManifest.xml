@@ -2,13 +2,14 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.example.strollsafe">
-    <!-- Permission to use network location provider for our Android app -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Permission to get last known location -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION " /> <!-- Internet permission for use of network provider -->
-    <uses-permission android:name="android.permission.INTERNET" /> <!-- Requesting background location access -->
-    <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
+
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION " />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
+        android:name=".pwd.location.PWDLocations"
+
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -18,6 +19,36 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.StrollSafe"
         tools:targetApi="31">
+
+
+
+        <!--
+     TODO: Before you run your application, you need a Google Maps API key.
+
+     To get one, follow the directions here:
+
+        https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+     Once you have your API key (it starts with "AIza"), define a new property in your
+     project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+     "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+-->
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAYvwlsvkTacsCUXqWSw_kw2GQzhsNHIJQ" />
+        <activity
+            android:name=".ui.location.ShowSavedLocationsList"
+            android:exported="false" />
+        <activity
+            android:name=".ui.location.MapsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.location.LocationActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ui.location.PWDLocationInformationActivity"
+            android:exported="false" />
         <activity
             android:name=".ui.PWDLoginActivity"
             android:exported="false" />
@@ -33,39 +64,24 @@
             android:name=".ui.ListOfPWDActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.LocationActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.CaregiverLoginActivity"
-            android:exported="false"
-            android:label="@string/caregiverLoginLabel"
-            android:theme="@style/Theme.StrollSafe.NoActionBar"
-            tools:ignore="DuplicateActivity" />
-        <!--
-             TODO: Before you run your application, you need a Google Maps API key.
-
-             To get one, follow the directions here:
-
-                https://developers.google.com/maps/documentation/android-sdk/get-api-key
-
-             Once you have your API key (it starts with "AIza"), define a new property in your
-             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
-             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
-        -->
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="YOUR_API_KEY" />
-
-        <activity
             android:name=".ui.CaregiverHomeActivity"
             android:label="@string/caregiverHomeLabel"
-            android:theme="@style/Theme.StrollSafe.NoActionBar"
+            android:theme="@style/Theme.StrollSafe.NoActionBar" />
+        <activity
+            android:name=".ui.location.ShowSavedLocationsList"
+            android:exported="false" />
+        <activity
+            android:name=".ui.location.MapsActivity"
             android:exported="false" />
         <activity
             android:name=".ui.PWDActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.PWDLocationInformationActivity"
+            android:name=".ui.location.PWDLocationInformationActivity"
+            android:exported="false" />
+            android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".ui.PWDActivity"
             android:exported="false" />
         <activity
             android:name=".ui.NewCaregiverActivity"

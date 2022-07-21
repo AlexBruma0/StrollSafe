@@ -71,6 +71,8 @@
 
         <activity
             android:name=".ui.NewCaregiverActivity"
+            android:label="@string/newCaregiverLabel"
+            android:theme="@style/Theme.StrollSafe.NoActionBar"
             android:exported="false" />
         <activity
             android:name=".ui.SettingsActivity"

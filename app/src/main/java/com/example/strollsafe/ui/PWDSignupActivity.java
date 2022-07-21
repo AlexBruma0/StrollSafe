@@ -4,32 +4,18 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.example.strollsafe.caregiver.Caregiver;
-import com.example.strollsafe.ui.MainActivity;
 import com.example.strollsafe.R;
-import com.example.strollsafe.ui.CaregiverActivity;
 import com.example.strollsafe.pwd.PWD;
 import com.example.strollsafe.utils.DatabaseManager;
-import com.google.android.material.snackbar.Snackbar;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.util.Log;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-import androidx.navigation.ui.AppBarConfiguration;
-import androidx.navigation.ui.NavigationUI;
-
-import com.example.strollsafe.databinding.ActivityPwdSignupBinding;
 
 import org.bson.types.ObjectId;
 
@@ -41,7 +27,6 @@ import java.util.concurrent.atomic.AtomicReference;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.mongodb.App;
-import io.realm.mongodb.AppConfiguration;
 import io.realm.mongodb.Credentials;
 import io.realm.mongodb.User;
 import io.realm.mongodb.sync.SyncConfiguration;

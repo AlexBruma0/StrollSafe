@@ -73,9 +73,10 @@ public class PWDListActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
-                app = databaseManager.getApp();
-                pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
-                pwdPreferenceEditor = pwdPreferences.edit();
+
+//                app = databaseManager.getApp();
+//                pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
+//                pwdPreferenceEditor = pwdPreferences.edit();
 //                setContentView(R.layout.activity_pwd);
 //                TextView code = findViewById(R.id.viewPWDCODE);
 //                code.setText(pwdPreferences.getString("code","error"));

@@ -141,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, CaregiverLoginActivity.class));
+                startActivity(new Intent(MainActivity.this, ListOfPWDActivity.class));
             }
         });
     }

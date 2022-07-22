@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.strollsafe.R;
@@ -51,6 +52,12 @@ public class ListOfPWDActivity extends AppCompatActivity {
         button = (Button) findViewById(R.id.NAME1);
         databaseManager = new DatabaseManager(this);
 
+        pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
+        pwdPreferenceEditor = pwdPreferences.edit();
+        databaseManager = new DatabaseManager(this);
+        app = databaseManager.getApp();
+
+
         configureBack();
         configureMap1();
         configureMap2();
@@ -58,7 +65,6 @@ public class ListOfPWDActivity extends AppCompatActivity {
         configureDelete1();
         configureDelete2();
         configureDelete3();
-        configureNew();
         configureName1();
         configureName2();
         configureName3();
@@ -151,31 +157,31 @@ public class ListOfPWDActivity extends AppCompatActivity {
             }
         });
     }
-    public void configureNew(){
-        ImageButton newPWD = (ImageButton) findViewById(R.id.NewPWD);
-//        ImageButton delete = (ImageButton) findViewById(R.id.delete1);
-//        ImageButton map = (ImageButton) findViewById(R.id.Map1);
-        Button name = (Button) findViewById(R.id.NAME1);
-        newPWD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                startActivity(new Intent(ListOfPWDActivity.this, PWDListActivity.class));
-            }
-        });
-    }
 
     public void configureName1(){
         Button name = (Button) findViewById(R.id.NAME1);
         ImageButton delete = (ImageButton) findViewById(R.id.delete1);
         ImageButton map = (ImageButton) findViewById(R.id.Map1);
+        EditText editText = (EditText) findViewById(R.id.editTextTextPassword);
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = getIntent();
-                name.setText(i.getStringExtra("cool"));
+//                TextView code = findViewById(R.id.viewPWDCODE);
+//                code.setText(pwdPreferences.getString("code","error"));
+//                Intent i =new Intent(ListOfPWDActivity.this, ListOfPWDActivity.class);
+//                i.putExtra("cool",editText.getText().toString());
+//                startActivity(i);
+                text = editText.getText().toString();
+//                i = getIntent();
+                name.setText(text);
                 delete.setVisibility(View.VISIBLE);
                 map.setVisibility(View.VISIBLE);
+
+
+
+
+
             }
         });
     }
@@ -183,13 +189,25 @@ public class ListOfPWDActivity extends AppCompatActivity {
         Button name = (Button) findViewById(R.id.NAME2);
         ImageButton delete = (ImageButton) findViewById(R.id.delete2);
         ImageButton map = (ImageButton) findViewById(R.id.Map2);
+        EditText editText = (EditText) findViewById(R.id.editTextTextPassword);
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = getIntent();
-                name.setText(i.getStringExtra("cool"));
+//                TextView code = findViewById(R.id.viewPWDCODE);
+//                code.setText(pwdPreferences.getString("code","error"));
+//                Intent i =new Intent(ListOfPWDActivity.this, ListOfPWDActivity.class);
+//                i.putExtra("cool",editText.getText().toString());
+//                startActivity(i);
+                text = editText.getText().toString();
+//                i = getIntent();
+                name.setText(text);
                 delete.setVisibility(View.VISIBLE);
                 map.setVisibility(View.VISIBLE);
+
+
+
+
+
             }
         });
     }
@@ -197,13 +215,25 @@ public class ListOfPWDActivity extends AppCompatActivity {
         Button name = (Button) findViewById(R.id.NAME3);
         ImageButton delete = (ImageButton) findViewById(R.id.delete3);
         ImageButton map = (ImageButton) findViewById(R.id.Map3);
+        EditText editText = (EditText) findViewById(R.id.editTextTextPassword);
         name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = getIntent();
-                name.setText(i.getStringExtra("cool"));
+//                TextView code = findViewById(R.id.viewPWDCODE);
+//                code.setText(pwdPreferences.getString("code","error"));
+//                Intent i =new Intent(ListOfPWDActivity.this, ListOfPWDActivity.class);
+//                i.putExtra("cool",editText.getText().toString());
+//                startActivity(i);
+                text = editText.getText().toString();
+//                i = getIntent();
+                name.setText(text);
                 delete.setVisibility(View.VISIBLE);
                 map.setVisibility(View.VISIBLE);
+
+
+
+
+
             }
         });
     }

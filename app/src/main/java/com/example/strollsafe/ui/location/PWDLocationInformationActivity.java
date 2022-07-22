@@ -26,6 +26,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.renderscript.RenderScript;
 import android.util.Log;
 
 import android.view.View;
@@ -47,14 +48,14 @@ import com.google.android.gms.location.LocationServices;
 import java.util.ArrayList;
 import java.util.List;
 import com.example.strollsafe.R;
-import com.google.android.gms.location.Priority;
+//import com.google.android.gms.location.Priority;
 import com.google.android.gms.tasks.OnSuccessListener;
 
 public class PWDLocationInformationActivity extends AppCompatActivity {
 
     public static final int DEFAULT_UPDATE_INTERVAL = 30; // seconds
     public static final int FAST_UPDATE_INTERVAL = 10; // seconds
-    public static final int LOCATION_REQUEST_PRIORITY = Priority.PRIORITY_HIGH_ACCURACY;
+    //public static final int LOCATION_REQUEST_PRIORITY = RenderScript.Priority.PRIORITY_HIGH_ACCURACY;
     private static final int PERMISSIONS_CODE_ALL = 99; // any permission code
 
     public final PWDLocation locationArray = new PWDLocation();
@@ -124,7 +125,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
 
         // set all properties of LocationRequest
         locationRequest = LocationRequest.create();
-        locationRequest.setPriority(LOCATION_REQUEST_PRIORITY);
+        //locationRequest.setPriority(LOCATION_REQUEST_PRIORITY);
         locationRequest.setInterval(1000 * DEFAULT_UPDATE_INTERVAL);
         // update frequency with max power & accuracy
         locationRequest.setFastestInterval(1000 * FAST_UPDATE_INTERVAL);
@@ -161,10 +162,10 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (sw_gps.isChecked()) { // if switch is turned on, use GPS sensors
-                    locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
+                    //locationRequest.setPriority(RenderScript.Priority.PRIORITY_HIGH_ACCURACY);
                     tv_sensor.setText("Using GPS sensor");
                 } else { // if swtich is turned off, use towers and WIFI
-                    locationRequest.setPriority(Priority.PRIORITY_BALANCED_POWER_ACCURACY);
+                    //locationRequest.setPriority(RenderScript.Priority.PRIORITY_BALANCED_POWER_ACCURACY);
                     tv_sensor.setText("Using towers + WIFI");
                 }
 
@@ -190,7 +191,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PWDLocationInformationActivity.this,
-                        ShowSavedLocationsList.class);
+                        com.example.strollsafe.ui.location.ShowSavedLocationsList.class);
                 startActivity(intent);
             }
         });
@@ -199,7 +200,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(PWDLocationInformationActivity.this,
-                        MapsActivity.class);
+                        com.example.strollsafe.ui.location.MapsActivity.class);
                 startActivity(intent);
             }
         });

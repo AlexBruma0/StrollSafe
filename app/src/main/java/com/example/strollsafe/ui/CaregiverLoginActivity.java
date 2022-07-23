@@ -44,8 +44,8 @@ public class CaregiverLoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_caregiver_login);
-        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(topBar);
+//        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
+//        setSupportActionBar(topBar);
 
     }
 
@@ -92,7 +92,7 @@ public class CaregiverLoginActivity extends AppCompatActivity {
                                 Log.v(TAG, "Successfully opened a realm with the given config.");
                                 realmDatabase = realm;
                                 // CODE TO EXECUTE AFTER LOGIN
-                                startActivity(new Intent(CaregiverLoginActivity.this, CaregiverHomeActivity.class));
+                                startActivity(new Intent(CaregiverLoginActivity.this, ListOfPWDActivity.class));
 
                             }
                         });

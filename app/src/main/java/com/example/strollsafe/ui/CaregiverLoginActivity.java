@@ -92,6 +92,7 @@ public class CaregiverLoginActivity extends AppCompatActivity {
                                 Log.v(TAG, "Successfully opened a realm with the given config.");
                                 realmDatabase = realm;
                                 // CODE TO EXECUTE AFTER LOGIN
+                                //databaseManager.logoutOfRealm();
                                 startActivity(new Intent(CaregiverLoginActivity.this, ListOfPWDActivity.class));
 
                             }

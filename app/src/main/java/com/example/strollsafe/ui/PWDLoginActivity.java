@@ -9,11 +9,15 @@ import android.os.Bundle;
 
 import com.example.strollsafe.R;
 
+import androidx.appcompat.app.AppCompatActivity;
+
+import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.PWD;
 import com.example.strollsafe.utils.DatabaseManager;
 
@@ -22,7 +26,9 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
+import io.realm.RealmResults;
 import io.realm.mongodb.App;
+import io.realm.mongodb.AppConfiguration;
 import io.realm.mongodb.Credentials;
 import io.realm.mongodb.User;
 import io.realm.mongodb.sync.SyncConfiguration;
@@ -69,8 +75,8 @@ public class PWDLoginActivity extends AppCompatActivity {
             public void onClick(View view) {
                 editPassword = (EditText) findViewById(R.id.editPWDPassword);
                 editEmail = (EditText) findViewById(R.id.editPWDEmail);
-                String email = "11";
-                String password = "password123";
+                String email = editEmail.getText().toString();
+                String password = editPassword.getText().toString();
                 try {
                     Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
                     AtomicReference<User> user = new AtomicReference<User>();
@@ -98,7 +104,7 @@ public class PWDLoginActivity extends AppCompatActivity {
                                     pwdPreferenceEditor.putString("Phone", account.getPhoneNumber());
                                     pwdPreferenceEditor.putString("email", account.getEmail());
                                     pwdPreferenceEditor.putString("password", account.getPassword());
-                                    //startActivity(new Intent(PWDLoginActivity.this,PWDActivity.class));
+                                    startActivity(new Intent(PWDLoginActivity.this,PWDActivity.class));
                                 }
                             });
                         } else {

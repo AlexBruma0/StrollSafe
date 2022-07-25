@@ -20,6 +20,7 @@ import android.widget.Toast;
 
 import org.bson.types.ObjectId;
 
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
@@ -125,6 +126,10 @@ public class PWDSignupActivity extends AppCompatActivity {
                                 Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
 
                                 Log.i(TAG, "Adding user information to shared preferences.");
+
+
+                                user.set(app.currentUser());
+                                databaseManager.addCustomerUserData(user.get(), DatabaseManager.PWD_ACCOUNT_TYPE, email, phoneNumber, new Date(), "address", firstName, lastName);
                                 // ADD NEWLY CREATED PWD TO USER PREFS PUT IN A FUNCTION LATER
                                 pwdPreferenceEditor.putString(PWD_CODE_PREFS_KEY, pwdCode);
                                 pwdPreferenceEditor.putString(FIRST_NAME_PREFS_KEY, firstName);
@@ -135,7 +140,6 @@ public class PWDSignupActivity extends AppCompatActivity {
                                 pwdPreferenceEditor.putString(REALM_OBJECT_ID_PREFS_KEY, id.toString());
                                 pwdPreferenceEditor.apply();
 
-                                user.set(app.currentUser());
                                 config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
                                         .name(APP_ID)
                                         .schemaVersion(2)
@@ -148,15 +152,6 @@ public class PWDSignupActivity extends AppCompatActivity {
                                     public void onSuccess(@NonNull Realm realm) {
                                         Log.v(TAG, "Successfully opened a realm with reads and writes allowed on the UI thread.");
                                         realmDatabase = realm;
-//                                        realmDatabase.executeTransaction(transaction -> {
-//                                            PWD newPwd = transaction.createObject(PWD.class, new ObjectId());
-//                                            newPwd.setEmail(email);
-//                                            newPwd.setFirstName(firstName);
-//                                            newPwd.setLastName(lastName);
-//                                            newPwd.setPhoneNumber(phoneNumber);
-//                                            newPwd.setPwdCode(pwdCode);
-//                                        });
-                                        Log.d(TAG, "Uploaded the PWD to the database.");
                                         startActivity(new Intent(PWDSignupActivity.this, PWDActivity.class));
                                     }
                                 });

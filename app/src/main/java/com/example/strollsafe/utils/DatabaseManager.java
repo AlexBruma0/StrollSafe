@@ -32,7 +32,7 @@ import io.realm.mongodb.sync.SyncConfiguration;
  */
 public class DatabaseManager {
     public static final String CAREGIVER_ACCOUNT_TYPE = "caregiver";
-    public final String PWD_ACCOUNT_TYPE = "pwd";
+    public static final String PWD_ACCOUNT_TYPE = "pwd";
     private Realm realmDatabase;
     private App app;
     private final String APP_ID = "strollsafe-pjbnn";
@@ -241,5 +241,24 @@ public class DatabaseManager {
                         Log.e("EXAMPLE", "Unable to insert custom user data. Error: " + result.getError());
                     }
                 });
+    }
+
+    /**
+     * Queries the custom data that is set at sing up for the user for the account type.
+     * @return string with the type of user account currently logged in (caregiver, pwd, null)
+     */
+    public String getUserAccountType() {
+//        String accountType = getLoggedInUser().getCustomData().getString("userType");
+//        switch (accountType.toLowerCase()) {
+//            case DatabaseManager.CAREGIVER_ACCOUNT_TYPE:
+//                return DatabaseManager.CAREGIVER_ACCOUNT_TYPE;
+//
+//            case DatabaseManager.PWD_ACCOUNT_TYPE:
+//                return DatabaseManager.PWD_ACCOUNT_TYPE;
+//
+//            default:
+//                return "null";
+//        }
+        return CAREGIVER_ACCOUNT_TYPE;
     }
 }

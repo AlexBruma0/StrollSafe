@@ -18,43 +18,9 @@ import androidx.appcompat.widget.Toolbar;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.mongodb.App;
-import io.realm.mongodb.Credentials;
-import io.realm.mongodb.User;
-import io.realm.mongodb.sync.SyncConfiguration;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.utils.DatabaseManager;
-
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
-
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.mongodb.App;
-import io.realm.mongodb.AppConfiguration;
-import io.realm.mongodb.Credentials;
-import io.realm.mongodb.User;
-import io.realm.mongodb.sync.SyncConfiguration;
-
-import com.example.strollsafe.caregiver.Caregiver;
-
-import com.example.strollsafe.R;
-
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
-
-
 
 
 public class MainActivity extends AppCompatActivity {
@@ -64,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private final String appId = "strollsafe-pjbnn";
     RealmConfiguration config;
     DatabaseManager databaseManager;
+
+    private final String TAG = "MainActivity/";
 
     // Shared preferences for storing caregiver information locally
     SharedPreferences caregiverPreferences;
@@ -76,6 +44,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Setup the realm database
+        databaseManager = new DatabaseManager(this);
+        checkUserAccountType(databaseManager);
 
         // Setup the layout and UI of the activity
         setContentView(R.layout.activity_main);
@@ -92,9 +64,6 @@ public class MainActivity extends AppCompatActivity {
 
         pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
         pwdPreferenceEditor = pwdPreferences.edit();
-
-        // Setup the realm database
-        databaseManager = new DatabaseManager(this);
     }
 
     @Override
@@ -108,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.optionsMenuItem:
+                Log.i(TAG, "Starting SettingsActivity form MainActivity");
                 startActivity(new Intent(MainActivity.this, SettingsActivity.class));
                 return true;
 
@@ -120,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                Log.i(TAG, "Starting PWDLoginActivity form MainActivity");
                 startActivity(new Intent(MainActivity.this,PWDLoginActivity.class));
             }
         });
@@ -130,6 +101,7 @@ public class MainActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                Log.i(TAG, "Starting NewCaregiverActivity form MainActivity");
                 startActivity(new Intent(MainActivity.this, NewCaregiverActivity.class));
             }
         });
@@ -141,6 +113,7 @@ public class MainActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
+                Log.i(TAG, "Starting CaregiverLoginActivity form MainActivity");
                 startActivity(new Intent(MainActivity.this, CaregiverLoginActivity.class));
             }
         });
@@ -167,6 +140,29 @@ public class MainActivity extends AppCompatActivity {
 //        RealmResults<PWD> caregiverRealmResults = database.where(PWD.class).findAll();
 //        Log.d("",caregiverRealmResults.asJSON());
 
+    }
+
+    private void checkUserAccountType(DatabaseManager databaseManager) {
+        if(databaseManager.isUserLoggedIn()) {
+            switch(databaseManager.getUserAccountType()) {
+                case DatabaseManager.CAREGIVER_ACCOUNT_TYPE:
+                    Log.i(TAG, "Starting CaregiverHomeActivity form MainActivity");
+                    startActivity(new Intent(MainActivity.this, CaregiverHomeActivity.class));
+                    break;
+
+                case DatabaseManager.PWD_ACCOUNT_TYPE:
+                    Log.i(TAG, "Starting PWDActivity form MainActivity");
+                    startActivity(new Intent(MainActivity.this, PWDActivity.class));
+                    break;
+
+                default:
+                    Log.e(TAG, "Account type is not set in custom user data.");
+                    break;
+
+            }
+        } else {
+            Log.i(TAG, "No user is currently logged in.");
+        }
     }
 
 }

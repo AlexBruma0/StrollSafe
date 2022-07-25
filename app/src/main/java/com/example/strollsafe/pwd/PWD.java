@@ -1,9 +1,8 @@
 package com.example.strollsafe.pwd;
 
-import com.example.strollsafe.utils.Address;
-import com.example.strollsafe.utils.EmergencyContact;
-
 import org.bson.types.ObjectId;
+
+import java.util.Date;
 
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
@@ -11,29 +10,28 @@ import io.realm.annotations.Required;
 
 public class PWD extends RealmObject {
 
-    //@PrimaryKey private ObjectId _id = new ObjectId();
     @PrimaryKey private ObjectId _id = new ObjectId();
-    @Required
-    private String PWDCode;
-    private String  lastName;
-    private String firstName;
-    private String phoneNumber;
-    private String email;
-    private String password;
-    //private Address homeAddress;
 
+    @Required private String pwdCode;
+    @Required private String lastName;
+    @Required private String firstName;
+    @Required private String phoneNumber;
+    @Required private String email;
+    @Required private String password;
+    @Required private Date dateOfBirth;
+    @Required private String homeAddress;
 
-    //private EmergencyContact[] emergencyContacts;
-    public PWD(){
+    public PWD() {
 
     }
-    public PWD(String fName, String lName, String PN, String code, String mail, String password){
-        this.firstName = fName;
-        this.lastName = lName;
-        this.phoneNumber = PN;
-        this.PWDCode = code;
-        this.email = mail;
-        this.email = password;
+    public PWD(String firstName, String lastName, String phoneNumber, String code, String email, Date dateOfBirth, String homeAddress){
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.phoneNumber = phoneNumber;
+        this.pwdCode = code;
+        this.email = email;
+        this.dateOfBirth = dateOfBirth;
+        this.homeAddress = homeAddress;
     }
 
     public String getEmail() {
@@ -52,19 +50,19 @@ public class PWD extends RealmObject {
         return firstName;
     }
 
-    public String getPWDCode() {
-        return PWDCode;
+    public String getPwdCode() {
+        return pwdCode;
     }
 
     public String getPhoneNumber() {
         return phoneNumber;
     }
 
-   public ObjectId get_id() {
+   public ObjectId getRealmObjectId() {
        return _id;
     }
 
-    public void set_id(ObjectId _id) {
+    public void setRealmObjectId(ObjectId _id) {
         this._id = _id;
     }
 
@@ -88,7 +86,19 @@ public class PWD extends RealmObject {
         this.password = password;
     }
 
-    public void setPWDCode(String PWDCode) {
-        this.PWDCode = PWDCode;
+    public void setPwdCode(String pwdCode) {
+        this.pwdCode = pwdCode;
+    }
+
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getHomeAddress() {
+        return homeAddress;
     }
 }

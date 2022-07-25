@@ -76,13 +76,13 @@ public class PWDActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-//                pwdPreferenceEditor.remove("email");
-//                pwdPreferenceEditor.remove("Phone");
-//                pwdPreferenceEditor.remove("L_name");
-//                pwdPreferenceEditor.remove("F_name");
-//                pwdPreferenceEditor.remove("password");
-//                pwdPreferenceEditor.remove("id");
-//                databaseManager.logoutOfRealm();
+                pwdPreferenceEditor.remove("email");
+                pwdPreferenceEditor.remove("Phone");
+                pwdPreferenceEditor.remove("L_name");
+                pwdPreferenceEditor.remove("F_name");
+                pwdPreferenceEditor.remove("password");
+                pwdPreferenceEditor.remove("id");
+                databaseManager.logoutOfRealm();
                 finish();
             }
         });
@@ -93,19 +93,8 @@ public class PWDActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PWDActivity.this, PWDLocationInformationActivity.class));
+                startActivity(new Intent(PWDActivity.this, com.example.strollsafe.ui.location.PWDLocationInformationActivity.class));
             }
         });
     }
-
-
-//    public void back() {
-//        Button PWD = (Button) findViewById(R.id.back1);
-//        PWD.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                finish();
-//            }
-//        });
-//    }
 }

@@ -32,7 +32,7 @@ import io.realm.mongodb.Credentials;
 import io.realm.mongodb.User;
 import io.realm.mongodb.sync.SyncConfiguration;
 
-public class NewCaregiverActivity extends AppCompatActivity {
+public class CaregiverSignupActivity extends AppCompatActivity {
     private int mYear,mMonth,mDay;
     DatabaseManager databaseManager;
     App app;
@@ -78,7 +78,7 @@ public class NewCaregiverActivity extends AppCompatActivity {
                 mDay = c.get(Calendar.DAY_OF_MONTH);
 
                 // Launch Date Picker Dialog
-                DatePickerDialog dpd = new DatePickerDialog(NewCaregiverActivity.this,
+                DatePickerDialog dpd = new DatePickerDialog(CaregiverSignupActivity.this,
                         new DatePickerDialog.OnDateSetListener() {
 
                             @Override
@@ -145,15 +145,15 @@ public class NewCaregiverActivity extends AppCompatActivity {
                             public void onSuccess(@NonNull Realm realm) {
                                 Log.v(TAG, "Successfully opened a realm with reads and writes allowed on the UI thread.");
                                 realmDatabase = realm;
-                                realmDatabase.executeTransaction(transaction -> {
-                                    Caregiver caregiver = transaction.createObject(Caregiver.class, new ObjectId());
-                                    caregiver.setEmail(email);
-                                    caregiver.setFirstName(firstName);
-                                    caregiver.setLastName(lastName);
-                                    caregiver.setPhoneNumber(phoneNumber);
-                                });
                                 databaseManager.addCustomerUserData(user.get(), DatabaseManager.CAREGIVER_ACCOUNT_TYPE, email, phoneNumber, address, firstName, lastName);
-                                startActivity(new Intent(NewCaregiverActivity.this, CaregiverHomeActivity.class));
+//                                realmDatabase.executeTransaction(transaction -> {
+//                                    Caregiver caregiver = transaction.createObject(Caregiver.class, new ObjectId());
+//                                    caregiver.setEmail(email);
+//                                    caregiver.setFirstName(firstName);
+//                                    caregiver.setLastName(lastName);
+//                                    caregiver.setPhoneNumber(phoneNumber);
+//                                });
+                                startActivity(new Intent(CaregiverSignupActivity.this, CaregiverHomeActivity.class));
                             }
                         });
                     } else {

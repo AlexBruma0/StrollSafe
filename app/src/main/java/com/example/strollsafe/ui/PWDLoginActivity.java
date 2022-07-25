@@ -92,13 +92,13 @@ public class PWDLoginActivity extends AppCompatActivity {
                                     realmDatabase = realm;
                                     // CODE TO EXECUTE AFTER LOGIN
                                     PWD account = realmDatabase.where(PWD.class).equalTo("email",email).findFirst();
-                                    pwdPreferenceEditor.putString("code", account.getPWDCode());
+                                    pwdPreferenceEditor.putString("code", account.getPwdCode());
                                     pwdPreferenceEditor.putString("F_name",account.getFirstName());
                                     pwdPreferenceEditor.putString("L_name",account.getLastName());
                                     pwdPreferenceEditor.putString("Phone", account.getPhoneNumber());
                                     pwdPreferenceEditor.putString("email", account.getEmail());
                                     pwdPreferenceEditor.putString("password", account.getPassword());
-                                    startActivity(new Intent(PWDLoginActivity.this,PWDActivity.class));
+                                    startActivity(new Intent(PWDLoginActivity.this,PWDHome_activity.class));
                                 }
                             });
                         } else {

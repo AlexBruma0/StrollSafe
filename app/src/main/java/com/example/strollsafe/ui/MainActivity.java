@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "Starting NewCaregiverActivity form MainActivity");
-                startActivity(new Intent(MainActivity.this, NewCaregiverActivity.class));
+                startActivity(new Intent(MainActivity.this, CaregiverSignupActivity.class));
             }
         });
     }

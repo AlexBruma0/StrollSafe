@@ -7,6 +7,7 @@ import org.bson.Document;
 
 import androidx.annotation.NonNull;
 
+import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
@@ -72,7 +73,7 @@ public class DatabaseManager {
      * @param email
      * @param password
      */
-    public void createRealmUserAndLoginAsync(String email, String password, String accountType, String phoneNumber, String address, String firstName, String lastName) {
+    public void createRealmUserAndLoginAsync(String email, String password, String accountType, String phoneNumber, Date dateOfBirth, String address, String firstName, String lastName) {
         app.getEmailPassword().registerUserAsync(email, password, registerResult -> {
             if (registerResult.isSuccess()) {
                 Log.i(TAG, "Successfully registered user: " + email);
@@ -92,7 +93,7 @@ public class DatabaseManager {
                                     .allowWritesOnUiThread(true)
                                     .build();
                             getRealmInstance(config);
-                            addCustomerUserData(user.get(), accountType, email, phoneNumber, address, firstName, lastName);
+                            addCustomerUserData(user.get(), accountType, email, phoneNumber, dateOfBirth, address, firstName, lastName);
                         } else {
                             Log.e(TAG + "asyncLoginToRealm", "email: " + loginResult.getError().toString());
                             isUserLoggedIn = false;
@@ -228,17 +229,23 @@ public class DatabaseManager {
         });
     }
 
-    public void addCustomerUserData(User currentUser, String accountType, String email, String phoneNumber, String address, String firstName, String lastName) {
-        MongoClient mongoClient = currentUser.getMongoClient("mongodb-atlas");
+    public void addCustomerUserData(User currentUser, String accountType, String email, String phoneNumber, Date dateOfBirth, String address, String firstName, String lastName) {
+        MongoClient mongoClient = currentUser.getMongoClient("user-data");
         MongoDatabase mongoDatabase = mongoClient.getDatabase("strollSafeTest");
         MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("users");
-        mongoCollection.insertOne(new Document("userId", currentUser.getId()).append(accountType, "caregiver").append("email", email).append("phoneNumber", phoneNumber).append("address", address).append("firstName", firstName).append("lastName", lastName))
+        mongoCollection.insertOne(new Document("userId", currentUser.getId())
+                        .append("accountType", accountType)
+                        .append("email", email)
+                        .append("phoneNumber", phoneNumber)
+                        .append("address", address)
+                        .append("firstName", firstName)
+                        .append("lastName", lastName)
+                        .append("dateOfBirth", dateOfBirth))
                 .getAsync(result -> {
                     if (result.isSuccess()) {
-                        Log.v("EXAMPLE", "Inserted custom user data document. _id of inserted document: "
-                                + result.get().getInsertedId());
+                        Log.d(TAG, String.format("User %s has been added to the database", email));
                     } else {
-                        Log.e("EXAMPLE", "Unable to insert custom user data. Error: " + result.getError());
+                        Log.e(TAG, String.format("Unable to insert custom user data for user %s. Error: %s", email, result.getError()));
                     }
                 });
     }
@@ -248,17 +255,16 @@ public class DatabaseManager {
      * @return string with the type of user account currently logged in (caregiver, pwd, null)
      */
     public String getUserAccountType() {
-//        String accountType = getLoggedInUser().getCustomData().getString("userType");
-//        switch (accountType.toLowerCase()) {
-//            case DatabaseManager.CAREGIVER_ACCOUNT_TYPE:
-//                return DatabaseManager.CAREGIVER_ACCOUNT_TYPE;
-//
-//            case DatabaseManager.PWD_ACCOUNT_TYPE:
-//                return DatabaseManager.PWD_ACCOUNT_TYPE;
-//
-//            default:
-//                return "null";
-//        }
-        return CAREGIVER_ACCOUNT_TYPE;
+        String accountType = getLoggedInUser().getCustomData().getString("accountType");
+        switch (accountType.toLowerCase()) {
+            case DatabaseManager.CAREGIVER_ACCOUNT_TYPE:
+                return DatabaseManager.CAREGIVER_ACCOUNT_TYPE;
+
+            case DatabaseManager.PWD_ACCOUNT_TYPE:
+                return DatabaseManager.PWD_ACCOUNT_TYPE;
+
+            default:
+                return "null";
+        }
     }
 }

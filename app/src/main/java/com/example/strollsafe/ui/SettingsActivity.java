@@ -1,6 +1,7 @@
 package com.example.strollsafe.ui;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,7 +18,10 @@ import io.realm.mongodb.User;
 import com.example.strollsafe.R;
 import com.example.strollsafe.utils.DatabaseManager;
 
+import org.bson.Document;
+
 import java.util.Objects;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class SettingsActivity extends AppCompatActivity {
     DatabaseManager databaseManager;
@@ -46,8 +50,14 @@ public class SettingsActivity extends AppCompatActivity {
         if(currentUser == null) {
             styleSettingsPageLoggedOut();
         } else {
-            styleSettingsPageLoggedIn();
+            currentUser.refreshCustomData(refreshResult -> {
+                if(refreshResult.isSuccess()) {
+                    styleSettingsPageLoggedIn(refreshResult.get());
 
+                } else {
+                    styleSettingsPageLoggedOut();
+                }
+            });
         }
     }
 
@@ -84,6 +94,9 @@ public class SettingsActivity extends AppCompatActivity {
         final String NULL_STRING = "null";
         loginStatusTextView.setText(String.format(getString(R.string.status_prefix), "LOGGED OUT"));
 
+        accountTypeTextView.setText(String.format(getString(R.string.account_type_prefix), NULL_STRING));
+        accountTypeTextView.setAlpha(0.5f);
+
         emailTextView.setText(String.format(getString(R.string.email_prefix), NULL_STRING));
         emailTextView.setAlpha(0.5f);
 
@@ -103,11 +116,14 @@ public class SettingsActivity extends AppCompatActivity {
         logoutButton.setAlpha(0.5f);
     }
 
-    private void styleSettingsPageLoggedIn() {
+    private void styleSettingsPageLoggedIn(Document customData) {
         loginStatusTextView.setText(String.format(getString(R.string.status_prefix), "LOGGED IN"));
 
+        accountTypeTextView.setText(String.format(getString(R.string.account_type_prefix), customData.get("accountType")));
+        accountTypeTextView.setAlpha(1.0f);
+
         emailTextView.setText(String.format(getString(R.string.email_prefix), currentUser.getProfile().getEmail()));
-        emailTextView.setAlpha(1f);
+        emailTextView.setAlpha(1.0f);
 
         userIdTextView.setText(String.format(getString(R.string.user_id_prefix), currentUser.getId()));
         userIdTextView.setAlpha(1.0f);
@@ -115,10 +131,10 @@ public class SettingsActivity extends AppCompatActivity {
         deviceIdTextView.setText(String.format(getString(R.string.device_id_prefix), currentUser.getDeviceId()));
         deviceIdTextView.setAlpha(1f);
 
-        firstNameTextView.setText(String.format(getString(R.string.first_name_prefix), currentUser.getProfile().getFirstName()));
+        firstNameTextView.setText(String.format(getString(R.string.first_name_prefix), customData.get("firstName")));
         firstNameTextView.setAlpha(1f);
 
-        lastNameTextView.setText(String.format(getString(R.string.last_name_prefix), currentUser.getProfile().getLastName()));
+        lastNameTextView.setText(String.format(getString(R.string.last_name_prefix), customData.get("lastName")));
         lastNameTextView.setAlpha(1f);
 
         logoutButton.setEnabled(true);

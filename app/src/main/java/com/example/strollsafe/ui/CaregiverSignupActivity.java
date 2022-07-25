@@ -14,13 +14,11 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.strollsafe.R;
-import com.example.strollsafe.caregiver.Caregiver;
 import com.example.strollsafe.utils.DatabaseManager;
-
-import org.bson.types.ObjectId;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
@@ -47,7 +45,7 @@ public class CaregiverSignupActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         databaseManager = new DatabaseManager(this);
         app = databaseManager.getApp();
-        setContentView(R.layout.activity_new_care_giver);
+        setContentView(R.layout.activity_caregiver_signup);
 
         final TextView pickDate = (TextView) findViewById(R.id.caregiverBirthday);
         final TextView textView = (TextView) findViewById(R.id.caregiverBirthday);
@@ -133,26 +131,20 @@ public class CaregiverSignupActivity extends AppCompatActivity {
                     if (loginResult.isSuccess()) {
                         Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
                         user.set(app.currentUser());
-                            config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
-                            .name(APP_ID)
-                            .schemaVersion(2)
-                            .allowQueriesOnUiThread(true)
-                            .allowWritesOnUiThread(true)
-                            .build();
+                        databaseManager.addCustomerUserData(user.get(), DatabaseManager.CAREGIVER_ACCOUNT_TYPE, email, phoneNumber, new Date(), address, firstName, lastName);
+
+                        config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
+                        .name(APP_ID)
+                        .schemaVersion(2)
+                        .allowQueriesOnUiThread(true)
+                        .allowWritesOnUiThread(true)
+                        .build();
 
                         Realm.getInstanceAsync(config, new Realm.Callback() {
                             @Override
                             public void onSuccess(@NonNull Realm realm) {
                                 Log.v(TAG, "Successfully opened a realm with reads and writes allowed on the UI thread.");
                                 realmDatabase = realm;
-                                databaseManager.addCustomerUserData(user.get(), DatabaseManager.CAREGIVER_ACCOUNT_TYPE, email, phoneNumber, address, firstName, lastName);
-//                                realmDatabase.executeTransaction(transaction -> {
-//                                    Caregiver caregiver = transaction.createObject(Caregiver.class, new ObjectId());
-//                                    caregiver.setEmail(email);
-//                                    caregiver.setFirstName(firstName);
-//                                    caregiver.setLastName(lastName);
-//                                    caregiver.setPhoneNumber(phoneNumber);
-//                                });
                                 startActivity(new Intent(CaregiverSignupActivity.this, CaregiverHomeActivity.class));
                             }
                         });

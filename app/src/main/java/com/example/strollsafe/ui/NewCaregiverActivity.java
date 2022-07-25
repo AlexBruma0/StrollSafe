@@ -22,7 +22,6 @@ import org.bson.types.ObjectId;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -151,7 +150,7 @@ public class NewCaregiverActivity extends AppCompatActivity {
                                     caregiver.setLastName(lastName);
                                     caregiver.setPhoneNumber(phoneNumber);
                                 });
-                                startActivity(new Intent(NewCaregiverActivity.this, CaregiverActivity.class));
+                                startActivity(new Intent(NewCaregiverActivity.this, CaregiverHomeActivity.class));
                             }
                         });
                     } else {

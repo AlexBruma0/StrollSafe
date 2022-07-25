@@ -98,7 +98,7 @@ public class PWDLoginActivity extends AppCompatActivity {
                                     pwdPreferenceEditor.putString("Phone", account.getPhoneNumber());
                                     pwdPreferenceEditor.putString("email", account.getEmail());
                                     pwdPreferenceEditor.putString("password", account.getPassword());
-                                    startActivity(new Intent(PWDLoginActivity.this,PWDActivity.class));
+                                    startActivity(new Intent(PWDLoginActivity.this,PWDHome_activity.class));
                                 }
                             });
                         } else {

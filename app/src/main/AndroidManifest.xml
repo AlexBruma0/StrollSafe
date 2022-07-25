@@ -47,9 +47,6 @@
             android:name=".ui.location.LocationActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.location.PWDLocationInformationActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.PWDLoginActivity"
             android:exported="false" />
         <activity
@@ -71,12 +68,6 @@
             android:label="@string/caregiverHomeLabel"
             android:theme="@style/Theme.StrollSafe.NoActionBar" />
         <activity
-            android:name=".ui.location.ShowSavedLocationsList"
-            android:exported="false" />
-        <activity
-            android:name=".ui.location.MapsActivity"
-            android:exported="false" />
-        <activity
             android:name=".ui.PWDActivity"
             android:exported="false" />
         <activity
@@ -84,7 +75,7 @@
             android:exported="false" />
             android:label="@string/title_activity_maps" />
         <activity
-            android:name=".ui.PWDActivity"
+            android:name=".ui.PWDHome_activity"
             android:exported="false" />
         <activity
             android:name=".ui.CaregiverSignupActivity"

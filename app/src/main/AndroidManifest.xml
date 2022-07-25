@@ -87,8 +87,9 @@
             android:name=".ui.PWDActivity"
             android:exported="false" />
         <activity
-            android:name=".ui.NewCaregiverActivity"
+            android:name=".ui.CaregiverSignupActivity"
             android:label="@string/newCaregiverLabel"
+            android:windowSoftInputMode="adjustResize"
             android:theme="@style/Theme.StrollSafe.NoActionBar"
             android:exported="false" />
         <activity

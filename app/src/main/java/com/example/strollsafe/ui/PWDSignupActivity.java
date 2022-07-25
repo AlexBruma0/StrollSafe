@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.bson.types.ObjectId;
 
@@ -33,32 +34,51 @@ import io.realm.mongodb.sync.SyncConfiguration;
 
 public class PWDSignupActivity extends AppCompatActivity {
 
+    public static final String PWD_CODE_PREFS_KEY = "PWDCODE";
+    public static final String FIRST_NAME_PREFS_KEY = "FIRSTNAME";
+    public static final String LAST_NAME_PREFS_KEY = "LASTNAME";
+    public static final String PHONE_NUMBER_PREFS_KEY = "PHONENUMBER";
+    public static final String EMAILS_PREFS_KEY = "EMAIL";
+    public static final String PASSWORD_PREFS_KEY = "PASSWORD";
+    public static final String REALM_OBJECT_ID_PREFS_KEY = "REALMOBJECTID";
+
     DatabaseManager databaseManager;
     App app;
     private User user;
     private final String APP_ID = "strollsafe-pjbnn";
     private RealmConfiguration config;
     Realm realmDatabase;
-    String TAG = "";
-    private Button btnMain;
+
+    String TAG = "PWDSignupActivity/";
+    private Button createPwdAccountButton;
     private TextView txtMain;
+    private EditText editPassword, editEmail, editPhoneNumber, editLastName, editFirstName;
+
     SharedPreferences pwdPreferences;
     SharedPreferences.Editor pwdPreferenceEditor;
-    private EditText editFirstName;
-    private EditText editLastName;
-    private EditText editPhoneNumber;
-    private EditText editPassword;
-    private EditText editEmail;
+
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         databaseManager = new DatabaseManager(this);
         app = databaseManager.getApp();
+
         pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
         pwdPreferenceEditor = pwdPreferences.edit();
+
         setContentView(R.layout.activity_pwd_signup);
-        configureBack();
-        configureSignUp();
+        createPwdAccountButton = (Button) findViewById(R.id.createPwdAccountButton);
+        editFirstName = (EditText) findViewById(R.id.editFirstNamePWD);
+        editLastName = (EditText) findViewById(R.id.editLastNamePWD);
+        editPhoneNumber = (EditText) findViewById(R.id.editPhoneNumber);
+        editEmail = (EditText) findViewById(R.id.editEmailAddress);
+        editPassword = (EditText) findViewById(R.id.editPassword);
+
+        configureBackButton();
+        configureSignUpButton();
     } // end of onCreate()
 
     private static String getRandomString(int i){
@@ -72,7 +92,7 @@ public class PWDSignupActivity extends AppCompatActivity {
         return result.toString().toUpperCase(Locale.ROOT);
     }
 
-    public void configureBack() {
+    public void configureBackButton() {
         Button PWD = (Button) findViewById(R.id.pwdBackButton);
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -81,33 +101,19 @@ public class PWDSignupActivity extends AppCompatActivity {
             }
         });
     }
-    public void configureSignUp(){
-        Button PWD = (Button) findViewById(R.id.btnMain);
-        PWD.setOnClickListener(new View.OnClickListener() {
+
+    public void configureSignUpButton(){
+        createPwdAccountButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String code = getRandomString(4);
-                editFirstName = (EditText) findViewById(R.id.editFirstNamePWD);
-                editLastName = (EditText) findViewById(R.id.editLastNamePWD);
-                editPhoneNumber = (EditText) findViewById(R.id.editPhoneNumber);
-                editEmail = (EditText) findViewById(R.id.editEmailAddress);
-                editPassword = (EditText) findViewById(R.id.editPassword);
+                String pwdCode = getRandomString(4);
+                ObjectId id = new ObjectId();
                 String email = editEmail.getText().toString();
                 String password = editPassword.getText().toString();
                 String firstName = editFirstName.getText().toString();
                 String lastName = editLastName.getText().toString();
                 String phoneNumber = editPhoneNumber.getText().toString();
 
-                pwdPreferenceEditor.putString("code",code);
-                pwdPreferenceEditor.putString("F_name",firstName);
-                pwdPreferenceEditor.putString("L_name",lastName);
-                pwdPreferenceEditor.putString("Phone",phoneNumber);
-                pwdPreferenceEditor.putString("email",email);
-                pwdPreferenceEditor.putString("password", password);
-
-                PWD account = new PWD(firstName,lastName,phoneNumber,code,email,password);
-                pwdPreferenceEditor.putString("id",account.get_id().toString());
-                pwdPreferenceEditor.apply();
                 app.getEmailPassword().registerUserAsync(email, password, createResult -> {
                     if (createResult.isSuccess()) {
                         Log.i(TAG, "Successfully registered user: " + email);
@@ -117,6 +123,18 @@ public class PWDSignupActivity extends AppCompatActivity {
                         app.loginAsync(emailPasswordCredentials, loginResult -> {
                             if (loginResult.isSuccess()) {
                                 Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
+
+                                Log.i(TAG, "Adding user information to shared preferences.");
+                                // ADD NEWLY CREATED PWD TO USER PREFS PUT IN A FUNCTION LATER
+                                pwdPreferenceEditor.putString(PWD_CODE_PREFS_KEY, pwdCode);
+                                pwdPreferenceEditor.putString(FIRST_NAME_PREFS_KEY, firstName);
+                                pwdPreferenceEditor.putString(LAST_NAME_PREFS_KEY, lastName);
+                                pwdPreferenceEditor.putString(PHONE_NUMBER_PREFS_KEY, phoneNumber);
+                                pwdPreferenceEditor.putString(EMAILS_PREFS_KEY, email);
+                                pwdPreferenceEditor.putString(PASSWORD_PREFS_KEY, password);
+                                pwdPreferenceEditor.putString(REALM_OBJECT_ID_PREFS_KEY, id.toString());
+                                pwdPreferenceEditor.apply();
+
                                 user.set(app.currentUser());
                                 config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
                                         .name(APP_ID)
@@ -130,25 +148,26 @@ public class PWDSignupActivity extends AppCompatActivity {
                                     public void onSuccess(@NonNull Realm realm) {
                                         Log.v(TAG, "Successfully opened a realm with reads and writes allowed on the UI thread.");
                                         realmDatabase = realm;
-                                        realmDatabase.executeTransaction(transaction -> {
-                                            PWD account = transaction.createObject(PWD.class, new ObjectId());
-                                            account.setEmail(email);
-                                            account.setFirstName(firstName);
-                                            account.setLastName(lastName);
-                                            account.setPhoneNumber(phoneNumber);
-                                            account.setPWDCode(code);
-                                        });
+//                                        realmDatabase.executeTransaction(transaction -> {
+//                                            PWD newPwd = transaction.createObject(PWD.class, new ObjectId());
+//                                            newPwd.setEmail(email);
+//                                            newPwd.setFirstName(firstName);
+//                                            newPwd.setLastName(lastName);
+//                                            newPwd.setPhoneNumber(phoneNumber);
+//                                            newPwd.setPwdCode(pwdCode);
+//                                        });
+                                        Log.d(TAG, "Uploaded the PWD to the database.");
                                         startActivity(new Intent(PWDSignupActivity.this, PWDActivity.class));
                                     }
                                 });
                             } else {
                                 Log.e(TAG + "asyncLoginToRealm", "email: " + loginResult.getError().toString());
-                                //Toast.makeText(this, "email: " + loginResult.getError().toString(), Toast.LENGTH_SHORT).show();
+                                Toast.makeText(PWDSignupActivity.this, "email: " + loginResult.getError().toString(), Toast.LENGTH_SHORT).show();
                             }
                         });
                     } else {
                         Log.e(TAG, "Failed to register user: " + email + "\t" + createResult.getError().getErrorMessage());
-                        //Toast.makeText(this, "Failed to register user: " + email + "\t" + createResult.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PWDSignupActivity.this, "Failed to register user: " + email + "\t" + createResult.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
                     }
                 });
             }

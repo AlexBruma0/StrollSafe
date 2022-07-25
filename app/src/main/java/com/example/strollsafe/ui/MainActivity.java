@@ -3,7 +3,6 @@ package com.example.strollsafe.ui;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -18,43 +17,9 @@ import androidx.appcompat.widget.Toolbar;
 import io.realm.Realm;
 import io.realm.RealmConfiguration;
 import io.realm.mongodb.App;
-import io.realm.mongodb.Credentials;
-import io.realm.mongodb.User;
-import io.realm.mongodb.sync.SyncConfiguration;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.utils.DatabaseManager;
-
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
-
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
-import io.realm.mongodb.App;
-import io.realm.mongodb.AppConfiguration;
-import io.realm.mongodb.Credentials;
-import io.realm.mongodb.User;
-import io.realm.mongodb.sync.SyncConfiguration;
-
-import com.example.strollsafe.caregiver.Caregiver;
-
-import com.example.strollsafe.R;
-
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
-
-
 
 
 public class MainActivity extends AppCompatActivity {
@@ -130,7 +95,7 @@ public class MainActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, NewCaregiverActivity.class));
+                startActivity(new Intent(MainActivity.this, CaregiverSignupActivity.class));
             }
         });
     }

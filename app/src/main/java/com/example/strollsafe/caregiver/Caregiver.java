@@ -2,6 +2,8 @@ package com.example.strollsafe.caregiver;
 
 import org.bson.types.ObjectId;
 
+import java.util.Date;
+
 import io.realm.RealmObject;
 import io.realm.annotations.PrimaryKey;
 import io.realm.annotations.Required;
@@ -10,21 +12,22 @@ public class Caregiver extends RealmObject {
 
     @PrimaryKey private ObjectId _id = new ObjectId();
 
-
-    private String lastName;
-    private String firstName;
-    private String phoneNumber;
-    private String email;
+    @Required private String email;
+    @Required private String firstName;
+    @Required private String lastName;
+    @Required private String phoneNumber;
+    @Required private Date dateOfBirth;
 
     public Caregiver() {
 
     }
 
-    public Caregiver(String email, String lastName, String firstName, String phoneNumber) {
+    public Caregiver(String email, String firstName, String lastName, String phoneNumber, Date dateOfBirth) {
         this.email = email;
         this.lastName = lastName;
         this.firstName = firstName;
         this.phoneNumber = phoneNumber;
+        this.dateOfBirth = dateOfBirth;
     }
 
     public String getEmail() {
@@ -59,4 +62,11 @@ public class Caregiver extends RealmObject {
         this.phoneNumber = phoneNumber;
     }
 
+    public Date getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(Date dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
 }

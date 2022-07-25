@@ -197,7 +197,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
                                         account.setFirstName("Herbert");
                                         account.setLastName("Tsang");
                                         account.setPhoneNumber("phoneNumb11er");
-                                        account.setPWDCode("1234");
+                                        account.setPwdCode("1234");
                                     });
                                     realmDatabase.executeTransaction(transaction -> {
                                         PWD account = transaction.createObject(PWD.class, new ObjectId());
@@ -205,7 +205,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
                                         account.setFirstName("Alex");
                                         account.setLastName("Bruma");
                                         account.setPhoneNumber("phoneNumb11er1");
-                                        account.setPWDCode("6666");
+                                        account.setPwdCode("6666");
                                     });
                                     PWD acc = realmDatabase.where(PWD.class).equalTo("PWDCode",editText.getText().toString()).findFirst();
                                     name.setText(acc.getFirstName() + " " + acc.getLastName());
@@ -271,7 +271,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
                                         account.setFirstName("Herbert");
                                         account.setLastName("Tsang");
                                         account.setPhoneNumber("phoneNumb11er");
-                                        account.setPWDCode("1234");
+                                        account.setPwdCode("1234");
                                     });
                                     realmDatabase.executeTransaction(transaction -> {
                                         PWD account = transaction.createObject(PWD.class, new ObjectId());
@@ -279,7 +279,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
                                         account.setFirstName("Alex");
                                         account.setLastName("Bruma");
                                         account.setPhoneNumber("phoneNumb11er1");
-                                        account.setPWDCode("6666");
+                                        account.setPwdCode("6666");
                                     });
                                     PWD acc = realmDatabase.where(PWD.class).equalTo("PWDCode",editText.getText().toString()).findFirst();
                                     name.setText(acc.getFirstName() + " " + acc.getLastName());
@@ -344,7 +344,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
                                         account.setFirstName("Herbert");
                                         account.setLastName("Tsang");
                                         account.setPhoneNumber("phoneNumb11er");
-                                        account.setPWDCode("1234");
+                                        account.setPwdCode("1234");
                                     });
                                     realmDatabase.executeTransaction(transaction -> {
                                         PWD account = transaction.createObject(PWD.class, new ObjectId());
@@ -352,7 +352,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
                                         account.setFirstName("Alex");
                                         account.setLastName("Bruma");
                                         account.setPhoneNumber("phoneNumb11er1");
-                                        account.setPWDCode("6666");
+                                        account.setPwdCode("6666");
                                     });
                                     PWD acc = realmDatabase.where(PWD.class).equalTo("PWDCode",editText.getText().toString()).findFirst();
                                     name.setText(acc.getFirstName() + " " + acc.getLastName());

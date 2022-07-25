@@ -11,8 +11,6 @@ import android.widget.Button;
 import com.example.strollsafe.R;
 import com.example.strollsafe.ui.location.PWDLocationInformationActivity;
 
-import android.widget.Button;
-
 
 public class PWD_activity extends AppCompatActivity {
 

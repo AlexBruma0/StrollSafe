@@ -87,6 +87,9 @@
             android:name=".ui.PWDActivity"
             android:exported="false" />
         <activity
+            android:name=".ui.PWDHome_activity"
+            android:exported="false" />
+        <activity
             android:name=".ui.NewCaregiverActivity"
             android:label="@string/newCaregiverLabel"
             android:theme="@style/Theme.StrollSafe.NoActionBar"

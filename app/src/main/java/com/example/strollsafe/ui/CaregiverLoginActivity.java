@@ -12,7 +12,6 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.utils.DatabaseManager;
@@ -43,7 +42,7 @@ public class CaregiverLoginActivity extends AppCompatActivity {
         app = databaseManager.getApp();
         super.onCreate(savedInstanceState);
 
-        setContentView(R.layout.activity_caregiver_login);
+        setContentView(R.layout.activity_login);
 //        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(topBar);
 

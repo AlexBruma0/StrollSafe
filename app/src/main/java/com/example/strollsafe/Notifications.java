@@ -1,15 +1,34 @@
 package com.example.strollsafe;
 
+import org.bson.types.ObjectId;
+
+import java.util.Date;
+
 import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 public class Notifications extends RealmObject{
-    private String pwdFirstName;
-    private String pwdLastName;
-    private String notificationTitle;
-    private String NotificationContent;
+    @PrimaryKey ObjectId _id = new ObjectId();
+
+    @Required private String pwdFirstName;
+    @Required private String pwdLastName;
+    @Required private String notificationTitle;
+    @Required private String notificationContent;
+    @Required private Date timestamp;
     private int notificationPriority;
-    private Long timestamp;
-    public Notifications(){
+
+    public Notifications() {
+
+    }
+
+    public Notifications(String pwdFirstName, String pwdLastName, String notificationTitle, String notificationContent, Date timestamp, int notificationPriority) {
+        this.pwdFirstName = pwdFirstName;
+        this.pwdLastName = pwdLastName;
+        this.notificationTitle = notificationTitle;
+        this.notificationContent = notificationContent;
+        this.timestamp = timestamp;
+        this.notificationPriority = notificationPriority;
     }
 
     public String getPwdFirstName() {
@@ -25,10 +44,10 @@ public class Notifications extends RealmObject{
     }
 
     public String getNotificationContent() {
-        return NotificationContent;
+        return notificationContent;
     }
 
-    public Long getTimestamp() {
+    public Date getTimestamp() {
         return timestamp;
     }
 
@@ -37,7 +56,7 @@ public class Notifications extends RealmObject{
     }
 
     public void setNotificationContent(String notificationContent) {
-        NotificationContent = notificationContent;
+        this.notificationContent = notificationContent;
     }
 
     public void setNotificationPriority(int notificationPriority) {
@@ -56,7 +75,7 @@ public class Notifications extends RealmObject{
         this.pwdLastName = pwdLastName;
     }
 
-    public void setTimestamp(Long timestamp) {
+    public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
     }
 }

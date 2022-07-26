@@ -91,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Log.i(TAG, "Starting PWDLoginActivity form MainActivity");
-                startActivity(new Intent(MainActivity.this,PWDLoginActivity.class));
+                startActivity(new Intent(MainActivity.this, PWDSignupActivity.class));
             }
         });
     }

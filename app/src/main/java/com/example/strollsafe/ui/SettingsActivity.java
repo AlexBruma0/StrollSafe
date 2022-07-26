@@ -1,5 +1,6 @@
 package com.example.strollsafe.ui;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
@@ -46,19 +47,8 @@ public class SettingsActivity extends AppCompatActivity {
         lastNameTextView = findViewById(R.id.userLastName);
 
         databaseManager = new DatabaseManager(this);
-        currentUser = databaseManager.isUserLoggedIn() ? databaseManager.getLoggedInUser() : null;
-        if(currentUser == null) {
-            styleSettingsPageLoggedOut();
-        } else {
-            currentUser.refreshCustomData(refreshResult -> {
-                if(refreshResult.isSuccess()) {
-                    styleSettingsPageLoggedIn(refreshResult.get());
-
-                } else {
-                    styleSettingsPageLoggedOut();
-                }
-            });
-        }
+        checkUserLoggedIn();
+        styleSettingsPage();
     }
 
     @Override
@@ -78,11 +68,35 @@ public class SettingsActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private boolean checkUserLoggedIn() {
+        currentUser = databaseManager.isUserLoggedIn() ? databaseManager.getLoggedInUser() : null;
+        return databaseManager.isUserLoggedIn();
+    }
+
+    private void styleSettingsPage() {
+        if(currentUser == null) {
+            styleSettingsPageLoggedOut();
+        } else {
+            currentUser.refreshCustomData(refreshResult -> {
+                if(refreshResult.isSuccess()) {
+                    styleSettingsPageLoggedIn(refreshResult.get());
+                } else {
+                    styleSettingsPageLoggedOut();
+                }
+            });
+        }
+    }
+
     public void logoutUserFromRealm(View view) {
         Objects.requireNonNull(databaseManager.getApp().currentUser()).logOutAsync(logoutStatus -> {
             if(logoutStatus.isSuccess()) {
                 styleSettingsPageLoggedOut();
                 Toast.makeText(this, "Logged out.", Toast.LENGTH_SHORT).show();
+                if(checkUserLoggedIn()) {
+                    styleSettingsPage();
+                } else {
+                    startActivity(new Intent(SettingsActivity.this, MainActivity.class));
+                }
             } else {
                 Toast.makeText(this, "" + logoutStatus.getError().toString(), Toast.LENGTH_SHORT).show();
 

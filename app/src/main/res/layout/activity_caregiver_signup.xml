@@ -18,6 +18,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <ScrollView
+        android:id="@+id/caregiverSignupScrollView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="25dp"
@@ -81,6 +82,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:layout_marginTop="15dp"
+                android:hint="Address"
                 android:inputType="textPostalAddress" />
 
             <EditText
@@ -101,16 +104,20 @@
                 android:layout_marginTop="15dp"
                 android:inputType="textPassword" />
 
-            <Button
-                android:id="@+id/caregiverSignUpBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:onClick="createUserLoginAndUploadObjectFromFields"
-                android:text="Sign Up" />
-
 
         </LinearLayout>
     </ScrollView>
+
+    <Button
+        android:id="@+id/caregiverSignUpBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="createUserLoginAndUploadObjectFromFields"
+        android:text="Sign Up"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
-    tools:context=".MainActivity">
+    tools:context=".ui.MainActivity">
 
     <FrameLayout
         android:layout_width="wrap_content"
@@ -17,6 +16,12 @@
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
             android:src="@drawable/good_morning_img" />
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
+
 
 
     </FrameLayout>
@@ -80,9 +85,10 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="40dp"
+        android:gravity="center"
         android:orientation="vertical"
-        android:paddingLeft="20dp"
-        android:paddingRight="20dp">
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp">
 
 
         <LinearLayout
@@ -104,8 +110,7 @@
                 android:text="New\nPWD"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
-                android:textSize="30sp"
-                android:textStyle="bold" />
+                android:autoSizeTextType="uniform" />
 
             <Button
                 android:id="@+id/button_new_caregiver"
@@ -117,22 +122,20 @@
                 android:text="New\nCaregiver"
                 android:textAllCaps="false"
                 android:textColor="#ffffff"
-                android:textSize="23sp"
+                android:autoSizeTextType="uniform"
                 android:textStyle="bold" />
-
-
         </LinearLayout>
 
         <Button
             android:id="@+id/button_toLogin"
-            android:layout_width="match_parent"
-            android:layout_height="40dp"
-            android:text="Already have an account? Log in here!"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/loginButtonText"
+            android:layout_marginTop="15dp"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="#ffdddd"
             android:textSize="12sp" />
-
 
     </LinearLayout>
 

@@ -1,4 +1,4 @@
-package com.example.strollsafe.caregiver;
+package com.example.strollsafe.ui.location;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.ActivityResultRegistry;
@@ -146,6 +146,5 @@ public class LocationActivity extends AppCompatActivity {
         return builder.build();
     }
 
+} // end of LocationActivity.java
 
-
-}

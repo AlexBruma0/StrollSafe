@@ -19,9 +19,8 @@ import io.realm.mongodb.Credentials;
 import io.realm.mongodb.User;
 import io.realm.mongodb.sync.SyncConfiguration;
 
-import com.example.strollsafe.caregiver.Caregiver;
 import com.example.strollsafe.caregiver.CaregiverActivity;
-import com.example.strollsafe.pwd.PWD_signup;
+import com.example.strollsafe.ui.PWDSignupActivity;
 
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
@@ -71,7 +70,7 @@ public class MainActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(MainActivity.this, PWD_signup.class));
+                startActivity(new Intent(MainActivity.this, PWDSignupActivity.class));
             }
         });
     }

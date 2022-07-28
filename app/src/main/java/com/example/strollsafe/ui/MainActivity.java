@@ -47,7 +47,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup the realm database
         databaseManager = new DatabaseManager(this);
-        checkUserAccountType(databaseManager);
+        //checkUserAccountType(databaseManager);
 
         // Setup the layout and UI of the activity
         setContentView(R.layout.activity_main);

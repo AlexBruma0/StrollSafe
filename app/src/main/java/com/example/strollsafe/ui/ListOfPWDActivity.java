@@ -31,6 +31,7 @@ import io.realm.mongodb.sync.SyncConfiguration;
 
 public class ListOfPWDActivity extends AppCompatActivity {
     RealmConfiguration config;
+    private static String t;
     App app;
     private final String APP_ID = "strollsafe-pjbnn";
     Realm realmDatabase;
@@ -42,6 +43,9 @@ public class ListOfPWDActivity extends AppCompatActivity {
     SharedPreferences pwdPreferences;
     SharedPreferences.Editor pwdPreferenceEditor;
     private final String appId = "strollsafe-pjbnn";
+
+
+
 
 
     @Override
@@ -67,9 +71,9 @@ public class ListOfPWDActivity extends AppCompatActivity {
         configureDelete1();
         configureDelete2();
         configureDelete3();
-        configureName1();
-        configureName2();
-        configureName3();
+        //configureName1();
+        //configureName2();
+        //configureName3();
 
     }
 
@@ -161,224 +165,79 @@ public class ListOfPWDActivity extends AppCompatActivity {
     }
 
 
-    public void configureName1(){
+    public void configureName1(View view){
         Button name = (Button) findViewById(R.id.NAME1);
         ImageButton delete = (ImageButton) findViewById(R.id.delete1);
         ImageButton map = (ImageButton) findViewById(R.id.Map1);
         EditText editText = (EditText) findViewById(R.id.editTextTextPassword);
-        name.setOnClickListener(new View.OnClickListener() {
+        Button name2 = (Button) findViewById(R.id.NAME2);
+
+        RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
+                .name(APP_ID)
+                .schemaVersion(2)
+                .allowQueriesOnUiThread(true)
+                .allowWritesOnUiThread(true)
+                .build();
+        Realm.getInstanceAsync(config, new Realm.Callback() {
             @Override
-            public void onClick(View v) {
-
-                String email = "22";
-                String password = "password123";
-                try {
-                    Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
-                    AtomicReference<User> user = new AtomicReference<User>();
-                    app.loginAsync(emailPasswordCredentials, it -> {
-                        if (it.isSuccess()) {
-                            Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
-                            user.set(app.currentUser());
-                            isUserLoggedIn = true;
-                            RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
-                                    .name(APP_ID)
-                                    .schemaVersion(2)
-                                    .allowQueriesOnUiThread(true)
-                                    .allowWritesOnUiThread(true)
-                                    .build();
-                            Realm.getInstanceAsync(config, new Realm.Callback() {
-                                @Override
-                                public void onSuccess(@NonNull Realm realm) {
-                                    Log.v(TAG, "Successfully opened a realm with the given config.");
-                                    realmDatabase = realm;
-                                    realmDatabase.executeTransaction(transaction -> {
-                                        PWD account = transaction.createObject(PWD.class, new ObjectId());
-                                        account.setEmail("emaila");
-                                        account.setFirstName("Herbert");
-                                        account.setLastName("Tsang");
-                                        account.setPhoneNumber("phoneNumb11er");
-                                        account.setPwdCode("1234");
-                                    });
-                                    realmDatabase.executeTransaction(transaction -> {
-                                        PWD account = transaction.createObject(PWD.class, new ObjectId());
-                                        account.setEmail("haha");
-                                        account.setFirstName("Alex");
-                                        account.setLastName("Bruma");
-                                        account.setPhoneNumber("phoneNumb11er1");
-                                        account.setPwdCode("6666");
-                                    });
-                                    PWD acc = realmDatabase.where(PWD.class).equalTo("PWDCode",editText.getText().toString()).findFirst();
-                                    name.setText(acc.getFirstName() + " " + acc.getLastName());
-
-//                                    Intent i = getIntent();
-//                                    name.setText(i.getStringExtra("cool"));
-                                    delete.setVisibility(View.VISIBLE);
-                                    map.setVisibility(View.VISIBLE);
-                                    // CODE TO EXECUTE AFTER LOGIN
-
-
-
-                                    //startActivity(new Intent(PWDLoginActivity.this,PWDActivity.class));
-                                }
-                            });
-                        } else {
-                            Log.e(TAG + "asyncLoginToRealm", "email: " + it.getError().toString());
-                            isUserLoggedIn = false;
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e(TAG + "asyncLoginToRealm", "" + e.getLocalizedMessage());
-                }
-
+            public void onSuccess(@NonNull Realm realm) {
+                realmDatabase = realm;
+                PWD acc = realmDatabase.where(PWD.class).equalTo("email",editText.getText().toString()).findFirst();
+                name.setText(acc.getFirstName() + " " + acc.getLastName());
+                delete.setVisibility(View.VISIBLE);
+                map.setVisibility(View.VISIBLE);
+                name2.setVisibility(View.VISIBLE);
             }
-
         });
     }
 
-    public void configureName2(){
+    public void configureName2(View view){
         Button name = (Button) findViewById(R.id.NAME2);
         ImageButton delete = (ImageButton) findViewById(R.id.delete2);
         ImageButton map = (ImageButton) findViewById(R.id.Map2);
         EditText editText = (EditText) findViewById(R.id.editTextTextPassword);
-        name.setOnClickListener(new View.OnClickListener() {
+        Button name3 = (Button) findViewById(R.id.NAME3);
+
+
+        RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
+                .name(APP_ID)
+                .schemaVersion(2)
+                .allowQueriesOnUiThread(true)
+                .allowWritesOnUiThread(true)
+                .build();
+        Realm.getInstanceAsync(config, new Realm.Callback() {
             @Override
-            public void onClick(View v) {
-
-                String email = "22";
-                String password = "password123";
-                try {
-                    Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
-                    AtomicReference<User> user = new AtomicReference<User>();
-                    app.loginAsync(emailPasswordCredentials, it -> {
-                        if (it.isSuccess()) {
-                            Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
-                            user.set(app.currentUser());
-                            isUserLoggedIn = true;
-                            RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
-                                    .name(APP_ID)
-                                    .schemaVersion(2)
-                                    .allowQueriesOnUiThread(true)
-                                    .allowWritesOnUiThread(true)
-                                    .build();
-                            Realm.getInstanceAsync(config, new Realm.Callback() {
-                                @Override
-                                public void onSuccess(@NonNull Realm realm) {
-                                    Log.v(TAG, "Successfully opened a realm with the given config.");
-                                    realmDatabase = realm;
-                                    realmDatabase.executeTransaction(transaction -> {
-                                        PWD account = transaction.createObject(PWD.class, new ObjectId());
-                                        account.setEmail("emaila");
-                                        account.setFirstName("Herbert");
-                                        account.setLastName("Tsang");
-                                        account.setPhoneNumber("phoneNumb11er");
-                                        account.setPwdCode("1234");
-                                    });
-                                    realmDatabase.executeTransaction(transaction -> {
-                                        PWD account = transaction.createObject(PWD.class, new ObjectId());
-                                        account.setEmail("haha");
-                                        account.setFirstName("Alex");
-                                        account.setLastName("Bruma");
-                                        account.setPhoneNumber("phoneNumb11er1");
-                                        account.setPwdCode("6666");
-                                    });
-                                    PWD acc = realmDatabase.where(PWD.class).equalTo("PWDCode",editText.getText().toString()).findFirst();
-                                    name.setText(acc.getFirstName() + " " + acc.getLastName());
-
-//                                    Intent i = getIntent();
-//                                    name.setText(i.getStringExtra("cool"));
-                                    delete.setVisibility(View.VISIBLE);
-                                    map.setVisibility(View.VISIBLE);
-                                    // CODE TO EXECUTE AFTER LOGIN
-
-
-
-                                    //startActivity(new Intent(PWDLoginActivity.this,PWDActivity.class));
-                                }
-                            });
-                        } else {
-                            Log.e(TAG + "asyncLoginToRealm", "email: " + it.getError().toString());
-                            isUserLoggedIn = false;
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e(TAG + "asyncLoginToRealm", "" + e.getLocalizedMessage());
-                }
-
+            public void onSuccess(@NonNull Realm realm) {
+                realmDatabase = realm;
+                PWD acc = realmDatabase.where(PWD.class).equalTo("email",editText.getText().toString()).findFirst();
+                name.setText(acc.getFirstName() + " " + acc.getLastName());
+                delete.setVisibility(View.VISIBLE);
+                map.setVisibility(View.VISIBLE);
+                name3.setVisibility(View.VISIBLE);
             }
-
         });
     }
-    public void configureName3(){
+    public void configureName3(View view){
         Button name = (Button) findViewById(R.id.NAME3);
         ImageButton delete = (ImageButton) findViewById(R.id.delete3);
         ImageButton map = (ImageButton) findViewById(R.id.Map3);
         EditText editText = (EditText) findViewById(R.id.editTextTextPassword);
-        name.setOnClickListener(new View.OnClickListener() {
+
+        RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
+                .name(APP_ID)
+                .schemaVersion(2)
+                .allowQueriesOnUiThread(true)
+                .allowWritesOnUiThread(true)
+                .build();
+        Realm.getInstanceAsync(config, new Realm.Callback() {
             @Override
-            public void onClick(View v) {
-
-                String email = "22";
-                String password = "password123";
-                try {
-                    Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
-                    AtomicReference<User> user = new AtomicReference<User>();
-                    app.loginAsync(emailPasswordCredentials, it -> {
-                        if (it.isSuccess()) {
-                            Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
-                            user.set(app.currentUser());
-                            isUserLoggedIn = true;
-                            RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
-                                    .name(APP_ID)
-                                    .schemaVersion(2)
-                                    .allowQueriesOnUiThread(true)
-                                    .allowWritesOnUiThread(true)
-                                    .build();
-                            Realm.getInstanceAsync(config, new Realm.Callback() {
-                                @Override
-                                public void onSuccess(@NonNull Realm realm) {
-                                    Log.v(TAG, "Successfully opened a realm with the given config.");
-                                    realmDatabase = realm;
-                                    realmDatabase.executeTransaction(transaction -> {
-                                        PWD account = transaction.createObject(PWD.class, new ObjectId());
-                                        account.setEmail("emaila");
-                                        account.setFirstName("Herbert");
-                                        account.setLastName("Tsang");
-                                        account.setPhoneNumber("phoneNumb11er");
-                                        account.setPwdCode("1234");
-                                    });
-                                    realmDatabase.executeTransaction(transaction -> {
-                                        PWD account = transaction.createObject(PWD.class, new ObjectId());
-                                        account.setEmail("haha");
-                                        account.setFirstName("Alex");
-                                        account.setLastName("Bruma");
-                                        account.setPhoneNumber("phoneNumb11er1");
-                                        account.setPwdCode("6666");
-                                    });
-                                    PWD acc = realmDatabase.where(PWD.class).equalTo("PWDCode",editText.getText().toString()).findFirst();
-                                    name.setText(acc.getFirstName() + " " + acc.getLastName());
-
-//                                    Intent i = getIntent();
-//                                    name.setText(i.getStringExtra("cool"));
-                                    delete.setVisibility(View.VISIBLE);
-                                    map.setVisibility(View.VISIBLE);
-                                    // CODE TO EXECUTE AFTER LOGIN
-
-
-
-                                    //startActivity(new Intent(PWDLoginActivity.this,PWDActivity.class));
-                                }
-                            });
-                        } else {
-                            Log.e(TAG + "asyncLoginToRealm", "email: " + it.getError().toString());
-                            isUserLoggedIn = false;
-                        }
-                    });
-                } catch (Exception e) {
-                    Log.e(TAG + "asyncLoginToRealm", "" + e.getLocalizedMessage());
-                }
-
+            public void onSuccess(@NonNull Realm realm) {
+                realmDatabase = realm;
+                PWD acc = realmDatabase.where(PWD.class).equalTo("email",editText.getText().toString()).findFirst();
+                name.setText(acc.getFirstName() + " " + acc.getLastName());
+                delete.setVisibility(View.VISIBLE);
+                map.setVisibility(View.VISIBLE);
             }
-
         });
     }
 

@@ -1,31 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
-  <component name="DesignSurface">
-    <option name="filePathToZoomLevelMap">
-      <map>
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_caregiver.xml" value="0.31354166666666666" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_caregiver_home.xml" value="0.31614583333333335" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_caregiver_login.xml" value="0.31354166666666666" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_caregiver_signup.xml" value="0.3645833333333333" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_geofencing_map.xml" value="0.3786231884057971" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_listofpwd.xml" value="0.31354166666666666" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_location.xml" value="0.31614583333333335" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_login.xml" value="0.5541666666666667" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_main.xml" value="0.31354166666666666" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_maps.xml" value="0.31614583333333335" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_new_care_giver.xml" value="0.31354166666666666" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_pwd.xml" value="0.31614583333333335" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_pwd_home.xml" value="0.31614583333333335" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_pwd_location_information.xml" value="0.36041666666666666" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_pwd_login.xml" value="0.36041666666666666" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_pwd_signup.xml" value="0.36041666666666666" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_pwdlist.xml" value="0.36041666666666666" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_settings.xml" value="0.36041666666666666" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/activity_show_saved_locations_list.xml" value="0.31614583333333335" />
-        <entry key="..\:/Users/Steve/Documents/School/CMPT 276/StrollSafe/app/src/main/res/layout/my_location_demo.xml" value="0.3223958333333333" />
-      </map>
-    </option>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" project-jdk-name="1.8" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/build/classes" />
   </component>
-  <component name="ExternalStorageConfigurationManager" enabled="true" />
-  <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK" />
+  <component name="ProjectType">
+    <option name="id" value="Android" />
+  </component>
 </project>

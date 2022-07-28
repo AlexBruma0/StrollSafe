@@ -62,7 +62,6 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(49.278965, -122.916582);
         map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        map.get
         enableMyLocation();
         //map.moveCamera(CameraUpdateFactory.newLatLngZoom(map.mylo, 16));
     }

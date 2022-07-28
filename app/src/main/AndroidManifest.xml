@@ -11,7 +11,6 @@
 
     <application
         android:name=".pwd.location.PWDLocations"
-
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -33,7 +32,8 @@
         <activity
             android:name=".GeofencingMapsActivity"
             android:exported="false"
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+            android:theme="@style/Theme.StrollSafe.NoActionBar"/>
         <activity
             android:name=".caregiver.CaregiverActivity"
             android:exported="false">

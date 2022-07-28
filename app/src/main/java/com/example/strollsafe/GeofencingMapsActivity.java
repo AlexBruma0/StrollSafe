@@ -81,6 +81,7 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
         map.setOnMyLocationClickListener(this);
         // Add a marker in Sydney and move the camera
         LatLng sydney = new LatLng(49.278965, -122.916582);
+<<<<<<< HEAD
 
         allMarkers = new LatLngBounds.Builder();
         for (MarkerOptions markerOptions : geoFences) {
@@ -107,6 +108,7 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
         int padding = 100; // offset from edges of the map in pixels
         CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
         map.moveCamera(cu);
+        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
         enableMyLocation();
         //map.moveCamera(CameraUpdateFactory.newLatLngZoom(map.mylo, 16));
     }

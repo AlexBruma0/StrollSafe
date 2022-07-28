@@ -20,6 +20,7 @@ public class Caregiver extends RealmObject {
 
     public Caregiver() {
 
+
     }
 
     public Caregiver(String email, String firstName, String lastName, String phoneNumber, Date dateOfBirth) {
@@ -69,4 +70,5 @@ public class Caregiver extends RealmObject {
     public void setDateOfBirth(Date dateOfBirth) {
         this.dateOfBirth = dateOfBirth;
     }
+
 }

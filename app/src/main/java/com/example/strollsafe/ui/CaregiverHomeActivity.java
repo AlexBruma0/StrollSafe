@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
+import com.example.strollsafe.GeofencingMapsActivity;
 import com.example.strollsafe.R;
 
 import android.util.Log;
@@ -18,6 +19,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.strollsafe.caregiver.CaregiverActivity;
 import com.example.strollsafe.pwd.PWD;
 import com.example.strollsafe.utils.DatabaseManager;
 
@@ -73,6 +75,14 @@ public class CaregiverHomeActivity extends AppCompatActivity {
 
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void myPatientsOnClick(View view) {
+        startActivity(new Intent(CaregiverHomeActivity.this, PWDListActivity.class));
+    }
+
+    public void geofencingOnClick(View view) {
+        startActivity(new Intent(CaregiverHomeActivity.this, GeofencingMapsActivity.class));
     }
 
 }

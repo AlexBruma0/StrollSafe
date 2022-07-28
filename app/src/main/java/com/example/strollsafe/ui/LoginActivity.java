@@ -26,7 +26,7 @@ import io.realm.mongodb.Credentials;
 import io.realm.mongodb.User;
 import io.realm.mongodb.sync.SyncConfiguration;
 
-public class CaregiverLoginActivity extends AppCompatActivity {
+public class LoginActivity extends AppCompatActivity {
     private static final String TAG ="";
     private static final String APP_ID =  "strollsafe-pjbnn";
 
@@ -59,7 +59,7 @@ public class CaregiverLoginActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.optionsMenuItem:
-                startActivity(new Intent(CaregiverLoginActivity.this, SettingsActivity.class));
+                startActivity(new Intent(LoginActivity.this, SettingsActivity.class));
                 return true;
 
         }
@@ -90,9 +90,7 @@ public class CaregiverLoginActivity extends AppCompatActivity {
                             public void onSuccess(@NonNull Realm realm) {
                                 Log.v(TAG, "Successfully opened a realm with the given config.");
                                 realmDatabase = realm;
-                                // CODE TO EXECUTE AFTER LOGIN
-                                //databaseManager.logoutOfRealm();
-                                startActivity(new Intent(CaregiverLoginActivity.this, ListOfPWDActivity.class));
+                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
                             }
                         });

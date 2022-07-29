@@ -7,6 +7,7 @@ import org.bson.Document;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -233,21 +234,43 @@ public class DatabaseManager {
         MongoClient mongoClient = currentUser.getMongoClient("user-data");
         MongoDatabase mongoDatabase = mongoClient.getDatabase("strollSafeTest");
         MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("users");
-        mongoCollection.insertOne(new Document("userId", currentUser.getId())
-                        .append("accountType", accountType)
-                        .append("email", email)
-                        .append("phoneNumber", phoneNumber)
-                        .append("address", address)
-                        .append("firstName", firstName)
-                        .append("lastName", lastName)
-                        .append("dateOfBirth", dateOfBirth))
-                .getAsync(result -> {
-                    if (result.isSuccess()) {
-                        Log.d(TAG, String.format("User %s has been added to the database", email));
-                    } else {
-                        Log.e(TAG, String.format("Unable to insert custom user data for user %s. Error: %s", email, result.getError()));
-                    }
-                });
+        if(accountType == CAREGIVER_ACCOUNT_TYPE) {
+            mongoCollection.insertOne(new Document("userId", currentUser.getId())
+                            .append("accountType", accountType)
+                            .append("email", email)
+                            .append("phoneNumber", phoneNumber)
+                            .append("address", address)
+                            .append("firstName", firstName)
+                            .append("lastName", lastName)
+                            .append("dateOfBirth", dateOfBirth)
+                            .append("patients", new ArrayList<String>()))
+                    .getAsync(result -> {
+                        if (result.isSuccess()) {
+                            Log.d(TAG, String.format("User %s has been added to the database", email));
+                        } else {
+                            Log.e(TAG, String.format("Unable to insert custom user data for user %s. Error: %s", email, result.getError()));
+                        }
+                    });
+
+        } else if(accountType == PWD_ACCOUNT_TYPE) {
+            mongoCollection.insertOne(new Document("userId", currentUser.getId())
+                            .append("accountType", accountType)
+                            .append("email", email)
+                            .append("phoneNumber", phoneNumber)
+                            .append("address", address)
+                            .append("firstName", firstName)
+                            .append("lastName", lastName)
+                            .append("dateOfBirth", dateOfBirth)
+                            .append("caregivers", new ArrayList<String>()))
+                    .getAsync(result -> {
+                        if (result.isSuccess()) {
+                            Log.d(TAG, String.format("User %s has been added to the database", email));
+                        } else {
+                            Log.e(TAG, String.format("Unable to insert custom user data for user %s. Error: %s", email, result.getError()));
+                        }
+                    });
+        }
+
     }
 
     /**
@@ -256,15 +279,18 @@ public class DatabaseManager {
      */
     public String getUserAccountType() {
         String accountType = getLoggedInUser().getCustomData().getString("accountType");
-        switch (accountType.toLowerCase()) {
-            case DatabaseManager.CAREGIVER_ACCOUNT_TYPE:
-                return DatabaseManager.CAREGIVER_ACCOUNT_TYPE;
+        if(isUserLoggedIn() && accountType != null) {
+            switch (accountType.toLowerCase()) {
+                case DatabaseManager.CAREGIVER_ACCOUNT_TYPE:
+                    return DatabaseManager.CAREGIVER_ACCOUNT_TYPE;
 
-            case DatabaseManager.PWD_ACCOUNT_TYPE:
-                return DatabaseManager.PWD_ACCOUNT_TYPE;
+                case DatabaseManager.PWD_ACCOUNT_TYPE:
+                    return DatabaseManager.PWD_ACCOUNT_TYPE;
 
-            default:
-                return "null";
+                default:
+                    return "null";
+            }
         }
+        return "null";
     }
 }

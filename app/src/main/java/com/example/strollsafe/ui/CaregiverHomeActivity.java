@@ -23,6 +23,7 @@ import com.example.strollsafe.caregiver.CaregiverActivity;
 import com.example.strollsafe.pwd.PWD;
 import com.example.strollsafe.utils.DatabaseManager;
 
+import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -78,7 +79,7 @@ public class CaregiverHomeActivity extends AppCompatActivity {
     }
 
     public void myPatientsOnClick(View view) {
-        startActivity(new Intent(CaregiverHomeActivity.this, PWDListActivity.class));
+        startActivity(new Intent(CaregiverHomeActivity.this, ListOfPWDActivity.class));
     }
 
     public void geofencingOnClick(View view) {

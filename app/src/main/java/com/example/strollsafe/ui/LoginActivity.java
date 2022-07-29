@@ -90,7 +90,7 @@ public class LoginActivity extends AppCompatActivity {
                             public void onSuccess(@NonNull Realm realm) {
                                 Log.v(TAG, "Successfully opened a realm with the given config.");
                                 realmDatabase = realm;
-                                startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                startActivity(new Intent(LoginActivity.this, ListOfPWDActivity.class));
 
                             }
                         });

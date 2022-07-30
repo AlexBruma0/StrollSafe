@@ -261,6 +261,7 @@ public class DatabaseManager {
                             .append("firstName", firstName)
                             .append("lastName", lastName)
                             .append("dateOfBirth", dateOfBirth)
+                            .append("safezones", new ArrayList<Double[][]>())
                             .append("caregivers", new ArrayList<String>()))
                     .getAsync(result -> {
                         if (result.isSuccess()) {
@@ -293,4 +294,36 @@ public class DatabaseManager {
         }
         return "null";
     }
+
+//    public Document getPwdInfo(String userId) {
+//        MongoClient mongoClient = app.currentUser().getMongoClient("user-data");
+//        MongoDatabase mongoDatabase = mongoClient.getDatabase("strollSafeTest");
+//        MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("users");
+//        return mongoCollection.findOne(new Document("userId", userId)).get();
+//    }
+
+    public MongoCollection getUsersCollection() {
+        MongoClient mongoClient = app.currentUser().getMongoClient("user-data");
+        MongoDatabase mongoDatabase = mongoClient.getDatabase("strollSafeTest");
+        return mongoDatabase.getCollection("users");
+//        mongoCollection.findOne(new Document(key, value)).getAsync(new App.Callback<Document>() {
+//            @Override
+//            public void onResult(App.Result<Document> result) {
+//
+//            }
+//        });
+    }
+
+//    public void linkPwdToCaregiver(String email) {
+//        Document pwdInfo = getPwdInfo("email", email);
+//        if(pwdInfo == null) {
+//            Log.e("", "User was not found");
+//        } else {
+//            MongoClient mongoClient = app.currentUser().getMongoClient("user-data");
+//            MongoDatabase mongoDatabase = mongoClient.getDatabase("strollSafeTest");
+//            MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("users");
+//            mongoCollection.updateOne(new Document("userId", app.currentUser().getId()), new Document("$push", new Document("patients", pwdInfo.get("userId"))));
+//        }
+//
+//    }
 }

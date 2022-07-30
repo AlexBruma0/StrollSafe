@@ -8,7 +8,6 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.example.strollsafe.R;
@@ -68,7 +67,7 @@ public class PWDListActivity extends AppCompatActivity {
 
     public void backB() {
         back = (Button) findViewById(R.id.backbutton);
-        editText = (EditText) findViewById(R.id.editTextTextPassword);
+        editText = (EditText) findViewById(R.id.pwdListEmailEntry);
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

@@ -1,6 +1,5 @@
 package com.example.strollsafe.ui;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
@@ -15,44 +14,26 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.EditText;
+import android.widget.Toast;
 
-import com.example.strollsafe.pwd.PWD;
 import com.example.strollsafe.utils.DatabaseManager;
-import org.bson.types.ObjectId;
 
-import java.util.Objects;
-import java.util.concurrent.atomic.AtomicReference;
+import org.bson.Document;
 
-import io.realm.Realm;
-import io.realm.RealmConfiguration;
+import java.util.ArrayList;
+
 import io.realm.mongodb.App;
-import io.realm.mongodb.Credentials;
-import io.realm.mongodb.User;
-import io.realm.mongodb.sync.SyncConfiguration;
+import io.realm.mongodb.mongo.MongoCollection;
+
 
 public class ListOfPWDActivity extends AppCompatActivity {
-    RealmConfiguration config;
-    private static String t;
     App app;
-    private final String APP_ID = "strollsafe-pjbnn";
-    Realm realmDatabase;
     DatabaseManager databaseManager;
-    private EditText editEmail;
-    private EditText editPassword;
-    boolean isUserLoggedIn;
-    String TAG = "";
+    String TAG = "ListOfPWDActivity";
     SharedPreferences pwdPreferences;
     SharedPreferences.Editor pwdPreferenceEditor;
-    private final String appId = "strollsafe-pjbnn";
-
-
-
-
 
     @Override
-
-
-
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
@@ -60,10 +41,6 @@ public class ListOfPWDActivity extends AppCompatActivity {
         databaseManager = new DatabaseManager(this);
         app = databaseManager.getApp();
         setContentView(R.layout.activity_listofpwd);
-
-
-
-        databaseManager = new DatabaseManager(this);
 
         configureBack();
         configureMap1();
@@ -73,7 +50,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
         configureDelete2();
         configureDelete3();
 
-
+        stylePage();
     }
 
 
@@ -87,7 +64,6 @@ public class ListOfPWDActivity extends AppCompatActivity {
         });
     }
 
-
     public void configureMap1(){
         ImageButton PWD = (ImageButton) findViewById(R.id.Map1);
         PWD.setOnClickListener(new View.OnClickListener() {
@@ -97,6 +73,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
             }
         });
     }
+
     public void configureMap2(){
         ImageButton PWD = (ImageButton) findViewById(R.id.Map2);
         PWD.setOnClickListener(new View.OnClickListener() {
@@ -106,6 +83,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
             }
         });
     }
+
     public void configureMap3(){
         ImageButton PWD = (ImageButton) findViewById(R.id.Map3);
         PWD.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +94,6 @@ public class ListOfPWDActivity extends AppCompatActivity {
         });
     }
 
-
     public void configureDelete1(){
         ImageButton PWD = (ImageButton) findViewById(R.id.delete1);
         ImageButton A = (ImageButton) findViewById(R.id.Map1);
@@ -125,6 +102,14 @@ public class ListOfPWDActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                app.currentUser().refreshCustomData(refreshResult -> {
+                    if(refreshResult.isSuccess()) {
+                        ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
+                        String userId = patientsList.get(0);
+                        remove(userId);
+                    }
+                });
+
                 B.setText("CLICK HERE TO ACTIVATE");
                 PWD.setVisibility(View.GONE);
                 A.setVisibility(View.GONE);
@@ -132,6 +117,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
             }
         });
     }
+
     public void configureDelete2(){
         ImageButton PWD = (ImageButton) findViewById(R.id.delete2);
         ImageButton A = (ImageButton) findViewById(R.id.Map2);
@@ -140,6 +126,14 @@ public class ListOfPWDActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                app.currentUser().refreshCustomData(refreshResult -> {
+                    if(refreshResult.isSuccess()) {
+                        ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
+                        String userId = patientsList.get(1);
+                        remove(userId);
+                    }
+                });
+
                 B.setText("CLICK HERE TO ACTIVATE");
                 PWD.setVisibility(View.GONE);
                 A.setVisibility(View.GONE);
@@ -148,6 +142,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
             }
         });
     }
+
     public void configureDelete3(){
         ImageButton PWD = (ImageButton) findViewById(R.id.delete3);
         ImageButton A = (ImageButton) findViewById(R.id.Map3);
@@ -156,6 +151,14 @@ public class ListOfPWDActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                app.currentUser().refreshCustomData(refreshResult -> {
+                    if(refreshResult.isSuccess()) {
+                        ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
+                        String userId = patientsList.get(2);
+                        remove(userId);
+                    }
+                });
+
                 B.setText("CLICK HERE TO ACTIVATE");
                 PWD.setVisibility(View.GONE);
                 A.setVisibility(View.GONE);
@@ -165,63 +168,133 @@ public class ListOfPWDActivity extends AppCompatActivity {
         });
     }
 
+    public void stylePage() {
+        app.currentUser().refreshCustomData(refreshResult -> {
+            ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
+            if(patientsList != null) {
+                if(patientsList.size() >= 3) {
+                    findViewById(R.id.pwdListTitle).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.pwdListEmailEntry).setVisibility(View.INVISIBLE);
+                    findViewById(R.id.pwdListAddButton).setVisibility(View.INVISIBLE);
+
+                } else {
+                    findViewById(R.id.pwdListTitle).setVisibility(View.VISIBLE);
+                    findViewById(R.id.pwdListEmailEntry).setVisibility(View.VISIBLE);
+                    findViewById(R.id.pwdListAddButton).setVisibility(View.VISIBLE);
+                }
+                for(int x = 0; x < patientsList.size(); x++) {
+                    MongoCollection userCollection = databaseManager.getUsersCollection();
+                    int finalX = x;
+                    userCollection.findOne(new Document("userId", patientsList.get(x))).getAsync(new App.Callback() {
+                        @Override
+                        public void onResult(App.Result result) {
+                            Document pwdInfo = (Document) result.get();
+
+                            switch (finalX) {
+                                case 0:
+                                    Log.e(TAG, "STYLING THE FIRST BUTTON");
+                                    Button name1 = (Button) findViewById(R.id.NAME1);
+                                    ImageButton delete1 = (ImageButton) findViewById(R.id.delete1);
+                                    ImageButton map1 = (ImageButton) findViewById(R.id.Map1);
+
+                                    name1.setText(pwdInfo.get("firstName") + " " + pwdInfo.get("lastName"));
+                                    name1.setVisibility(View.VISIBLE);
+                                    delete1.setVisibility(View.VISIBLE);
+                                    map1.setVisibility(View.VISIBLE);
+                                    break;
+
+                                case 1:
+                                    Log.e(TAG, "STYLING THE SECOND BUTTON");
+                                    Button name2 = (Button) findViewById(R.id.NAME2);
+                                    ImageButton delete2 = (ImageButton) findViewById(R.id.delete2);
+                                    ImageButton map2 = (ImageButton) findViewById(R.id.Map2);
+
+                                    name2.setText(pwdInfo.get("firstName") + " " + pwdInfo.get("lastName"));
+                                    delete2.setVisibility(View.VISIBLE);
+                                    name2.setVisibility(View.VISIBLE);
+                                    map2.setVisibility(View.VISIBLE);
+                                    break;
+
+                                case 2:
+                                    Log.e(TAG, "STYLING THE THIRD BUTTON");
+                                    Button name3 = (Button) findViewById(R.id.NAME3);
+                                    ImageButton delete3 = (ImageButton) findViewById(R.id.delete3);
+                                    ImageButton map3 = (ImageButton) findViewById(R.id.Map3);
+
+                                    name3.setText(pwdInfo.get("firstName") + " " + pwdInfo.get("lastName"));
+                                    delete3.setVisibility(View.VISIBLE);
+                                    name3.setVisibility(View.VISIBLE);
+                                    map3.setVisibility(View.VISIBLE);
+                                    break;
+                            }
+                        }
+                    });
+                }
+            }
+        });
+    }
 
     public void add(View view){
-        Button name1 = (Button) findViewById(R.id.NAME1);
-        ImageButton delete1 = (ImageButton) findViewById(R.id.delete1);
-        ImageButton map1 = (ImageButton) findViewById(R.id.Map1);
+        app.currentUser().refreshCustomData(refreshResult -> {
+            ArrayList<String> patientsArray = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
+            if(patientsArray == null || patientsArray.size() >= 3) {
+                Toast.makeText(ListOfPWDActivity.this, "PWD limit max already reached.", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-        Button name2 = (Button) findViewById(R.id.NAME2);
-        ImageButton delete2 = (ImageButton) findViewById(R.id.delete2);
-        ImageButton map2 = (ImageButton) findViewById(R.id.Map2);
+            EditText editText = (EditText) findViewById(R.id.pwdListEmailEntry);
+            String code = editText.getText().toString();
 
-        Button name3 = (Button) findViewById(R.id.NAME3);
-        ImageButton delete3 = (ImageButton) findViewById(R.id.delete3);
-        ImageButton map3 = (ImageButton) findViewById(R.id.Map3);
-
-        EditText editText = (EditText) findViewById(R.id.editTextTextPassword);
-        Credentials emailPasswordCredentials = Credentials.emailPassword("1234", "password123");
-        AtomicReference<User> user = new AtomicReference<User>();
-        app.loginAsync(emailPasswordCredentials, it -> {
-            user.set(app.currentUser());
-            RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
-                    .name(APP_ID)
-                    .schemaVersion(2)
-                    .allowQueriesOnUiThread(true)
-                    .allowWritesOnUiThread(true)
-                    .build();
-            Realm.getInstanceAsync(config, new Realm.Callback() {
+            MongoCollection userCollection = databaseManager.getUsersCollection();
+            userCollection.findOne(new Document("email", code)).getAsync(new App.Callback() {
                 @Override
-                public void onSuccess(@NonNull Realm realm) {
-                    realmDatabase = realm;
-                    if (name1.getText().equals("CLICK HERE TO ACTIVATE")) {
-                        PWD acc = realmDatabase.where(PWD.class).equalTo("pwdCode", editText.getText().toString()).findFirst();
-                        name1.setText(acc.getFirstName() + " " + acc.getLastName());
-                        name1.setVisibility(View.VISIBLE);
-                        delete1.setVisibility(View.VISIBLE);
-                        map1.setVisibility(View.VISIBLE);
+                public void onResult(App.Result result) {
+                    Document pwdInfo = (Document) result.get();
+                    if(pwdInfo == null) {
+                        Toast.makeText(ListOfPWDActivity.this, "PWD can not be found.", Toast.LENGTH_SHORT).show();
+                        return;
                     }
-                    else if (name2.getText().equals("CLICK HERE TO ACTIVATE")) {
-                        PWD acc = realmDatabase.where(PWD.class).equalTo("pwdCode", editText.getText().toString()).findFirst();
-                        name2.setText(acc.getFirstName() + " " + acc.getLastName());
-                        delete2.setVisibility(View.VISIBLE);
-                        name2.setVisibility(View.VISIBLE);
-                        map2.setVisibility(View.VISIBLE);
-                    }
-                    else if (name3.getText().equals("CLICK HERE TO ACTIVATE")) {
-                        PWD acc = realmDatabase.where(PWD.class).equalTo("pwdCode", editText.getText().toString()).findFirst();
-                        name3.setText(acc.getFirstName() + " " + acc.getLastName());
-                        delete3.setVisibility(View.VISIBLE);
-                        name3.setVisibility(View.VISIBLE);
-
-                        map3.setVisibility(View.VISIBLE);
+                    if(patientsArray.contains(pwdInfo.get("userId"))) {
+                        Toast.makeText(ListOfPWDActivity.this, "This PWD is already linked to your account.", Toast.LENGTH_SHORT).show();
+                        return;
                     }
 
-
+                    Document careGiverData = new Document("userId", app.currentUser().getId());
+                    Document update =  new Document("patients", pwdInfo.get("userId"));
+                    userCollection.updateOne(careGiverData, new Document("$push", update)).getAsync(new App.Callback() {
+                        @Override
+                        public void onResult(App.Result result) {
+                            if(result.isSuccess()) {
+                                Toast.makeText(ListOfPWDActivity.this, "PWD has been linked to your account.", Toast.LENGTH_SHORT).show();
+                                stylePage();
+                            } else {
+                                Toast.makeText(ListOfPWDActivity.this, "Error linked PWD to your account.", Toast.LENGTH_LONG).show();
+                            }
+                        }
+                    });
                 }
             });
         });
     }
 
+    public void remove(String userId) {
+        app.currentUser().refreshCustomData(refreshResult -> {
+            MongoCollection userCollection = databaseManager.getUsersCollection();
+            Document careGiverData = new Document("userId", app.currentUser().getId());
+            Document update =  new Document("patients", userId);
+            userCollection.updateOne(careGiverData, new Document("$pull", update)).getAsync(new App.Callback() {
+                @Override
+                public void onResult(App.Result result) {
+                    if(result.isSuccess()) {
+                        Toast.makeText(ListOfPWDActivity.this, "PWD has been removed to your account.", Toast.LENGTH_SHORT).show();
+                        stylePage();
+                    } else {
+                        Toast.makeText(ListOfPWDActivity.this, "Error removing PWD to your account.", Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+        });
+    }
 
 }

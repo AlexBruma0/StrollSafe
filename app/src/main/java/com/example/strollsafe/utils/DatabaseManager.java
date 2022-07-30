@@ -261,6 +261,7 @@ public class DatabaseManager {
                             .append("firstName", firstName)
                             .append("lastName", lastName)
                             .append("dateOfBirth", dateOfBirth)
+                            .append("safezones", new ArrayList<Double[][]>())
                             .append("caregivers", new ArrayList<String>()))
                     .getAsync(result -> {
                         if (result.isSuccess()) {
@@ -293,4 +294,11 @@ public class DatabaseManager {
         }
         return "null";
     }
+
+    public MongoCollection getUsersCollection() {
+        MongoClient mongoClient = app.currentUser().getMongoClient("user-data");
+        MongoDatabase mongoDatabase = mongoClient.getDatabase("strollSafeTest");
+        return mongoDatabase.getCollection("users");
+    }
+
 }

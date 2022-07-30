@@ -10,41 +10,49 @@
 
 package com.example.strollsafe.pwd;
 
+import android.os.Build;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
+
+import java.time.LocalDateTime;
+
 public class PWDLocation {
 
-    private final String[] locationArray;
+//    private final String[] locationArray;
 
     private double latitude;
     private double longitude;
     private float accuracy;
     private String address;
+    private LocalDateTime dateTime;
 
     /**
      * Description: Default constructor
      * */
-    public PWDLocation() {
-        this.locationArray = new String[4];
-    }
+//    public PWDLocation() {
+//        this.locationArray = new String[5];
+//    }
 
     /**
      * Description: Parameterized constructor
      * */
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public PWDLocation(double latitude, double longitude, float accuracy, String address) {
+//        this.locationArray = new String[5];
         this.latitude = latitude;
         this.longitude = longitude;
         this.accuracy = accuracy;
         this.address = address;
-        this.locationArray = new String[4];
-
-        updateLocationValues(latitude, longitude, accuracy, address);
+        this.dateTime = LocalDateTime.now();
     } // end of constructor
 
     /**
      * Description: Returns the PWD GPS information as an ArrayList
      * */
-    public String[] getPWDLocationArray() {
-        return locationArray;
-    }
+//    public String[] getPWDLocationArray() {
+//        return locationArray;
+//    }
 
     /**
      * Description: Returns the latitude of the PWD's location in degrees
@@ -76,16 +84,37 @@ public class PWDLocation {
     }
 
     /**
-     * Description: Update the location array
+     * Description: Returns the first address line of the location
      * */
-    public void updateLocationValues(double latitude, double longitude,
-                                        float accuracy, String address) {
-        locationArray[0] = String.valueOf(latitude);
-        locationArray[1] = String.valueOf(longitude);
-        locationArray[2] = String.valueOf(accuracy);
-        locationArray[3] = String.valueOf(address);
+    public LocalDateTime getDate() {
+        return dateTime;
+    }
 
-    } // end of updateLocationValues()
+//    /**
+//     * Description: Update the location array
+//     * */
+//    public void updateLocationValues(double latitude, double longitude,
+//                                        float accuracy, String address, LocalDateTime dateTime) {
+//        locationArray[0] = String.valueOf(latitude);
+//        locationArray[1] = String.valueOf(longitude);
+//        locationArray[2] = String.valueOf(accuracy);
+//        locationArray[3] = String.valueOf(address);
+//        locationArray[4] = dateTime.toString();
+//
+//    } // end of updateLocationValues()
+
+    @NonNull
+    @Override
+    public String toString() {
+        return(
+                "Latitude: " + this.latitude + "\n" +
+                "Longitude: " + this.longitude + "\n" +
+                "Accuracy: " + this.accuracy + "\n" +
+                "Address: " + this.address + "\n" +
+                "Date: " + this.dateTime.toString() + "\n"
+                );
+    }
+
 
 } // end of PWDLocation.java
 

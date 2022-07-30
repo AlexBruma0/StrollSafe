@@ -45,32 +45,13 @@
 
 
     <TextView
-        android:id="@+id/tv_labelaltitude"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Altitude:"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labellon" />
-
-    <TextView
-        android:id="@+id/tv_altitude"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="0.00"
-        app:layout_constraintStart_toEndOf="@+id/tv_labelaltitude"
-        app:layout_constraintTop_toBottomOf="@+id/tv_lon" />
-
-
-    <TextView
         android:id="@+id/tv_labelaccuracy"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         android:text="Accuracy:"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelaltitude" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_labellon" />
 
     <TextView
         android:id="@+id/tv_accuracy"
@@ -79,26 +60,7 @@
         android:layout_marginTop="16dp"
         android:text="0.00"
         app:layout_constraintStart_toEndOf="@+id/tv_labelaccuracy"
-        app:layout_constraintTop_toBottomOf="@+id/tv_altitude" />
-
-    <TextView
-        android:id="@+id/tv_labelspeed"
-        android:layout_width="100dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="Speed"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelaccuracy" />
-
-
-    <TextView
-        android:id="@+id/tv_speed"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:text="0.00"
-        app:layout_constraintStart_toEndOf="@+id/tv_labelspeed"
-        app:layout_constraintTop_toBottomOf="@+id/tv_accuracy" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_lon" />
 
     <TextView
         android:id="@+id/tv_labelsensor"
@@ -132,7 +94,7 @@
         android:id="@+id/tv_updates"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Off"
+        android:text="Location is being tracked"
         app:layout_constraintStart_toEndOf="@+id/tv_labelupdates"
         app:layout_constraintTop_toBottomOf="@+id/sw_locationsupdates" />
 
@@ -166,7 +128,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toEndOf="@+id/tv_labeladdress"
-        app:layout_constraintTop_toBottomOf="@+id/tv_speed" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_accuracy" />
 
 
 
@@ -177,7 +139,7 @@
         android:layout_marginTop="1dp"
         android:text="Address"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelspeed" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_labelaccuracy" />
 
     <View
         android:id="@+id/divider"
@@ -190,7 +152,7 @@
         tools:layout_editor_absoluteX="1dp"/>
 
     <TextView
-        android:id="@+id/tv_labelBreadCrumb"
+        android:id="@+id/tv_labelWayPoints"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
@@ -199,23 +161,13 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_labelsensor" />
 
     <TextView
-        android:id="@+id/tv_breadCrumbCount"
+        android:id="@+id/tv_wayPointCount"
         android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="0"
-        app:layout_constraintStart_toEndOf="@+id/tv_labelBreadCrumb"
+        app:layout_constraintStart_toEndOf="@+id/tv_labelWayPoints"
         app:layout_constraintTop_toBottomOf="@+id/tv_labelsensor" />
-
-    <Button
-        android:id="@+id/btn_newWayPoint"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
-        android:text="Add Way Point"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_labelBreadCrumb" />
 
     <Button
         android:id="@+id/btn_showWayPoints"
@@ -225,7 +177,7 @@
         android:text="Show Way Points"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/btn_newWayPoint" />
+        app:layout_constraintTop_toBottomOf="@+id/tv_wayPointCount" />
 
 
     <Button

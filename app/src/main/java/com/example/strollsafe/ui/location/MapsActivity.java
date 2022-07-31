@@ -46,22 +46,23 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
 
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
     private static final String SHARED_PREFS = "StrollSafe: LocationList";
     private ArrayList<PWDLocation> PWDLocationList;
     private LatLng lastLocationPlaced;
     private final float ZOOM_FACTOR = 12.0F;
 
 
-
-    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,16 +78,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
-
-//        PWDLocationList myApplication = (PWDLocationList) getApplicationContext();
-//        savedLocations = myApplication.getPWDLocationList();
     } // end of onCreate()
 
     /**
      * Manipulates the map once available.
      * This callback is triggered when the map is ready to be used.
-     * This is where we can add markers or lines, add listeners or move the camera. In this case,
-     * we just add a marker near Sydney, Australia.
+     * This is where we can add markers or lines, add listeners or move the camera.
      * If Google Play services is not installed on the device, the user will be prompted to install
      * it inside the SupportMapFragment. This method will only be triggered once the user has
      * installed Google Play services and returned to the app.
@@ -96,7 +93,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap = googleMap;
 
         if (PWDLocationList.size() < 1) { // if no saved locations, map will not display
-            Toast.makeText(MapsActivity.this, "No waypoints saved",
+            Toast.makeText(MapsActivity.this, "No locations saved",
                     Toast.LENGTH_SHORT).show();
             finish();
         } else {
@@ -107,38 +104,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 MarkerOptions markerOptions = new MarkerOptions();
                 markerOptions.position(latLng);
 
-                Geocoder geocoder = new Geocoder(MapsActivity.this);
-                try {
-                    List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
-                            location.getLongitude(), 1);
-                    markerOptions.title(addresses.get(0).getAddressLine(0));
-                } catch (Exception e) {
-                    markerOptions.title("Lat: " + location.getLatitude() + "\n" +
-                            "Lon: " + location.getLongitude());
-                }
+                // show address and last access details when the marker is touched
+                markerOptions.title(location.getAddress());
+                markerOptions.snippet("Last here on " + location.getDateTime().format(DATE_FORMAT));
                 // place location as a pin on the map
                 mMap.addMarker(markerOptions);
                 lastLocationPlaced = latLng;
             }
             // when maps is opened, zoom in to the last saved location
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocationPlaced, ZOOM_FACTOR));
-            mMap.setOnMarkerClickListener(marker -> {
-                Integer clicks = (Integer) marker.getTag();
-                if (clicks == null) {
-                    clicks = 0;
-
-                }
-                clicks++;
-                marker.setTag(clicks);
-//                Toast.makeText(MapsActivity.this, "Marker " + marker.getTitle() +
-//                        " was clicked " + clicks + " times", Toast.LENGTH_SHORT).show();
-
-                return false;
-            });
         }
     } // end of onMapReady()
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+    /**
+     * Description: Read the shared preference folder for the list of saved locations and
+     *              store them in an arraylist
+     * */
     private void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 

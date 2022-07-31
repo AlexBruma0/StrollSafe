@@ -18,8 +18,6 @@ import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 
 import android.content.SharedPreferences;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
@@ -48,7 +46,6 @@ import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.List;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
@@ -106,7 +103,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 // show address and last access details when the marker is touched
                 markerOptions.title(location.getAddress());
-                markerOptions.snippet("Last here on " + location.getDateTime().format(DATE_FORMAT));
+                markerOptions.snippet("Last here on " + location.getLastHereDateTime().format(DATE_FORMAT));
                 // place location as a pin on the map
                 mMap.addMarker(markerOptions);
                 lastLocationPlaced = latLng;

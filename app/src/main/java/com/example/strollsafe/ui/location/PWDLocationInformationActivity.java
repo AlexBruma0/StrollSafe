@@ -155,7 +155,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
 
                     if (address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
                             !address.equals("Unable to get street address"))  {
-                        PWDLocationList.get(PWDLocationList.size() - 1).setDateTime(LocalDateTime.now());
+                        PWDLocationList.get(PWDLocationList.size() - 1).setLastHereDateTime(LocalDateTime.now());
                     } else {
                         PWDLocation newLocation = new PWDLocation(location.getLatitude(),
                                 location.getLongitude(), location.getAccuracy(), address);
@@ -341,7 +341,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                                 address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
                                 !address.equals("Unable to get street address"))
                         {
-                            PWDLocationList.get(PWDLocationList.size() - 1).setDateTime(LocalDateTime.now());
+                            PWDLocationList.get(PWDLocationList.size() - 1).setLastHereDateTime(LocalDateTime.now());
                             updateUIValues(PWDLocationList.get(PWDLocationList.size() - 1));
                         } else {
                             PWDLocation newLocation = new PWDLocation(location.getLatitude(),

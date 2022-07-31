@@ -26,7 +26,8 @@ public class PWDLocation {
     private final double longitude;
     private final float accuracy;
     private final String address;
-    private LocalDateTime dateTime;
+    private final LocalDateTime initalDateTime;
+    private LocalDateTime lastHereDateTime;
 
     /**
      * Description: Parameterized constructor
@@ -43,7 +44,8 @@ public class PWDLocation {
         this.longitude = longitude;
         this.accuracy = accuracy;
         this.address = address;
-        this.dateTime = LocalDateTime.now();
+        this.initalDateTime = LocalDateTime.now();
+        this.lastHereDateTime = initalDateTime;
     } // end of constructor
 
     /**
@@ -84,21 +86,30 @@ public class PWDLocation {
     } // end of getAddresss()
 
     /**
-     * Description: Returns the first address line of the location
+     * Description: Returns the initial location save date and time
      *
      * @return the date and time when the pwd location was saved
      * */
-    public LocalDateTime getDateTime() {
-        return dateTime;
-    }
+    public LocalDateTime getInitialDateTime() {
+        return initalDateTime;
+    } // end of getInitialDateTime()
+
+    /**
+     * Description: Returns the last saved date and time of the location
+     *
+     * @return the date and time when the pwd location was saved
+     * */
+    public LocalDateTime getLastHereDateTime() {
+        return lastHereDateTime;
+    } // end of getLastHereDateTime()
 
     /**
      * Description: Update the dateTime to be the the last date and time this location was saved
      *
-     * @param dateTime most recent date and time this location was logged
+     * @param lastHereDateTime most recent date and time this location was logged
      * */
-    public void setDateTime(LocalDateTime dateTime) {
-        this.dateTime = dateTime;
+    public void setLastHereDateTime(LocalDateTime lastHereDateTime) {
+        this.lastHereDateTime = lastHereDateTime;
     } // end of setDateTime()
 
     /**
@@ -114,7 +125,8 @@ public class PWDLocation {
                 "Longitude: " + this.longitude + "\n" +
                 "Accuracy: " + this.accuracy + "\n" +
                 "Address: " + this.address + "\n" +
-                "Date: " + this.dateTime.toString() + "\n"
+                "Initial Date" + this.initalDateTime.toString() + "\n" +
+                "Last Here Date: " + this.lastHereDateTime.toString() + "\n"
                 );
     } // end of toString()
 

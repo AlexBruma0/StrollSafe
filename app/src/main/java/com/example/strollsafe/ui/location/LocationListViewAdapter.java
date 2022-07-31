@@ -47,7 +47,7 @@ public class LocationListViewAdapter extends RecyclerView.Adapter<LocationListVi
         // setting data to our views of recycler view.
         PWDLocation location = PWDLocationList.get(position);
         holder.tv_streetAddress.setText(location.getAddress());
-        holder.tv_lastHereDateTime.setText("Last here on " + location.getDateTime().format(DATE_FORMAT));
+        holder.tv_lastHereDateTime.setText("Last here on " + location.getLastHereDateTime().format(DATE_FORMAT));
     }
 
     @Override

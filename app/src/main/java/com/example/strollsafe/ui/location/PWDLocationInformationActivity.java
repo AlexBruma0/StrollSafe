@@ -59,6 +59,7 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class PWDLocationInformationActivity extends AppCompatActivity {
 
     public static final int DEFAULT_UPDATE_INTERVAL = 10; // seconds
@@ -66,9 +67,9 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
     public static final int LOCATION_REQUEST_PRIORITY = Priority.PRIORITY_HIGH_ACCURACY;
     private static final int PERMISSIONS_CODE_ALL = 99; // any permission code
     private static final String SHARED_PREFS = "StrollSafe: LocationList";
+    private static final int  MAX_SAVED_LOCATIONS = 5;
 
-//    private PWDLocationList locationList;
-    // current location
+
     private ArrayList<PWDLocation> PWDLocationList;
 
     // references to all UI elements
@@ -90,13 +91,13 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
 
 
     // Google's API for location services
-    FusedLocationProviderClient fusedLocationProviderClient;
+    private FusedLocationProviderClient fusedLocationProviderClient;
 
     // location request is a config file for all settings related to the FusedLocationProviderClient
-    LocationRequest locationRequest;
-    LocationCallback locationCallback;
+    private LocationRequest locationRequest;
+    private LocationCallback locationCallback;
 
-    static String[] PERMISSIONS;
+    private static String[] PERMISSIONS;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @SuppressLint("SetTextI18n")
@@ -106,12 +107,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pwd_location_information);
 
         loadData();
-        if (PWDLocationList == null) {
-            Log.d("list", "list is null");
-        }
-
-//        locationList = new PWDLocationList(PWDLocationInformationActivity.this);
-
         PERMISSIONS = new String[] {
                 Manifest.permission.ACCESS_FINE_LOCATION,
                 Manifest.permission.ACCESS_COARSE_LOCATION
@@ -163,11 +158,14 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                     } else {
                         PWDLocation newLocation = new PWDLocation(location.getLatitude(),
                                 location.getLongitude(), location.getAccuracy(), address);
+                        if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
+                            PWDLocationList.remove(0);
+                        }
                         PWDLocationList.add(newLocation);
                         updateUIValues(newLocation);
                     }
                     saveData();
-
+                    Log.i("Location", "Location updated");
                 }
             }
         };
@@ -181,7 +179,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                 if (sw_gps.isChecked()) { // if switch is turned on, use GPS sensors
                     locationRequest.setPriority(Priority.PRIORITY_HIGH_ACCURACY);
                     tv_sensor.setText("Using GPS sensor");
-                } else { // if swtich is turned off, use towers and WIFI
+                } else { // if switch is turned off, use towers and WIFI
                     locationRequest.setPriority(Priority.PRIORITY_BALANCED_POWER_ACCURACY);
                     tv_sensor.setText("Using towers + WIFI");
                 }
@@ -192,7 +190,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
 
         // get constant location updates
         sw_locationsupdates.setOnClickListener(new View.OnClickListener() {
-            @RequiresApi(api = Build.VERSION_CODES.M)
             @Override
             public void onClick(View view) {
                 if (sw_locationsupdates.isChecked()) { // tracking is turned on
@@ -242,7 +239,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
      * Description: If permission is granted, track location. Otherwise, get permission from
      *              the user and then track location
      * */
-    @RequiresApi(api = Build.VERSION_CODES.M)
     @SuppressLint("SetTextI18n")
     private void startLocationUpdates() {
         tv_updates.setText("Location is being tracked");
@@ -316,7 +312,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(
                     this, new OnSuccessListener<Location>() {
 
-                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onSuccess(Location location) {
                     if (location != null) {
@@ -333,6 +328,9 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                         }
                         PWDLocation newLocation = new PWDLocation(location.getLatitude(),
                                 location.getLongitude(), location.getAccuracy(), address);
+                        if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
+                            PWDLocationList.remove(0);
+                        }
                         PWDLocationList.add(newLocation);
                         saveData();
                         updateUIValues(newLocation);
@@ -367,24 +365,16 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
         tv_lat.setText(String.valueOf(location.getLatitude()));
         tv_lon.setText(String.valueOf(location.getLongitude()));
         tv_accuracy.setText(String.valueOf(location.getAccuracy()));
-
-        Geocoder geocoder = new Geocoder(PWDLocationInformationActivity.this);
-        try {
-            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
-                    location.getLongitude(), 1);
-            tv_address.setText(addresses.get(0).getAddressLine(0));
-        } catch (Exception e) {
-            tv_address.setText("Unable to get street address");
-        }
+        tv_address.setText(location.getAddress());
 
         // show the number of waypoints saved
         tv_wayPointCount.setText(Integer.toString(PWDLocationList.size()));
 
+        Toast.makeText(this, "Updated location", Toast.LENGTH_SHORT).show();
 
     } // end of updateUIValues()
 
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
@@ -411,7 +401,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
         }
     } // end of loadData()
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void saveData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -431,10 +420,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
         String json = gson.toJson(PWDLocationList);
         editor.putString("Locations", json);
         editor.apply();
-
-//        // after saving data we are displaying a toast message.
-//        Toast.makeText(this, "Saved Array List to Shared preferences. ", Toast.LENGTH_SHORT).show();
-    }
+    } // end of saveData()
 
 
 

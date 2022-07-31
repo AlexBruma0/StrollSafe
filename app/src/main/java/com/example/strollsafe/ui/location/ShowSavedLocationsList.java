@@ -59,16 +59,7 @@ public class ShowSavedLocationsList extends AppCompatActivity {
         // convert locations to a street address if possible
         ArrayList<String> savedAddresses = new ArrayList<>();
         for (PWDLocation location: PWDLocationList) {
-            Geocoder geocoder = new Geocoder(ShowSavedLocationsList.this);
-            try {
-                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
-                        location.getLongitude(), 1);
-                savedAddresses.add(addresses.get(0).getAddressLine(0));
-            } catch (Exception e) {
-                String address = "Lat: " + location.getLatitude() + "Lon: " + location.getLongitude() +
-                        "\n" + "Unable to get street address";
-                savedAddresses.add(address);
-            }
+            savedAddresses.add(location.getAddress());
         }
         // save all locations as a list and display for the user
         lv_wayPoints.setAdapter(new ArrayAdapter<>(this,
@@ -76,7 +67,10 @@ public class ShowSavedLocationsList extends AppCompatActivity {
 
     } // end of onCreate()
 
-
+    /**
+     * Description: Read the shared preference folder for the list of saved locations and
+     *              store them in an arraylist
+     * */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
@@ -103,7 +97,4 @@ public class ShowSavedLocationsList extends AppCompatActivity {
             PWDLocationList = new ArrayList<>();
         }
     } // end of loadData()
-
-
-
 } // end of ShowSavedLocationsList.java

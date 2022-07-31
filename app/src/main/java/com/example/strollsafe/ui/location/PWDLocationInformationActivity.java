@@ -88,7 +88,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
 
     private Button btn_showWayPoints;
     private Button btn_showMap;
-
+    private Button btn_cleanSharedPreferences;
 
     // Google's API for location services
     private FusedLocationProviderClient fusedLocationProviderClient;
@@ -125,6 +125,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
         btn_showWayPoints = findViewById(R.id.btn_showWayPoints);
         tv_wayPointCount = findViewById(R.id.tv_wayPointCount);
         btn_showMap = findViewById(R.id.btn_showMap);
+        btn_cleanSharedPreferences = findViewById(R.id.btn_cleanSharedPreferences);
 
         // set all properties of LocationRequest
         locationRequest = LocationRequest.create();
@@ -186,8 +187,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
 
             }
         });
-
-
         // get constant location updates
         sw_locationsupdates.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -199,8 +198,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                 }
             }
         });
-
-
         btn_showWayPoints.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -220,6 +217,19 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                 } else {
                     Log.e("Map", "no saved waypoints to show on map");
                 }
+
+            }
+        });
+
+        btn_cleanSharedPreferences.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                PWDLocationList.clear();
+                saveData();
+                loadData();
+
+                tv_wayPointCount.setText(Integer.toString(PWDLocationList.size()));
 
             }
         });
@@ -326,14 +336,25 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             address = ("Unable to get street address");
                         }
-                        PWDLocation newLocation = new PWDLocation(location.getLatitude(),
-                                location.getLongitude(), location.getAccuracy(), address);
-                        if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
-                            PWDLocationList.remove(0);
+
+                        if (PWDLocationList.size() > 0 &&
+                                address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
+                                !address.equals("Unable to get street address"))
+                        {
+                            PWDLocationList.get(PWDLocationList.size() - 1).setDateTime(LocalDateTime.now());
+                            updateUIValues(PWDLocationList.get(PWDLocationList.size() - 1));
+                        } else {
+                            PWDLocation newLocation = new PWDLocation(location.getLatitude(),
+                                    location.getLongitude(), location.getAccuracy(), address);
+                            if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
+                                PWDLocationList.remove(0);
+                            }
+                            PWDLocationList.add(newLocation);
+                            updateUIValues(newLocation);
                         }
-                        PWDLocationList.add(newLocation);
                         saveData();
-                        updateUIValues(newLocation);
+                        Log.i("Location", "Location updated");
+
                     } else {
                         if (ActivityCompat.checkSelfPermission(
                                 PWDLocationInformationActivity.this,

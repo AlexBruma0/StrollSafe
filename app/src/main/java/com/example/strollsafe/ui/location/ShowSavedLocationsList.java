@@ -19,7 +19,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
@@ -27,7 +26,6 @@ import android.widget.ListView;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.PWDLocation;
-import com.example.strollsafe.pwd.location.PWDLocationList;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.TypeAdapter;
@@ -81,34 +79,23 @@ public class ShowSavedLocationsList extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadData() {
-        // method to load arraylist from shared prefs
-        // initializing our shared prefs with name as
-        // shared preferences.
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
-        // creating a variable for gson.
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class,
                 new TypeAdapter<LocalDateTime>() {
                     @Override
                     public void write(JsonWriter jsonWriter, LocalDateTime date) throws IOException {
                         jsonWriter.value(date.toString());
                     }
-
                     @Override
                     public LocalDateTime read(JsonReader jsonReader) throws IOException {
                         return LocalDateTime.parse(jsonReader.nextString());
                     }
                 }).setPrettyPrinting().create();
 
-        // below line is to get the type of our array list.
+
         Type type = new TypeToken<ArrayList<PWDLocation>>() {}.getType();
-
-        // below line is to get to string present from our
-        // shared prefs if not present setting it as null.
         String json = sharedPreferences.getString("Locations", null);
-
-        // in below line we are getting data from gson
-        // and saving it to our array list
         PWDLocationList = gson.fromJson(json, type);
 
         // checking below if the array list is empty or not

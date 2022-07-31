@@ -90,18 +90,9 @@ public class PWDLocation {
         return dateTime;
     }
 
-//    /**
-//     * Description: Update the location array
-//     * */
-//    public void updateLocationValues(double latitude, double longitude,
-//                                        float accuracy, String address, LocalDateTime dateTime) {
-//        locationArray[0] = String.valueOf(latitude);
-//        locationArray[1] = String.valueOf(longitude);
-//        locationArray[2] = String.valueOf(accuracy);
-//        locationArray[3] = String.valueOf(address);
-//        locationArray[4] = dateTime.toString();
-//
-//    } // end of updateLocationValues()
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
 
     @NonNull
     @Override

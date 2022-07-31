@@ -69,7 +69,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
 
 //    private PWDLocationList locationList;
     // current location
-    private Location currentLocation;
     private ArrayList<PWDLocation> PWDLocationList;
 
     // references to all UI elements
@@ -158,11 +157,17 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                         address = ("Unable to get street address");
                     }
 
-                    PWDLocation newLocation = new PWDLocation(location.getLatitude(),
-                            location.getLongitude(), location.getAccuracy(), address);
-                    PWDLocationList.add(newLocation);
+                    if (address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
+                            !address.equals("Unable to get street address"))  {
+                        PWDLocationList.get(PWDLocationList.size() - 1).setDateTime(LocalDateTime.now());
+                    } else {
+                        PWDLocation newLocation = new PWDLocation(location.getLatitude(),
+                                location.getLongitude(), location.getAccuracy(), address);
+                        PWDLocationList.add(newLocation);
+                        updateUIValues(newLocation);
+                    }
                     saveData();
-                    updateUIValues(newLocation);
+
                 }
             }
         };
@@ -309,8 +314,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                 Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED)
         {
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(
-                    this, new OnSuccessListener<Location>()
-            {
+                    this, new OnSuccessListener<Location>() {
 
                 @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
@@ -327,15 +331,11 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                         } catch (Exception e) {
                             address = ("Unable to get street address");
                         }
-
                         PWDLocation newLocation = new PWDLocation(location.getLatitude(),
                                 location.getLongitude(), location.getAccuracy(), address);
                         PWDLocationList.add(newLocation);
                         saveData();
                         updateUIValues(newLocation);
-
-
-                        currentLocation = location;
                     } else {
                         if (ActivityCompat.checkSelfPermission(
                                 PWDLocationInformationActivity.this,
@@ -386,9 +386,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadData() {
-        // method to load arraylist from shared prefs
-        // initializing our shared prefs with name as
-        // shared preferences.
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
         // creating a variable for gson.
@@ -398,22 +395,14 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                     public void write(JsonWriter jsonWriter, LocalDateTime date) throws IOException {
                         jsonWriter.value(date.toString());
                     }
-
                     @Override
                     public LocalDateTime read(JsonReader jsonReader) throws IOException {
                         return LocalDateTime.parse(jsonReader.nextString());
                     }
                 }).setPrettyPrinting().create();
 
-        // below line is to get the type of our array list.
         Type type = new TypeToken<ArrayList<PWDLocation>>() {}.getType();
-
-        // below line is to get to string present from our
-        // shared prefs if not present setting it as null.
         String json = sharedPreferences.getString("Locations", null);
-
-        // in below line we are getting data from gson
-        // and saving it to our array list
         PWDLocationList = gson.fromJson(json, type);
 
         // checking below if the array list is empty or not
@@ -424,42 +413,27 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void saveData() {
-        // method for saving the data in array list.
-        // creating a variable for storing data in
-        // shared preferences.
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
-
-        // creating a variable for editor to
-        // store data in shared preferences.
         SharedPreferences.Editor editor = sharedPreferences.edit();
 
-        // creating a new variable for gson.
-//        Gson gson = new Gson();
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class,
                 new TypeAdapter<LocalDateTime>() {
                     @Override
                     public void write(JsonWriter jsonWriter, LocalDateTime date) throws IOException {
                         jsonWriter.value(date.toString());
                     }
-
                     @Override
                     public LocalDateTime read(JsonReader jsonReader) throws IOException {
                         return LocalDateTime.parse(jsonReader.nextString());
                     }
                 }).setPrettyPrinting().create();
-        // getting data from gson and storing it in a string.
+
         String json = gson.toJson(PWDLocationList);
-
-        // below line is to save data in shared
-        // prefs in the form of string.
         editor.putString("Locations", json);
-
-        // below line is to apply changes
-        // and save data in shared prefs.
         editor.apply();
 
-        // after saving data we are displaying a toast message.
-        Toast.makeText(this, "Saved Array List to Shared preferences. ", Toast.LENGTH_SHORT).show();
+//        // after saving data we are displaying a toast message.
+//        Toast.makeText(this, "Saved Array List to Shared preferences. ", Toast.LENGTH_SHORT).show();
     }
 
 

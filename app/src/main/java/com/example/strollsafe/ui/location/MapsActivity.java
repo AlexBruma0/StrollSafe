@@ -130,8 +130,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 clicks++;
                 marker.setTag(clicks);
-                Toast.makeText(MapsActivity.this, "Marker " + marker.getTitle() +
-                        " was clicked " + clicks + " times", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MapsActivity.this, "Marker " + marker.getTitle() +
+//                        " was clicked " + clicks + " times", Toast.LENGTH_SHORT).show();
 
                 return false;
             });
@@ -140,34 +140,22 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadData() {
-        // method to load arraylist from shared prefs
-        // initializing our shared prefs with name as
-        // shared preferences.
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 
-        // creating a variable for gson.
         Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class,
                 new TypeAdapter<LocalDateTime>() {
                     @Override
                     public void write(JsonWriter jsonWriter, LocalDateTime date) throws IOException {
                         jsonWriter.value(date.toString());
                     }
-
                     @Override
                     public LocalDateTime read(JsonReader jsonReader) throws IOException {
                         return LocalDateTime.parse(jsonReader.nextString());
                     }
                 }).setPrettyPrinting().create();
 
-        // below line is to get the type of our array list.
         Type type = new TypeToken<ArrayList<PWDLocation>>() {}.getType();
-
-        // below line is to get to string present from our
-        // shared prefs if not present setting it as null.
         String json = sharedPreferences.getString("Locations", null);
-
-        // in below line we are getting data from gson
-        // and saving it to our array list
         PWDLocationList = gson.fromJson(json, type);
 
         // checking below if the array list is empty or not

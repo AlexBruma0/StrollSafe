@@ -16,9 +16,14 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Notification;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -46,6 +51,7 @@ import com.google.android.gms.location.LocationServices;
 
 import java.io.IOException;
 import java.lang.reflect.Type;
+import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -68,9 +74,13 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
     private static final int PERMISSIONS_CODE_ALL = 99; // any permission code
     private static final String SHARED_PREFS = "StrollSafe: LocationList";
     private static final int  MAX_SAVED_LOCATIONS = 5;
+    private static final long IDLE_MINUTES = 2L;
 
 
     private ArrayList<PWDLocation> PWDLocationList;
+
+    private NotificationManagerCompat notificationManagerCompat;
+    private Notification notification;
 
     // references to all UI elements
     private TextView tv_lat;
@@ -154,8 +164,33 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                     }
 
                     if (address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
-                            !address.equals("Unable to get street address"))  {
-                        PWDLocationList.get(PWDLocationList.size() - 1).setLastHereDateTime(LocalDateTime.now());
+                            !address.equals("Unable to get street address"))
+                    {
+                        PWDLocation lastLocation = PWDLocationList.get(PWDLocationList.size() - 1);
+                        lastLocation.setLastHereDateTime(LocalDateTime.now());
+
+                        // after IDLE_MINUTES, if the location has not changed, notify user
+                        Duration duration = Duration.between(lastLocation.getInitialDateTime(),
+                                                    lastLocation.getLastHereDateTime());
+                        if (duration.toMinutes() == IDLE_MINUTES) {
+                            NotificationChannel channel = new NotificationChannel("idle_alert",
+                                    "PWD Idle", NotificationManager.IMPORTANCE_DEFAULT);
+                            NotificationManager manager = getSystemService(NotificationManager.class);
+                            manager.createNotificationChannel(channel);
+
+                            NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                                    PWDLocationInformationActivity.this,"idle_alert");
+                            builder.setSmallIcon(R.drawable.ic_launcher_background);
+                            builder.setContentTitle("PWD Idle Alert");
+                            builder.setContentText("PWD has been idle for " + IDLE_MINUTES + " minutes!");
+
+                            notification = builder.build();
+                            notificationManagerCompat = NotificationManagerCompat.from(PWDLocationInformationActivity.this);
+                            notificationManagerCompat.notify("idle_alert", 1, notification);
+                        }
+
+
+
                     } else {
                         PWDLocation newLocation = new PWDLocation(location.getLatitude(),
                                 location.getLongitude(), location.getAccuracy(), address);
@@ -167,6 +202,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                     }
                     saveData();
                     Log.i("Location", "Location updated");
+
                 }
             }
         };

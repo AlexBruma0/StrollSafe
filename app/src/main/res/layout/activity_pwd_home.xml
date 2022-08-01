@@ -5,31 +5,47 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <Button
-        android:id="@+id/SOSbtn"
-        android:layout_width="166dp"
-        android:layout_height="169dp"
-        android:onClick="SOS"
-        android:text="SOS"
-        android:textSize="34sp"
+
+    <ImageView
+        android:id="@+id/iv_background_image"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/pwdB"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.229" />
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/SOSbtn"
+        android:layout_width="125dp"
+        android:layout_height="82dp"
+        android:background="@drawable/backbutton"
+        android:onClick="SOS"
+        android:text="SOS"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.122"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.297" />
 
     <Button
         android:id="@+id/SOSbtn2"
-        android:layout_width="166dp"
-        android:layout_height="169dp"
+        android:layout_width="125dp"
+        android:layout_height="78dp"
+        android:background="@drawable/backbutton"
         android:onClick="nonEmergency"
-        android:text="Non-Emergency"
-        android:textSize="12sp"
+        android:text="Call Caregiver"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.497"
+        app:layout_constraintHorizontal_bias="0.818"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.676" />
+        app:layout_constraintVertical_bias="0.301" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -14,16 +14,19 @@
 package com.example.strollsafe.ui.location;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.SharedPreferences;
 import android.location.Address;
 import android.location.Geocoder;
-import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.strollsafe.R;
-import com.example.strollsafe.pwd.location.PWDLocations;
+import com.example.strollsafe.pwd.PWDLocation;
+
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -33,7 +36,16 @@ import com.google.android.gms.maps.model.LatLng;
 
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.strollsafe.databinding.ActivityMapsBinding;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,14 +54,19 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
 
-    private ArrayList<Location> savedLocations;
+    private static final String SHARED_PREFS = "StrollSafe: LocationList";
+    private ArrayList<PWDLocation> PWDLocationList;
     private LatLng lastLocationPlaced;
     private final float ZOOM_FACTOR = 12.0F;
 
 
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        loadData();
 
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
@@ -61,8 +78,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mapFragment.getMapAsync(this);
         }
 
-        PWDLocations myApplication = (PWDLocations) getApplicationContext();
-        savedLocations = myApplication.getMyLocations();
+//        PWDLocationList myApplication = (PWDLocationList) getApplicationContext();
+//        savedLocations = myApplication.getPWDLocationList();
     } // end of onCreate()
 
     /**
@@ -78,13 +95,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (savedLocations.size() < 1) { // if no saved locations, map will not display
+        if (PWDLocationList.size() < 1) { // if no saved locations, map will not display
             Toast.makeText(MapsActivity.this, "No waypoints saved",
                     Toast.LENGTH_SHORT).show();
             finish();
         } else {
             // convert all locations to LatLng
-            for (Location location : savedLocations) {
+            for (PWDLocation location : PWDLocationList) {
                 LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
                 MarkerOptions markerOptions = new MarkerOptions();
@@ -113,12 +130,39 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 }
                 clicks++;
                 marker.setTag(clicks);
-                Toast.makeText(MapsActivity.this, "Marker " + marker.getTitle() +
-                        " was clicked " + clicks + " times", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(MapsActivity.this, "Marker " + marker.getTitle() +
+//                        " was clicked " + clicks + " times", Toast.LENGTH_SHORT).show();
 
                 return false;
             });
         }
     } // end of onMapReady()
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private void loadData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+
+        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class,
+                new TypeAdapter<LocalDateTime>() {
+                    @Override
+                    public void write(JsonWriter jsonWriter, LocalDateTime date) throws IOException {
+                        jsonWriter.value(date.toString());
+                    }
+                    @Override
+                    public LocalDateTime read(JsonReader jsonReader) throws IOException {
+                        return LocalDateTime.parse(jsonReader.nextString());
+                    }
+                }).setPrettyPrinting().create();
+
+        Type type = new TypeToken<ArrayList<PWDLocation>>() {}.getType();
+        String json = sharedPreferences.getString("Locations", null);
+        PWDLocationList = gson.fromJson(json, type);
+
+        // checking below if the array list is empty or not
+        if (PWDLocationList == null) {
+            PWDLocationList = new ArrayList<>();
+        }
+    } // end of loadData()
+
 }// end of MapsActivity.java
 

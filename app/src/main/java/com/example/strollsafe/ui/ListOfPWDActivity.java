@@ -2,6 +2,7 @@ package com.example.strollsafe.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -32,6 +33,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
     String TAG = "ListOfPWDActivity";
     SharedPreferences pwdPreferences;
     SharedPreferences.Editor pwdPreferenceEditor;
+    ProgressDialog progressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,10 +51,8 @@ public class ListOfPWDActivity extends AppCompatActivity {
         configureDelete1();
         configureDelete2();
         configureDelete3();
-
         stylePage();
     }
-
 
     public void configureBack(){
         ImageButton PWD = (ImageButton) findViewById(R.id.quit);
@@ -69,7 +69,17 @@ public class ListOfPWDActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ListOfPWDActivity.this, GeofencingMapsActivity.class));
+                startProgressDialog("Opening Safe Zone Manager...", false);
+                app.currentUser().refreshCustomData(refreshResult -> {
+                    if(refreshResult.isSuccess()) {
+                        ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
+                        String userId = patientsList.get(0);
+                        Intent intent = new Intent(ListOfPWDActivity.this, GeofencingMapsActivity.class);
+                        intent.putExtra("userId", userId);
+                        startActivity(intent);
+                    }
+                    dismissProgressDialog();
+                });
             }
         });
     }
@@ -79,7 +89,17 @@ public class ListOfPWDActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ListOfPWDActivity.this, GeofencingMapsActivity.class));
+                startProgressDialog("Opening Safe Zone Manager...", false);
+                app.currentUser().refreshCustomData(refreshResult -> {
+                    if(refreshResult.isSuccess()) {
+                        ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
+                        String userId = patientsList.get(1);
+                        Intent intent = new Intent(ListOfPWDActivity.this, GeofencingMapsActivity.class);
+                        intent.putExtra("userId", userId);
+                        startActivity(intent);
+                    }
+                    dismissProgressDialog();
+                });
             }
         });
     }
@@ -89,7 +109,17 @@ public class ListOfPWDActivity extends AppCompatActivity {
         PWD.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(ListOfPWDActivity.this, GeofencingMapsActivity.class));
+                startProgressDialog("Opening Safe Zone Manager...", false);
+                app.currentUser().refreshCustomData(refreshResult -> {
+                    if(refreshResult.isSuccess()) {
+                        ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
+                        String userId = patientsList.get(2);
+                        Intent intent = new Intent(ListOfPWDActivity.this, GeofencingMapsActivity.class);
+                        intent.putExtra("userId", userId);
+                        startActivity(intent);
+                    }
+                    dismissProgressDialog();
+                });
             }
         });
     }
@@ -107,13 +137,13 @@ public class ListOfPWDActivity extends AppCompatActivity {
                         ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
                         String userId = patientsList.get(0);
                         remove(userId);
+
+                        B.setText("CLICK HERE TO ACTIVATE");
+                        PWD.setVisibility(View.GONE);
+                        A.setVisibility(View.GONE);
+                        B.setVisibility(View.GONE);
                     }
                 });
-
-                B.setText("CLICK HERE TO ACTIVATE");
-                PWD.setVisibility(View.GONE);
-                A.setVisibility(View.GONE);
-                B.setVisibility(View.GONE);
             }
         });
     }
@@ -131,14 +161,13 @@ public class ListOfPWDActivity extends AppCompatActivity {
                         ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
                         String userId = patientsList.get(1);
                         remove(userId);
+
+                        B.setText("CLICK HERE TO ACTIVATE");
+                        PWD.setVisibility(View.GONE);
+                        A.setVisibility(View.GONE);
+                        B.setVisibility(View.GONE);
                     }
                 });
-
-                B.setText("CLICK HERE TO ACTIVATE");
-                PWD.setVisibility(View.GONE);
-                A.setVisibility(View.GONE);
-                B.setVisibility(View.GONE);
-
             }
         });
     }
@@ -156,19 +185,19 @@ public class ListOfPWDActivity extends AppCompatActivity {
                         ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
                         String userId = patientsList.get(2);
                         remove(userId);
+
+                        B.setText("CLICK HERE TO ACTIVATE");
+                        PWD.setVisibility(View.GONE);
+                        A.setVisibility(View.GONE);
+                        B.setVisibility(View.GONE);
                     }
                 });
-
-                B.setText("CLICK HERE TO ACTIVATE");
-                PWD.setVisibility(View.GONE);
-                A.setVisibility(View.GONE);
-                B.setVisibility(View.GONE);
-
             }
         });
     }
 
     public void stylePage() {
+        startProgressDialog("Loading patients...", false);
         app.currentUser().refreshCustomData(refreshResult -> {
             ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
             if(patientsList != null) {
@@ -188,44 +217,59 @@ public class ListOfPWDActivity extends AppCompatActivity {
                     userCollection.findOne(new Document("userId", patientsList.get(x))).getAsync(new App.Callback() {
                         @Override
                         public void onResult(App.Result result) {
-                            Document pwdInfo = (Document) result.get();
+                            if(result.isSuccess()) {
+                                Document pwdInfo = (Document) result.get();
 
-                            switch (finalX) {
-                                case 0:
-                                    Log.e(TAG, "STYLING THE FIRST BUTTON");
-                                    Button name1 = (Button) findViewById(R.id.NAME1);
-                                    ImageButton delete1 = (ImageButton) findViewById(R.id.delete1);
-                                    ImageButton map1 = (ImageButton) findViewById(R.id.Map1);
+                                switch (finalX) {
+                                    case 0:
+                                        Log.i(TAG, "STYLING THE FIRST BUTTON");
+                                        Button name1 = (Button) findViewById(R.id.NAME1);
+                                        ImageButton delete1 = (ImageButton) findViewById(R.id.delete1);
+                                        ImageButton map1 = (ImageButton) findViewById(R.id.Map1);
 
-                                    name1.setText(pwdInfo.get("firstName") + " " + pwdInfo.get("lastName"));
-                                    name1.setVisibility(View.VISIBLE);
-                                    delete1.setVisibility(View.VISIBLE);
-                                    map1.setVisibility(View.VISIBLE);
-                                    break;
+                                        name1.setText(pwdInfo.get("firstName") + " " + pwdInfo.get("lastName"));
+                                        name1.setVisibility(View.VISIBLE);
+                                        delete1.setVisibility(View.VISIBLE);
+                                        map1.setVisibility(View.VISIBLE);
 
-                                case 1:
-                                    Log.e(TAG, "STYLING THE SECOND BUTTON");
-                                    Button name2 = (Button) findViewById(R.id.NAME2);
-                                    ImageButton delete2 = (ImageButton) findViewById(R.id.delete2);
-                                    ImageButton map2 = (ImageButton) findViewById(R.id.Map2);
+                                        if(finalX == patientsList.size() - 1) {
+                                            dismissProgressDialog();
+                                        }
 
-                                    name2.setText(pwdInfo.get("firstName") + " " + pwdInfo.get("lastName"));
-                                    delete2.setVisibility(View.VISIBLE);
-                                    name2.setVisibility(View.VISIBLE);
-                                    map2.setVisibility(View.VISIBLE);
-                                    break;
+                                        break;
 
-                                case 2:
-                                    Log.e(TAG, "STYLING THE THIRD BUTTON");
-                                    Button name3 = (Button) findViewById(R.id.NAME3);
-                                    ImageButton delete3 = (ImageButton) findViewById(R.id.delete3);
-                                    ImageButton map3 = (ImageButton) findViewById(R.id.Map3);
+                                    case 1:
+                                        Log.i(TAG, "STYLING THE SECOND BUTTON");
+                                        Button name2 = (Button) findViewById(R.id.NAME2);
+                                        ImageButton delete2 = (ImageButton) findViewById(R.id.delete2);
+                                        ImageButton map2 = (ImageButton) findViewById(R.id.Map2);
 
-                                    name3.setText(pwdInfo.get("firstName") + " " + pwdInfo.get("lastName"));
-                                    delete3.setVisibility(View.VISIBLE);
-                                    name3.setVisibility(View.VISIBLE);
-                                    map3.setVisibility(View.VISIBLE);
-                                    break;
+                                        name2.setText(pwdInfo.get("firstName") + " " + pwdInfo.get("lastName"));
+                                        delete2.setVisibility(View.VISIBLE);
+                                        name2.setVisibility(View.VISIBLE);
+                                        map2.setVisibility(View.VISIBLE);
+
+                                        if(finalX == patientsList.size() - 1) {
+                                            dismissProgressDialog();
+                                        }
+                                        break;
+
+                                    case 2:
+                                        Log.i(TAG, "STYLING THE THIRD BUTTON");
+                                        Button name3 = (Button) findViewById(R.id.NAME3);
+                                        ImageButton delete3 = (ImageButton) findViewById(R.id.delete3);
+                                        ImageButton map3 = (ImageButton) findViewById(R.id.Map3);
+
+                                        name3.setText(pwdInfo.get("firstName") + " " + pwdInfo.get("lastName"));
+                                        delete3.setVisibility(View.VISIBLE);
+                                        name3.setVisibility(View.VISIBLE);
+                                        map3.setVisibility(View.VISIBLE);
+
+                                        if(finalX == patientsList.size() - 1) {
+                                            dismissProgressDialog();
+                                        }
+                                        break;
+                                }
                             }
                         }
                     });
@@ -235,9 +279,11 @@ public class ListOfPWDActivity extends AppCompatActivity {
     }
 
     public void add(View view){
+        startProgressDialog("Adding patient...", false);
         app.currentUser().refreshCustomData(refreshResult -> {
             ArrayList<String> patientsArray = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
             if(patientsArray == null || patientsArray.size() >= 3) {
+                dismissProgressDialog();
                 Toast.makeText(ListOfPWDActivity.this, "PWD limit max already reached.", Toast.LENGTH_SHORT).show();
                 return;
             }
@@ -251,10 +297,12 @@ public class ListOfPWDActivity extends AppCompatActivity {
                 public void onResult(App.Result result) {
                     Document pwdInfo = (Document) result.get();
                     if(pwdInfo == null) {
+                        dismissProgressDialog();
                         Toast.makeText(ListOfPWDActivity.this, "PWD can not be found.", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if(patientsArray.contains(pwdInfo.get("userId"))) {
+                        dismissProgressDialog();
                         Toast.makeText(ListOfPWDActivity.this, "This PWD is already linked to your account.", Toast.LENGTH_SHORT).show();
                         return;
                     }
@@ -265,9 +313,11 @@ public class ListOfPWDActivity extends AppCompatActivity {
                         @Override
                         public void onResult(App.Result result) {
                             if(result.isSuccess()) {
+                                dismissProgressDialog();
                                 Toast.makeText(ListOfPWDActivity.this, "PWD has been linked to your account.", Toast.LENGTH_SHORT).show();
                                 stylePage();
                             } else {
+                                dismissProgressDialog();
                                 Toast.makeText(ListOfPWDActivity.this, "Error linked PWD to your account.", Toast.LENGTH_LONG).show();
                             }
                         }
@@ -278,6 +328,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
     }
 
     public void remove(String userId) {
+        startProgressDialog("Removing patient...", false);
         app.currentUser().refreshCustomData(refreshResult -> {
             MongoCollection userCollection = databaseManager.getUsersCollection();
             Document careGiverData = new Document("userId", app.currentUser().getId());
@@ -286,15 +337,28 @@ public class ListOfPWDActivity extends AppCompatActivity {
                 @Override
                 public void onResult(App.Result result) {
                     if(result.isSuccess()) {
+                        dismissProgressDialog();
                         Toast.makeText(ListOfPWDActivity.this, "PWD has been removed to your account.", Toast.LENGTH_SHORT).show();
                         stylePage();
                     } else {
+                        dismissProgressDialog();
                         Toast.makeText(ListOfPWDActivity.this, "Error removing PWD to your account.", Toast.LENGTH_LONG).show();
                     }
                 }
             });
-
         });
+    }
+
+    private void startProgressDialog(String message, boolean cancelable) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(message);
+        progressDialog.setIndeterminate(false);
+        progressDialog.setCancelable(cancelable);
+        progressDialog.show();
+    }
+
+    private void dismissProgressDialog() {
+        progressDialog.dismiss();
     }
 
 }

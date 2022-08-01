@@ -1,5 +1,6 @@
 package com.example.strollsafe.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -29,6 +30,8 @@ public class SettingsActivity extends AppCompatActivity {
     User currentUser;
     TextView loginStatusTextView, accountTypeTextView, emailTextView, userIdTextView, deviceIdTextView, firstNameTextView, lastNameTextView;
     Button logoutButton;
+    ProgressDialog progressSpinner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +77,11 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     private void styleSettingsPage() {
+        progressSpinner = new ProgressDialog(this);
+        progressSpinner.setIndeterminate(false);
+        progressSpinner.setCancelable(true);
+        progressSpinner.show();
+
         if(currentUser == null) {
             styleSettingsPageLoggedOut();
         } else {
@@ -128,6 +136,8 @@ public class SettingsActivity extends AppCompatActivity {
 
         logoutButton.setEnabled(false);
         logoutButton.setAlpha(0.5f);
+
+        progressSpinner.dismiss();
     }
 
     private void styleSettingsPageLoggedIn(Document customData) {
@@ -153,5 +163,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         logoutButton.setEnabled(true);
         logoutButton.setAlpha(1f);
+
+        progressSpinner.dismiss();
     }
 }

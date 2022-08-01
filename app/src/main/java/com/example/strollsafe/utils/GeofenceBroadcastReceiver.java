@@ -1,4 +1,4 @@
-package com.example.strollsafe;
+package com.example.strollsafe.utils;
 
 import android.app.Notification;
 import android.app.NotificationManager;

@@ -146,8 +146,8 @@ public class MainActivity extends AppCompatActivity {
         if(databaseManager.isUserLoggedIn()) {
             switch(databaseManager.getUserAccountType()) {
                 case DatabaseManager.CAREGIVER_ACCOUNT_TYPE:
-                    Log.i(TAG, "Starting CaregiverHomeActivity form MainActivity");
-                    startActivity(new Intent(MainActivity.this, CaregiverHomeActivity.class));
+                    Log.i(TAG, "Starting CaregiverPwdListActivity form MainActivity");
+                    startActivity(new Intent(MainActivity.this, CaregiverPwdListActivity.class));
                     break;
 
                 case DatabaseManager.PWD_ACCOUNT_TYPE:

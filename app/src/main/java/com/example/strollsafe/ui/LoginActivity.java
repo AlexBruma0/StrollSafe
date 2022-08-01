@@ -1,5 +1,6 @@
 package com.example.strollsafe.ui;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.utils.DatabaseManager;
@@ -35,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
     private RealmConfiguration config;
     private User user;
     DatabaseManager databaseManager;
+    ProgressDialog progressSpinner;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
-//        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(topBar);
+        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(topBar);
 
     }
 
@@ -66,43 +69,51 @@ public class LoginActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    public void caregiverLoginOnClick(View view) {
-            EditText caregiverLoginEmail = findViewById(R.id.caregiverLoginEmail);
-            EditText caregiverLoginPassword = findViewById(R.id.caregiverLoginPassword);
-            String password = caregiverLoginPassword.getText().toString();
-            String email = caregiverLoginEmail.getText().toString();
+    public void loginOnClick(View view) {
+        EditText caregiverLoginEmail = findViewById(R.id.caregiverLoginEmail);
+        EditText caregiverLoginPassword = findViewById(R.id.caregiverLoginPassword);
+        String password = caregiverLoginPassword.getText().toString();
+        String email = caregiverLoginEmail.getText().toString();
 
-            try {
-                Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
-                AtomicReference<User> user = new AtomicReference<User>();
-                app.loginAsync(emailPasswordCredentials, it -> {
-                    if (it.isSuccess()) {
-                        Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
-                        user.set(app.currentUser());
-                        RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
-                                .name(APP_ID)
-                                .schemaVersion(2)
-                                .allowQueriesOnUiThread(true)
-                                .allowWritesOnUiThread(true)
-                                .build();
-                        Realm.getInstanceAsync(config, new Realm.Callback() {
-                            @Override
-                            public void onSuccess(@NonNull Realm realm) {
-                                Log.v(TAG, "Successfully opened a realm with the given config.");
-                                realmDatabase = realm;
-                                startActivity(new Intent(LoginActivity.this, ListOfPWDActivity.class));
+        progressSpinner = new ProgressDialog(this);
+        progressSpinner.setIndeterminate(false);
+        progressSpinner.setCancelable(true);
+        progressSpinner.show();
 
-                            }
-                        });
-                    } else {
-                        Log.e(TAG + "asyncLoginToRealm", "" + it.getError().toString());
-                        Toast.makeText(this, "" + it.getError().toString(), Toast.LENGTH_LONG).show();
-                    }
-                });
-            } catch (Exception e) {
-                Log.e(TAG + "asyncLoginToRealm", "" + e.getLocalizedMessage());
-                Toast.makeText(this, "" + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
-            }
+        try {
+            Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
+            AtomicReference<User> user = new AtomicReference<User>();
+            app.loginAsync(emailPasswordCredentials, it -> {
+                if (it.isSuccess()) {
+                    Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
+                    user.set(app.currentUser());
+                    RealmConfiguration config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
+                            .name(APP_ID)
+                            .schemaVersion(2)
+                            .allowQueriesOnUiThread(true)
+                            .allowWritesOnUiThread(true)
+                            .build();
+                    Realm.getInstanceAsync(config, new Realm.Callback() {
+                        @Override
+                        public void onSuccess(@NonNull Realm realm) {
+                            Log.v(TAG, "Successfully opened a realm with the given config.");
+                            realmDatabase = realm;
+                            progressSpinner.dismiss();
+                            startActivity(new Intent(LoginActivity.this, CaregiverPwdListActivity.class));
+
+                        }
+                    });
+                } else {
+                    Log.e(TAG + "asyncLoginToRealm", "" + it.getError().toString());
+                    Toast.makeText(this, "" + it.getError().toString(), Toast.LENGTH_LONG).show();
+                    progressSpinner.dismiss();
+                }
+            });
+        } catch (Exception e) {
+            Log.e(TAG + "asyncLoginToRealm", "" + e.getLocalizedMessage());
+            Toast.makeText(this, "" + e.getLocalizedMessage(), Toast.LENGTH_LONG).show();
+            progressSpinner.dismiss();
+        }
 
     }
 

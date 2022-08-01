@@ -9,21 +9,12 @@
     android:backgroundTintMode="add"
     android:visibility="visible">
 
-
-    <ImageButton
-
-        android:id="@+id/quit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:contentDescription="@string/app_name"
-        android:foregroundTint="#EBFFFFFF"
-        app:layout_constraintBottom_toBottomOf="parent"
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"
-        app:srcCompat="@android:drawable/btn_dialog" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/NAME1"

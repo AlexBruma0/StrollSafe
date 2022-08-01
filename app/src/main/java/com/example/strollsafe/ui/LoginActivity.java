@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.utils.DatabaseManager;
@@ -45,8 +46,8 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_login);
-//        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
-//        setSupportActionBar(topBar);
+        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(topBar);
 
     }
 
@@ -98,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.v(TAG, "Successfully opened a realm with the given config.");
                             realmDatabase = realm;
                             progressSpinner.dismiss();
-                            startActivity(new Intent(LoginActivity.this, ListOfPWDActivity.class));
+                            startActivity(new Intent(LoginActivity.this, CaregiverPwdListActivity.class));
 
                         }
                     });

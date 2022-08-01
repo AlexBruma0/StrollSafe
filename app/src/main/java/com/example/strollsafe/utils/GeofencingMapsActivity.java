@@ -1,18 +1,15 @@
-package com.example.strollsafe;
+package com.example.strollsafe.utils;
 
 import android.Manifest.permission;
 import android.annotation.SuppressLint;
 
-import com.example.strollsafe.ui.ListOfPWDActivity;
-import com.example.strollsafe.utils.DatabaseManager;
-import com.example.strollsafe.utils.PermissionUtils;
-import com.example.strollsafe.utils.SafeZone;
+import com.example.strollsafe.R;
+import com.example.strollsafe.ui.CaregiverPwdListActivity;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.internal.ICameraUpdateFactoryDelegate;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -26,7 +23,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -129,7 +125,7 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {
             case R.id.back:
-                startActivity(new Intent(GeofencingMapsActivity.this, ListOfPWDActivity.class));
+                startActivity(new Intent(GeofencingMapsActivity.this, CaregiverPwdListActivity.class));
                 return true;
 
             case R.id.showAllMarkersOption:

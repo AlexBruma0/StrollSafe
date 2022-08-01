@@ -145,7 +145,7 @@ public class CaregiverSignupActivity extends AppCompatActivity {
                             public void onSuccess(@NonNull Realm realm) {
                                 Log.v(TAG, "Successfully opened a realm with reads and writes allowed on the UI thread.");
                                 realmDatabase = realm;
-                                startActivity(new Intent(CaregiverSignupActivity.this, CaregiverHomeActivity.class));
+                                startActivity(new Intent(CaregiverSignupActivity.this, CaregiverPwdListActivity.class));
                             }
                         });
                     } else {

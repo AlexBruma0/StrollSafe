@@ -1,16 +1,21 @@
 package com.example.strollsafe.ui;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
-import com.example.strollsafe.GeofencingMapsActivity;
+import com.example.strollsafe.utils.GeofencingMapsActivity;
 import com.example.strollsafe.R;
 
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -27,7 +32,7 @@ import io.realm.mongodb.App;
 import io.realm.mongodb.mongo.MongoCollection;
 
 
-public class ListOfPWDActivity extends AppCompatActivity {
+public class CaregiverPwdListActivity extends AppCompatActivity {
     App app;
     DatabaseManager databaseManager;
     String TAG = "ListOfPWDActivity";
@@ -43,8 +48,9 @@ public class ListOfPWDActivity extends AppCompatActivity {
         databaseManager = new DatabaseManager(this);
         app = databaseManager.getApp();
         setContentView(R.layout.activity_listofpwd);
+        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(topBar);
 
-        configureBack();
         configureMap1();
         configureMap2();
         configureMap3();
@@ -54,14 +60,23 @@ public class ListOfPWDActivity extends AppCompatActivity {
         stylePage();
     }
 
-    public void configureBack(){
-        ImageButton PWD = (ImageButton) findViewById(R.id.quit);
-        PWD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(new Intent(ListOfPWDActivity.this, MainActivity.class));
-            }
-        });
+    @Override
+    public boolean onCreateOptionsMenu(@NonNull Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.toolbar_options, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.optionsMenuItem:
+                Log.i(TAG, "Starting SettingsActivity form CaregiverPwdListActivity");
+                startActivity(new Intent(CaregiverPwdListActivity.this, SettingsActivity.class));
+                return true;
+
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void configureMap1(){
@@ -74,7 +89,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
                     if(refreshResult.isSuccess()) {
                         ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
                         String userId = patientsList.get(0);
-                        Intent intent = new Intent(ListOfPWDActivity.this, GeofencingMapsActivity.class);
+                        Intent intent = new Intent(CaregiverPwdListActivity.this, GeofencingMapsActivity.class);
                         intent.putExtra("userId", userId);
                         startActivity(intent);
                     }
@@ -94,7 +109,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
                     if(refreshResult.isSuccess()) {
                         ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
                         String userId = patientsList.get(1);
-                        Intent intent = new Intent(ListOfPWDActivity.this, GeofencingMapsActivity.class);
+                        Intent intent = new Intent(CaregiverPwdListActivity.this, GeofencingMapsActivity.class);
                         intent.putExtra("userId", userId);
                         startActivity(intent);
                     }
@@ -114,7 +129,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
                     if(refreshResult.isSuccess()) {
                         ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
                         String userId = patientsList.get(2);
-                        Intent intent = new Intent(ListOfPWDActivity.this, GeofencingMapsActivity.class);
+                        Intent intent = new Intent(CaregiverPwdListActivity.this, GeofencingMapsActivity.class);
                         intent.putExtra("userId", userId);
                         startActivity(intent);
                     }
@@ -205,11 +220,13 @@ public class ListOfPWDActivity extends AppCompatActivity {
                     findViewById(R.id.pwdListTitle).setVisibility(View.INVISIBLE);
                     findViewById(R.id.pwdListEmailEntry).setVisibility(View.INVISIBLE);
                     findViewById(R.id.pwdListAddButton).setVisibility(View.INVISIBLE);
+                    dismissProgressDialog();
 
                 } else {
                     findViewById(R.id.pwdListTitle).setVisibility(View.VISIBLE);
                     findViewById(R.id.pwdListEmailEntry).setVisibility(View.VISIBLE);
                     findViewById(R.id.pwdListAddButton).setVisibility(View.VISIBLE);
+                    dismissProgressDialog();
                 }
                 for(int x = 0; x < patientsList.size(); x++) {
                     MongoCollection userCollection = databaseManager.getUsersCollection();
@@ -219,14 +236,21 @@ public class ListOfPWDActivity extends AppCompatActivity {
                         public void onResult(App.Result result) {
                             if(result.isSuccess()) {
                                 Document pwdInfo = (Document) result.get();
+                                Button name1 = (Button) findViewById(R.id.NAME1);
+                                ImageButton delete1 = (ImageButton) findViewById(R.id.delete1);
+
+                                Button name2 = (Button) findViewById(R.id.NAME2);
+                                ImageButton delete2 = (ImageButton) findViewById(R.id.delete2);
+                                ImageButton map2 = (ImageButton) findViewById(R.id.Map2);
+
+                                ImageButton map1 = (ImageButton) findViewById(R.id.Map1);
+                                Button name3 = (Button) findViewById(R.id.NAME3);
+                                ImageButton delete3 = (ImageButton) findViewById(R.id.delete3);
+                                ImageButton map3 = (ImageButton) findViewById(R.id.Map3);
 
                                 switch (finalX) {
                                     case 0:
                                         Log.i(TAG, "STYLING THE FIRST BUTTON");
-                                        Button name1 = (Button) findViewById(R.id.NAME1);
-                                        ImageButton delete1 = (ImageButton) findViewById(R.id.delete1);
-                                        ImageButton map1 = (ImageButton) findViewById(R.id.Map1);
-
                                         name1.setText(pwdInfo.get("firstName") + " " + pwdInfo.get("lastName"));
                                         name1.setVisibility(View.VISIBLE);
                                         delete1.setVisibility(View.VISIBLE);
@@ -234,16 +258,19 @@ public class ListOfPWDActivity extends AppCompatActivity {
 
                                         if(finalX == patientsList.size() - 1) {
                                             dismissProgressDialog();
+                                            delete2.setVisibility(View.INVISIBLE);
+                                            name2.setVisibility(View.INVISIBLE);
+                                            map2.setVisibility(View.INVISIBLE);
+
+                                            delete3.setVisibility(View.INVISIBLE);
+                                            name3.setVisibility(View.INVISIBLE);
+                                            map3.setVisibility(View.INVISIBLE);
                                         }
 
                                         break;
 
                                     case 1:
                                         Log.i(TAG, "STYLING THE SECOND BUTTON");
-                                        Button name2 = (Button) findViewById(R.id.NAME2);
-                                        ImageButton delete2 = (ImageButton) findViewById(R.id.delete2);
-                                        ImageButton map2 = (ImageButton) findViewById(R.id.Map2);
-
                                         name2.setText(pwdInfo.get("firstName") + " " + pwdInfo.get("lastName"));
                                         delete2.setVisibility(View.VISIBLE);
                                         name2.setVisibility(View.VISIBLE);
@@ -251,15 +278,14 @@ public class ListOfPWDActivity extends AppCompatActivity {
 
                                         if(finalX == patientsList.size() - 1) {
                                             dismissProgressDialog();
+                                            delete3.setVisibility(View.INVISIBLE);
+                                            name3.setVisibility(View.INVISIBLE);
+                                            map3.setVisibility(View.INVISIBLE);
                                         }
                                         break;
 
                                     case 2:
                                         Log.i(TAG, "STYLING THE THIRD BUTTON");
-                                        Button name3 = (Button) findViewById(R.id.NAME3);
-                                        ImageButton delete3 = (ImageButton) findViewById(R.id.delete3);
-                                        ImageButton map3 = (ImageButton) findViewById(R.id.Map3);
-
                                         name3.setText(pwdInfo.get("firstName") + " " + pwdInfo.get("lastName"));
                                         delete3.setVisibility(View.VISIBLE);
                                         name3.setVisibility(View.VISIBLE);
@@ -275,6 +301,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
                     });
                 }
             }
+            dismissProgressDialog();
         });
     }
 
@@ -284,7 +311,7 @@ public class ListOfPWDActivity extends AppCompatActivity {
             ArrayList<String> patientsArray = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
             if(patientsArray == null || patientsArray.size() >= 3) {
                 dismissProgressDialog();
-                Toast.makeText(ListOfPWDActivity.this, "PWD limit max already reached.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CaregiverPwdListActivity.this, "PWD limit max already reached.", Toast.LENGTH_SHORT).show();
                 return;
             }
 
@@ -298,12 +325,12 @@ public class ListOfPWDActivity extends AppCompatActivity {
                     Document pwdInfo = (Document) result.get();
                     if(pwdInfo == null) {
                         dismissProgressDialog();
-                        Toast.makeText(ListOfPWDActivity.this, "PWD can not be found.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CaregiverPwdListActivity.this, "PWD can not be found.", Toast.LENGTH_SHORT).show();
                         return;
                     }
                     if(patientsArray.contains(pwdInfo.get("userId"))) {
                         dismissProgressDialog();
-                        Toast.makeText(ListOfPWDActivity.this, "This PWD is already linked to your account.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CaregiverPwdListActivity.this, "This PWD is already linked to your account.", Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -314,11 +341,13 @@ public class ListOfPWDActivity extends AppCompatActivity {
                         public void onResult(App.Result result) {
                             if(result.isSuccess()) {
                                 dismissProgressDialog();
-                                Toast.makeText(ListOfPWDActivity.this, "PWD has been linked to your account.", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(CaregiverPwdListActivity.this, "PWD has been linked to your account.", Toast.LENGTH_SHORT).show();
+                                EditText enterPatientEmail = findViewById(R.id.pwdListEmailEntry);
+                                enterPatientEmail.getText().clear();
                                 stylePage();
                             } else {
                                 dismissProgressDialog();
-                                Toast.makeText(ListOfPWDActivity.this, "Error linked PWD to your account.", Toast.LENGTH_LONG).show();
+                                Toast.makeText(CaregiverPwdListActivity.this, "Error linked PWD to your account.", Toast.LENGTH_LONG).show();
                             }
                         }
                     });
@@ -338,11 +367,11 @@ public class ListOfPWDActivity extends AppCompatActivity {
                 public void onResult(App.Result result) {
                     if(result.isSuccess()) {
                         dismissProgressDialog();
-                        Toast.makeText(ListOfPWDActivity.this, "PWD has been removed to your account.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(CaregiverPwdListActivity.this, "PWD has been removed to your account.", Toast.LENGTH_SHORT).show();
                         stylePage();
                     } else {
                         dismissProgressDialog();
-                        Toast.makeText(ListOfPWDActivity.this, "Error removing PWD to your account.", Toast.LENGTH_LONG).show();
+                        Toast.makeText(CaregiverPwdListActivity.this, "Error removing PWD to your account.", Toast.LENGTH_LONG).show();
                     }
                 }
             });

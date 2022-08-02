@@ -1,15 +1,25 @@
 package com.example.strollsafe.ui;
 
+import android.Manifest;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.PWD;
 import com.example.strollsafe.utils.DatabaseManager;
+import com.example.strollsafe.utils.location.BackgroundLocationWork;
+import com.example.strollsafe.utils.location.LocationManager;
+import com.example.strollsafe.utils.location.LocationPermissionManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.work.BackoffPolicy;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import androidx.work.WorkRequest;
 
 import android.util.Log;
 import android.view.View;
@@ -24,6 +34,7 @@ import java.util.Date;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicReference;
 
 import io.realm.Realm;
@@ -33,6 +44,7 @@ import io.realm.mongodb.Credentials;
 import io.realm.mongodb.User;
 import io.realm.mongodb.sync.SyncConfiguration;
 
+@RequiresApi(api = Build.VERSION_CODES.Q)
 public class PWDSignupActivity extends AppCompatActivity {
 
     public static final String PWD_CODE_PREFS_KEY = "PWDCODE";
@@ -58,6 +70,15 @@ public class PWDSignupActivity extends AppCompatActivity {
     SharedPreferences pwdPreferences;
     SharedPreferences.Editor pwdPreferenceEditor;
 
+    // location permissions
+    private final int PERMISSION_REQUEST_CODE = 200;
+    private String[] locationPermissions = {
+            Manifest.permission.ACCESS_COARSE_LOCATION,
+            Manifest.permission.ACCESS_FINE_LOCATION};
+    private String[] backgroundPermission = {Manifest.permission.ACCESS_BACKGROUND_LOCATION};
+    private LocationPermissionManager locationPermissionManager;
+    private LocationManager locationManager;
+    private WorkRequest backgroundWorkRequest;
 
 
     @Override
@@ -69,6 +90,9 @@ public class PWDSignupActivity extends AppCompatActivity {
 
         pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
         pwdPreferenceEditor = pwdPreferences.edit();
+
+        locationPermissionManager = LocationPermissionManager.getInstance(PWDSignupActivity.this);
+        locationManager = LocationManager.getInstance(PWDSignupActivity.this);
 
         setContentView(R.layout.activity_pwd_signup);
         createPwdAccountButton = (Button) findViewById(R.id.createPwdAccountButton);
@@ -155,6 +179,18 @@ public class PWDSignupActivity extends AppCompatActivity {
                                         startActivity(new Intent(PWDSignupActivity.this, PWDActivity.class));
                                     }
                                 });
+
+                                if (!locationPermissionManager.checkPermissions(locationPermissions)) {
+                                    locationPermissionManager.askPermissions(PWDSignupActivity.this,
+                                            locationPermissions, PERMISSION_REQUEST_CODE);
+                                    if (!locationPermissionManager.checkPermissions(backgroundPermission)) {
+                                        locationPermissionManager.askPermissions(PWDSignupActivity.this,
+                                                locationPermissions, PERMISSION_REQUEST_CODE);
+                                    }
+                                } else {
+                                    startLocationWork();
+                                }
+
                             } else {
                                 Log.e(TAG + "asyncLoginToRealm", "email: " + loginResult.getError().toString());
                                 Toast.makeText(PWDSignupActivity.this, "email: " + loginResult.getError().toString(), Toast.LENGTH_SHORT).show();
@@ -168,6 +204,25 @@ public class PWDSignupActivity extends AppCompatActivity {
             }
         });
     }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, locationPermissions, grantResults);
+        if (!locationPermissionManager.handlePermissionResult(PWDSignupActivity.this, requestCode,
+                locationPermissions, grantResults)) {
+            startLocationWork();
+        }
+    }
+
+    private void startLocationWork() {
+        backgroundWorkRequest = new OneTimeWorkRequest.Builder(BackgroundLocationWork.class)
+                .addTag("LocationWork")
+                .setBackoffCriteria(BackoffPolicy.LINEAR, OneTimeWorkRequest.MAX_BACKOFF_MILLIS, TimeUnit.SECONDS)
+                .build();
+        WorkManager.getInstance(PWDSignupActivity.this).enqueue(backgroundWorkRequest);
+    }
+
 }
     /*public void configureSignUp(){
         Button PWD = (Button) findViewById(R.id.btnMain);

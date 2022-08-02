@@ -17,15 +17,19 @@ import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.FragmentActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.PWDLocation;
 
 
+import com.example.strollsafe.ui.PWDActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -75,6 +79,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (mapFragment != null) {
             mapFragment.getMapAsync(this);
         }
+        configureViewLocationList();
     } // end of onCreate()
 
     /**
@@ -112,6 +117,18 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocationPlaced, ZOOM_FACTOR));
         }
     } // end of onMapReady()
+
+
+    public void configureViewLocationList() {
+        Button viewList = (Button) findViewById(R.id.btn_seeLocationList);
+        viewList.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                startActivity(new Intent(MapsActivity.this, ShowSavedLocationsList.class));
+            }
+        });
+    }
+
 
     /**
      * Description: Read the shared preference folder for the list of saved locations and

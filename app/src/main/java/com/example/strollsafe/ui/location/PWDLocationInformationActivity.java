@@ -71,7 +71,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
     public static final int DEFAULT_UPDATE_INTERVAL = 10; // seconds
     public static final int FAST_UPDATE_INTERVAL = 1; // seconds
     public static final int LOCATION_REQUEST_PRIORITY = Priority.PRIORITY_HIGH_ACCURACY;
-    private static final int PERMISSIONS_CODE_ALL = 99; // any permission code
+    private static final int PERMISSIONS_CODE_ALL = 200; // any permission code
     private static final String SHARED_PREFS = "StrollSafe: LocationList";
     private static final int  MAX_SAVED_LOCATIONS = 5;
     private static final long IDLE_MINUTES = 2L;
@@ -107,7 +107,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
     private LocationRequest locationRequest;
     private LocationCallback locationCallback;
 
-    private static String[] PERMISSIONS;
+    private static String[] PERMISSIONS_LIST;
 
     @RequiresApi(api = Build.VERSION_CODES.Q)
     @SuppressLint("SetTextI18n")
@@ -117,9 +117,10 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
         setContentView(R.layout.activity_pwd_location_information);
 
         loadData();
-        PERMISSIONS = new String[] {
+        PERMISSIONS_LIST = new String[] {
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_COARSE_LOCATION
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
         };
 
         // give each UI variable a value
@@ -289,7 +290,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
         if (ActivityCompat.checkSelfPermission(this,
                 Manifest.permission.ACCESS_COARSE_LOCATION) !=
                 PackageManager.PERMISSION_GRANTED) {
-            requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
+            requestPermissions(PERMISSIONS_LIST, PERMISSIONS_CODE_ALL);
         }
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null);
         updateGPS();
@@ -337,6 +338,15 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                     Log.d("permission", "Coarse permission denied");
                     finish();
                 }
+
+                if (grantResults[2] == PackageManager.PERMISSION_GRANTED) {
+                    Log.d("permission", "Background location permission granted");
+                    updateGPS();
+                } else { // permission is not granted, exit program
+                    Toast.makeText(this, "This app requires permission to be granted to work properly",
+                            Toast.LENGTH_SHORT).show();
+                    Log.d("permission", "Background  permission denied");
+                }
         }
     } // end of onRequestPermissionResult()
 
@@ -355,18 +365,47 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
         {
             fusedLocationProviderClient.getLastLocation().addOnSuccessListener(
                     this, new OnSuccessListener<Location>() {
-
                 @Override
                 public void onSuccess(Location location) {
                     if (location != null) {
-                        startLocationUpdates();
+//                        startLocationUpdates();
+                        Log.d("GPSStatus", "GPS is on");
+
+                        String address;
+                        Geocoder geocoder = new Geocoder(PWDLocationInformationActivity.this);
+                        try {
+                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
+                                    location.getLongitude(), 1);
+                            address = addresses.get(0).getAddressLine(0);
+                        } catch (Exception e) {
+                            address = ("Unable to get street address");
+                        }
+
+                        if (PWDLocationList.size() > 0 &&
+                                address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
+                                !address.equals("Unable to get street address"))
+                        {
+                            PWDLocationList.get(PWDLocationList.size() - 1).setLastHereDateTime(LocalDateTime.now());
+                            updateUIValues(PWDLocationList.get(PWDLocationList.size() - 1));
+                        } else {
+                            PWDLocation newLocation = new PWDLocation(location.getLatitude(),
+                                    location.getLongitude(), location.getAccuracy(), address);
+                            if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
+                                PWDLocationList.remove(0);
+                            }
+                            PWDLocationList.add(newLocation);
+                            updateUIValues(newLocation);
+                        }
+                        saveData();
+                        Log.i("Location", "Location updated");
+
                     } else {
                         if (ActivityCompat.checkSelfPermission(
                                 PWDLocationInformationActivity.this,
                                         Manifest.permission.ACCESS_COARSE_LOCATION) !=
                                         PackageManager.PERMISSION_GRANTED)
                         {
-                                    requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
+                            requestPermissions(PERMISSIONS_LIST, PERMISSIONS_CODE_ALL);
                         }
                             fusedLocationProviderClient.requestLocationUpdates(locationRequest,
                                     locationCallback, null);
@@ -376,7 +415,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
 
         } else { // no permissions, must be requested
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) { // os version greater than marshmallow
-                requestPermissions(PERMISSIONS, PERMISSIONS_CODE_ALL);
+                requestPermissions(PERMISSIONS_LIST, PERMISSIONS_CODE_ALL);
             }
         }
 

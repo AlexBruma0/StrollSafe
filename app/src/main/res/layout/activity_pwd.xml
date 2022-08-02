@@ -18,12 +18,12 @@
         app:layout_constraintVertical_bias="0.01" />
 
     <Button
-        android:id="@+id/GPSInfoButton"
+        android:id="@+id/btn_showMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="133dp"
         android:layout_marginTop="194dp"
-        android:text="See GPS Info"
+        android:text="See Map"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.028"

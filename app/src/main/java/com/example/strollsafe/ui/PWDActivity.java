@@ -53,8 +53,6 @@ public class PWDActivity extends AppCompatActivity {
         pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
         pwdPreferenceEditor = pwdPreferences.edit();
         setContentView(R.layout.activity_pwd);
-        TextView code = findViewById(R.id.viewPWDCODE);
-        code.setText(pwdPreferences.getString("code","error"));
         configureSignout();
         configurePWDLocationInformation();
         //was testing an update timer

@@ -1,5 +1,9 @@
 package com.example.strollsafe.pwd;
 
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.Context;
+
 import org.bson.types.ObjectId;
 
 import java.util.Date;
@@ -20,11 +24,12 @@ public class PWD extends RealmObject {
     @Required private String password;
     @Required private Date dateOfBirth;
     @Required private String homeAddress;
+    private float batterylife;
 
     public PWD() {
 
     }
-    public PWD(String firstName, String lastName, String phoneNumber, String code, String email, Date dateOfBirth, String homeAddress){
+    public PWD(String firstName, String lastName, String phoneNumber, String code, String email, Date dateOfBirth, String homeAddress, float battery){
         this.firstName = firstName;
         this.lastName = lastName;
         this.phoneNumber = phoneNumber;
@@ -32,6 +37,7 @@ public class PWD extends RealmObject {
         this.email = email;
         this.dateOfBirth = dateOfBirth;
         this.homeAddress = homeAddress;
+        this.batterylife = battery;
     }
 
     public String getEmail() {
@@ -100,5 +106,13 @@ public class PWD extends RealmObject {
 
     public String getHomeAddress() {
         return homeAddress;
+    }
+
+    public float getBatterylife() {
+        return batterylife;
+    }
+
+    public void setBatterylife(float batterylife) {
+        this.batterylife = batterylife;
     }
 }

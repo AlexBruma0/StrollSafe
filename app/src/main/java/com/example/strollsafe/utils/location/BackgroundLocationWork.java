@@ -12,6 +12,7 @@ import android.os.Build;
 import android.util.Log;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 import androidx.work.ForegroundInfo;
@@ -20,6 +21,7 @@ import androidx.work.WorkerParameters;
 
 import com.example.strollsafe.R;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class BackgroundLocationWork extends Worker {
 
     private NotificationManager notificationManager;
@@ -28,6 +30,7 @@ public class BackgroundLocationWork extends Worker {
     int NOTIFICATION_ID = 1;
     private LocationManager locationManager;
     private IntentFilter localBroadcastIntentFilter;
+
 
 
     public BackgroundLocationWork(@NonNull Context context, @NonNull WorkerParameters workerParams) {
@@ -69,8 +72,7 @@ public class BackgroundLocationWork extends Worker {
 
     private Notification createNotification(String message) {
         String CHANNEL_ID = "100";
-        String title = "Foreground work";
-        String cancel = "Cancel";
+        String title = "Location is being tracked";
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             ((NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE)).createNotificationChannel(

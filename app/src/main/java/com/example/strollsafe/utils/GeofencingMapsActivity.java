@@ -4,7 +4,9 @@ import android.Manifest.permission;
 import android.annotation.SuppressLint;
 
 import com.example.strollsafe.R;
+import com.example.strollsafe.pwd.PWDLocation;
 import com.example.strollsafe.ui.CaregiverPwdListActivity;
+import com.example.strollsafe.ui.location.ShowSavedLocationsList;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -16,16 +18,25 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.TypeAdapter;
+import com.google.gson.reflect.TypeToken;
+import com.google.gson.stream.JsonReader;
+import com.google.gson.stream.JsonWriter;
 
 import android.Manifest;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.ActivityCompat;
@@ -35,18 +46,23 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import org.bson.Document;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
 import io.realm.mongodb.App;
 import io.realm.mongodb.mongo.MongoCollection;
 
-
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class GeofencingMapsActivity extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private DatabaseManager databaseManager;
@@ -59,6 +75,11 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
     private double customSafeZoneRadius = 0;
     private String customSafeZoneName = "";
     private final int CIRCLE_FILL_COLOUR = 0x750000FF;
+
+    // pwd location
+    public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+    private static final String SHARED_PREFS = "StrollSafe: LocationList";
+    private ArrayList<PWDLocation> PWDLocationList;
 
     /**
      * Flag indicating whether a requested permission has been denied after returning in {@link
@@ -76,6 +97,8 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        loadLocationData();
 
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
@@ -111,7 +134,6 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
                 Toast.makeText(GeofencingMapsActivity.this, "Error. Unable to load patients Safe Zones.", Toast.LENGTH_LONG).show();
             }
         });
-
     }
 
     @Override
@@ -136,6 +158,10 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
                 // call refresh on the database for more recent information
                 break;
 
+            case R.id.item_seeLocationList:
+                startActivity(new Intent(GeofencingMapsActivity.this, ShowSavedLocationsList.class));
+                break;
+
         }
         return super.onOptionsItemSelected(item);
     }
@@ -151,6 +177,21 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
         map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         map.setOnMyLocationButtonClickListener(this);
         map.setOnMyLocationClickListener(this);
+
+        // convert last location to LatLng
+        PWDLocation location = PWDLocationList.get(PWDLocationList.size() - 1);
+        if (location != null) {
+            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+
+            // show address and last access details when the marker is touched
+            markerOptions.title(location.getAddress());
+            markerOptions.snippet("Last here on " + location.getLastHereDateTime().format(DATE_FORMAT));
+            // place location as a pin on the map
+            map.addMarker(markerOptions);
+        }
 
         map.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
             @Override
@@ -398,5 +439,36 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
     private boolean requestBackgroundLocation() {
         return ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_BACKGROUND_LOCATION) != PackageManager.PERMISSION_GRANTED ? false : true;
     }
+
+
+    /**
+     * Description: Read the shared preference folder for the list of saved locations and
+     *              store them in an arraylist
+     * */
+    private void loadLocationData() {
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
+
+        Gson gson = new GsonBuilder().registerTypeAdapter(LocalDateTime.class,
+                new TypeAdapter<LocalDateTime>() {
+                    @Override
+                    public void write(JsonWriter jsonWriter, LocalDateTime date) throws IOException {
+                        jsonWriter.value(date.toString());
+                    }
+                    @RequiresApi(api = Build.VERSION_CODES.O)
+                    @Override
+                    public LocalDateTime read(JsonReader jsonReader) throws IOException {
+                        return LocalDateTime.parse(jsonReader.nextString());
+                    }
+                }).setPrettyPrinting().create();
+
+        Type type = new TypeToken<ArrayList<PWDLocation>>() {}.getType();
+        String json = sharedPreferences.getString("Locations", null);
+        PWDLocationList = gson.fromJson(json, type);
+
+        // checking below if the array list is empty or not
+        if (PWDLocationList == null) {
+            PWDLocationList = new ArrayList<>();
+        }
+    } // end of loadData()
 
 }

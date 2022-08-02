@@ -23,9 +23,12 @@ import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.localbroadcastmanager.content.LocalBroadcastManager;
+import io.realm.mongodb.App;
+import io.realm.mongodb.mongo.MongoCollection;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.PWDLocation;
+import com.example.strollsafe.utils.DatabaseManager;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -46,17 +49,22 @@ import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 import com.google.gson.stream.JsonWriter;
 
+import org.bson.Document;
+
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class LocationManager {
     private static LocationManager instance = null;
     private Context context;
+    private DatabaseManager databaseManager;
+    private App app;
 
     public static final int DEFAULT_UPDATE_INTERVAL = 10; // seconds
     public static final int FAST_UPDATE_INTERVAL = 1; // seconds
@@ -70,7 +78,7 @@ public class LocationManager {
     private Activity activity;
 
     private static final String SHARED_PREFS = "StrollSafe: LocationList";
-    private static final int  MAX_SAVED_LOCATIONS = 5;
+    private static final int MAX_SAVED_LOCATIONS = 5;
     private static final long IDLE_MINUTES = 2L;
 
     private ArrayList<PWDLocation> PWDLocationList;
@@ -78,12 +86,14 @@ public class LocationManager {
     private NotificationManagerCompat notificationManagerCompat;
     private Notification notification;
 
-    private LocationManager() {
+    private LocationManager(Context context) {
+        databaseManager = new DatabaseManager(context);
+        app = databaseManager.getApp();
     }
 
     public static LocationManager getInstance(Context context) {
         if (instance == null) {
-            instance = new LocationManager();
+            instance = new LocationManager(context);
         }
         instance.init(context);
         return instance;
@@ -96,6 +106,7 @@ public class LocationManager {
             activity = (Activity) context;
         }
         instance.loadData();
+
 
         locationCallback = new LocationCallback() {
             @Override
@@ -112,10 +123,9 @@ public class LocationManager {
                             address = ("Unable to get street address");
                         }
 
-                        if ( PWDLocationList.size() > 0 &&
+                        if (PWDLocationList.size() > 0 &&
                                 address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
-                                !address.equals("Unable to get street address"))
-                        {
+                                !address.equals("Unable to get street address")) {
                             PWDLocation lastLocation = PWDLocationList.get(PWDLocationList.size() - 1);
                             lastLocation.setLastHereDateTime(LocalDateTime.now());
 
@@ -129,7 +139,7 @@ public class LocationManager {
                                 manager.createNotificationChannel(channel);
 
                                 NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                                        context,"idle_alert");
+                                        context, "idle_alert");
                                 builder.setSmallIcon(R.drawable.ic_launcher_background);
                                 builder.setContentTitle("PWD Idle Alert");
                                 builder.setContentText("PWD has been idle for " + IDLE_MINUTES + " minutes!");
@@ -137,25 +147,26 @@ public class LocationManager {
                                 notification = builder.build();
                                 notificationManagerCompat = NotificationManagerCompat.from(context);
                                 notificationManagerCompat.notify("idle_alert", 1, notification);
-                            }
-                        } else {
-                            PWDLocation newLocation = new PWDLocation(location.getLatitude(),
-                                    location.getLongitude(), location.getAccuracy(), address);
-                            if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
-                                PWDLocationList.remove(0);
-                            }
-                            PWDLocationList.add(newLocation);
+                            } else {
+                                PWDLocation newLocation = new PWDLocation(location.getLatitude(),
+                                        location.getLongitude(), location.getAccuracy(), address);
+                                if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
+                                    PWDLocationList.remove(0);
+                                }
+                                PWDLocationList.add(newLocation);
 
+                            }
+                            Log.i("Location", "Location updated");
+                            instance.saveData();
+                            LocalBroadcastManager.getInstance(context).sendBroadcast(backgroundLocationIntent);
                         }
-                        Log.i("Location", "Location updated");
-                        instance.saveData();
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(backgroundLocationIntent);
                     }
+                    createLocationRequest();
                 }
             }
         };
-        createLocationRequest();
     }
+
 
     protected void createLocationRequest() {
         locationRequest = LocationRequest.create();
@@ -253,6 +264,27 @@ public class LocationManager {
         String json = gson.toJson(PWDLocationList);
         editor.putString("Locations", json);
         editor.apply();
+
+
+        Document pwdData = new Document("userId", Objects.requireNonNull(app.currentUser()).getId());
+        ArrayList<Document> docList = new ArrayList<>();
+        for (PWDLocation location : PWDLocationList) {
+            docList.add(location.toDocument());
+        }
+        Document update =  new Document("locations", docList);
+
+        // Add the new safezone to the pwds safezone array
+        MongoCollection userCollection = databaseManager.getUsersCollection();
+        userCollection.updateOne(pwdData, new Document("$set", update)).getAsync(new App.Callback() {
+            @Override
+            public void onResult(App.Result result) {
+                if (result.isSuccess()) {
+                    Log.d("saveData", "Location saved to database");
+                }
+            }
+        });
+
+
     } // end of saveData()
 
 

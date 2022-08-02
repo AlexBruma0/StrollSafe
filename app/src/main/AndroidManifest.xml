@@ -71,7 +71,7 @@
             android:label="@string/title_activity_maps"
         android:theme="@style/Theme.StrollSafe.NoActionBar"/>
         <activity
-            android:name=".ui.PWDHome_activity"
+            android:name=".ui.PwdHomeActivity"
             android:exported="false"
             android:theme="@style/Theme.StrollSafe.NoActionBar"/>
         <activity

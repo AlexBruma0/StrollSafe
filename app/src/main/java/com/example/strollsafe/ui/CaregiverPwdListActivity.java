@@ -85,6 +85,7 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
         inflater.inflate(R.menu.toolbar_options, menu);
         return true;
     }
+
     public void batteryNotification() {
         /*EditText editText = (EditText) findViewById(R.id.pwdListEmailEntry);
         String code = editText.getText().toString();
@@ -99,21 +100,22 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
                     return;
                 }*/
                 //if(Integer.parseInt(pwdInfo.get("batteryLife").toString())<=15){
-                    builder.setSmallIcon(R.drawable.ic_launcher_background);
-                    builder.setContentTitle("Battery Notification");
-                    builder.setContentText( " has low battery of ");
-                    builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-                    builder.setAutoCancel(true);
+        builder.setSmallIcon(R.drawable.ic_launcher_background);
+        builder.setContentTitle("Battery Notification");
+        builder.setContentText( " has low battery of ");
+        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setAutoCancel(true);
 
-                    NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CaregiverPwdListActivity.this);
-                    managerCompat.notify(1, builder.build());
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CaregiverPwdListActivity.this);
+        managerCompat.notify(1, builder.build());
 
-                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                        NotificationChannel Channel = new NotificationChannel("Battery Notification","Battery notification",NotificationManager.IMPORTANCE_DEFAULT);
-                        NotificationManager manager = getSystemService(NotificationManager.class);
-                        manager.createNotificationChannel(Channel);
-                    }
-                }
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel Channel = new NotificationChannel("Battery Notification","Battery notification",NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(Channel);
+        }
+    }
+
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {

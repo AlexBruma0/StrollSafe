@@ -151,8 +151,8 @@ public class MainActivity extends AppCompatActivity {
                     break;
 
                 case DatabaseManager.PWD_ACCOUNT_TYPE:
-                    Log.i(TAG, "Starting PWDActivity form MainActivity");
-                    startActivity(new Intent(MainActivity.this, PWDActivity.class));
+                    Log.i(TAG, "Starting PwdHomeActivity form MainActivity");
+                    startActivity(new Intent(MainActivity.this, PwdHomeActivity.class));
                     break;
 
                 default:

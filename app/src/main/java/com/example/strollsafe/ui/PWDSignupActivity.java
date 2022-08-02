@@ -162,7 +162,7 @@ public class PWDSignupActivity extends AppCompatActivity {
                                     public void onSuccess(@NonNull Realm realm) {
                                         Log.v(TAG, "Successfully opened a realm with reads and writes allowed on the UI thread.");
                                         realmDatabase = realm;
-                                        startActivity(new Intent(PWDSignupActivity.this, PWDActivity.class));
+                                        startActivity(new Intent(PWDSignupActivity.this, PwdHomeActivity.class));
                                     }
                                 });
                             } else {

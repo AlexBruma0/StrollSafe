@@ -99,7 +99,7 @@ public class LoginActivity extends AppCompatActivity {
                             Log.v(TAG, "Successfully opened a realm with the given config.");
                             realmDatabase = realm;
                             progressSpinner.dismiss();
-                            startActivity(new Intent(LoginActivity.this, CaregiverPwdListActivity.class));
+                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
 
                         }
                     });

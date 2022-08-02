@@ -6,6 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ui.location.PWDLocationInformationActivity">
 
+    <ImageView
+        android:id="@+id/iv_background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b9"
+        tools:layout_editor_absoluteX="32dp"
+        tools:layout_editor_absoluteY="-16dp" />
+
     <TextView
         android:id="@+id/tv_labellat"
         android:layout_width="100dp"
@@ -169,24 +178,43 @@
         app:layout_constraintStart_toEndOf="@+id/tv_labelWayPoints"
         app:layout_constraintTop_toBottomOf="@+id/tv_labelsensor" />
 
+
+    <Button
+        android:id="@+id/btn_newWayPoint"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="76dp"
+        android:background="@drawable/darkbtn"
+        android:text="Add Way Point"
+        android:textColor="@color/white"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_cleanSharedPreferences" />
+
     <Button
         android:id="@+id/btn_showWayPoints"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="40dp"
+        android:background="@drawable/darkbtn"
         android:text="Show Way Points"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/tv_wayPointCount" />
-
 
     <Button
         android:id="@+id/btn_showMap"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
+        android:layout_marginTop="36dp"
+        android:background="@drawable/darkbtn"
         android:text="Show on Map"
+        android:textColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_showWayPoints" />
 
@@ -199,6 +227,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_showMap" />
-
 
 </androidx.constraintlayout.widget.ConstraintLayout>

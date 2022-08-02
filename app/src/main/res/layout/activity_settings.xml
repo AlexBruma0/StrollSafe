@@ -13,6 +13,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <ImageView
+        android:id="@+id/iv_background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b9" />
+
+
     <TextView
         android:id="@+id/loginStatus"
         android:layout_width="wrap_content"
@@ -91,10 +99,12 @@
         android:id="@+id/logoutButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:onClick="logoutUserFromRealm"
-        android:layout_centerInParent="true"
         android:layout_above="@+id/appVersionTextView"
+        android:layout_centerInParent="true"
         android:layout_marginBottom="15dp"
+        android:onClick="logoutUserFromRealm"
+        android:background="@drawable/buttonshapewhitebg"
+        android:textColor="@color/white"
         android:text="LOGOUT" />
 
     <TextView
@@ -104,6 +114,6 @@
         android:layout_alignParentBottom="true"
         android:layout_centerInParent="true"
         android:layout_marginBottom="15dp"
-        android:text="Version 0.0.0"/>
+        android:text="Version 0.0.0" />
 
 </RelativeLayout>

@@ -5,27 +5,16 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     tools:context=".ui.MainActivity">
+    <ImageView
+        android:id="@+id/iv_background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b16" />
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/iv_background_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/good_morning_img" />
-
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
-
-
-
-
-    </FrameLayout>
-
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
     <LinearLayout
         android:id="@+id/ll_label_Stroll_Safe"
@@ -76,9 +65,6 @@
 
     </LinearLayout>
 
-
-
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -128,14 +114,16 @@
 
         <Button
             android:id="@+id/button_toLogin"
-            android:layout_width="wrap_content"
+            android:layout_width="276dp"
             android:layout_height="wrap_content"
-            android:text="@string/loginButtonText"
             android:layout_marginTop="15dp"
+            android:background="@drawable/darkbtn"
+            android:fontFamily="@font/calibri"
+            android:text="@string/loginButtonText"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="#ffdddd"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 

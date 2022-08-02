@@ -3,10 +3,15 @@ package com.example.strollsafe.ui;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.example.strollsafe.utils.GeofencingMapsActivity;
@@ -39,7 +44,7 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
     SharedPreferences pwdPreferences;
     SharedPreferences.Editor pwdPreferenceEditor;
     ProgressDialog progressDialog;
-
+    public NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"Battery Notification");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +56,20 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
         Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(topBar);
 
+        /*builder.setSmallIcon(R.drawable.ic_launcher_background);
+        builder.setContentTitle("Battery Notification");
+        builder.setContentText(" has low battery of ");builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setAutoCancel(true);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CaregiverPwdListActivity.this);
+        managerCompat.notify(1, builder.build());
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel Channel = new NotificationChannel("Battery Notification","Battery notification",NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(Channel);
+        }*/
+        batteryNotification();
         configureMap1();
         configureMap2();
         configureMap3();
@@ -65,6 +84,37 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_options, menu);
         return true;
+    }
+    public void batteryNotification() {
+        EditText editText = (EditText) findViewById(R.id.pwdListEmailEntry);
+        String code = editText.getText().toString();
+        MongoCollection userCollection = databaseManager.getUsersCollection();
+        userCollection.findOne(new Document("email",code)).getAsync(new App.Callback() {
+            @Override
+            public void onResult(App.Result result) {
+                Document pwdInfo = (Document) result.get();
+                if (pwdInfo == null) {
+                    dismissProgressDialog();
+                    Toast.makeText(CaregiverPwdListActivity.this, "PWD can not be found.", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                else if(Integer.parseInt(pwdInfo.get("batteryLife").toString())<=15){
+                    builder.setSmallIcon(R.drawable.ic_launcher_background);
+                    builder.setContentTitle("Battery Notification");
+                    builder.setContentText(pwdInfo.get("firstName").toString() + " has low battery of "+ pwdInfo.get("batteryLife").toString());builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    builder.setAutoCancel(true);
+
+                    NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CaregiverPwdListActivity.this);
+                    managerCompat.notify(1, builder.build());
+
+                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                        NotificationChannel Channel = new NotificationChannel("Battery Notification","Battery notification",NotificationManager.IMPORTANCE_DEFAULT);
+                        NotificationManager manager = getSystemService(NotificationManager.class);
+                        manager.createNotificationChannel(Channel);
+                    }
+                }
+            }
+        });
     }
 
     @Override

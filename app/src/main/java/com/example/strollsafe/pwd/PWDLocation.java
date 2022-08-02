@@ -5,7 +5,15 @@ import android.os.Build;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
+import org.bson.types.ObjectId;
+
 import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
+
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+import io.realm.annotations.Required;
 
 
 /**
@@ -20,14 +28,15 @@ import java.time.LocalDateTime;
  * Last modified by: Alvin Tsang
  * */
 
-public class PWDLocation {
+public class PWDLocation extends RealmObject {
+    @PrimaryKey ObjectId _id = new ObjectId();
 
-    private final double latitude;
-    private final double longitude;
-    private final float accuracy;
-    private final String address;
-    private final LocalDateTime initalDateTime;
-    private LocalDateTime lastHereDateTime;
+    private double latitude;
+    private double longitude;
+    private float accuracy;
+    @Required private String address;
+    @Required private Date initialDateTime;
+    @Required private Date lastHereDateTime;
 
     /**
      * Description: Parameterized constructor
@@ -44,9 +53,15 @@ public class PWDLocation {
         this.longitude = longitude;
         this.accuracy = accuracy;
         this.address = address;
-        this.initalDateTime = LocalDateTime.now();
-        this.lastHereDateTime = initalDateTime;
+        this.initialDateTime = Calendar.getInstance().getTime();
+        this.lastHereDateTime = initialDateTime;
     } // end of constructor
+
+    /**
+     * Empty constructor for Realm
+     */
+    public PWDLocation() {
+    }
 
     /**
      * Description: Returns the latitude of the PWD's location in degrees
@@ -90,8 +105,8 @@ public class PWDLocation {
      *
      * @return the date and time when the pwd location was saved
      * */
-    public LocalDateTime getInitialDateTime() {
-        return initalDateTime;
+    public Date getInitialDateTime() {
+        return initialDateTime;
     } // end of getInitialDateTime()
 
     /**
@@ -99,7 +114,7 @@ public class PWDLocation {
      *
      * @return the date and time when the pwd location was saved
      * */
-    public LocalDateTime getLastHereDateTime() {
+    public Date getLastHereDateTime() {
         return lastHereDateTime;
     } // end of getLastHereDateTime()
 
@@ -108,7 +123,7 @@ public class PWDLocation {
      *
      * @param lastHereDateTime most recent date and time this location was logged
      * */
-    public void setLastHereDateTime(LocalDateTime lastHereDateTime) {
+    public void setLastHereDateTime(Date lastHereDateTime) {
         this.lastHereDateTime = lastHereDateTime;
     } // end of setDateTime()
 
@@ -125,7 +140,7 @@ public class PWDLocation {
                 "Longitude: " + this.longitude + "\n" +
                 "Accuracy: " + this.accuracy + "\n" +
                 "Address: " + this.address + "\n" +
-                "Initial Date" + this.initalDateTime.toString() + "\n" +
+                "Initial Date" + this.initialDateTime.toString() + "\n" +
                 "Last Here Date: " + this.lastHereDateTime.toString() + "\n"
                 );
     } // end of toString()

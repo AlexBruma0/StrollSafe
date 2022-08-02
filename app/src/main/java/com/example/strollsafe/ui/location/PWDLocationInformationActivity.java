@@ -54,6 +54,7 @@ import java.lang.reflect.Type;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import com.example.strollsafe.R;
 import com.google.android.gms.location.Priority;
@@ -167,11 +168,11 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                             !address.equals("Unable to get street address"))
                     {
                         PWDLocation lastLocation = PWDLocationList.get(PWDLocationList.size() - 1);
-                        lastLocation.setLastHereDateTime(LocalDateTime.now());
+                        lastLocation.setLastHereDateTime(Calendar.getInstance().getTime());
 
                         // after IDLE_MINUTES, if the location has not changed, notify user
-                        Duration duration = Duration.between(lastLocation.getInitialDateTime(),
-                                                    lastLocation.getLastHereDateTime());
+                        Duration duration = Duration.between(lastLocation.getInitialDateTime().toInstant(),
+                                                    lastLocation.getLastHereDateTime().toInstant());
                         if (duration.toMinutes() == IDLE_MINUTES) {
                             NotificationChannel channel = new NotificationChannel("idle_alert",
                                     "PWD Idle", NotificationManager.IMPORTANCE_DEFAULT);
@@ -377,7 +378,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                                 address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
                                 !address.equals("Unable to get street address"))
                         {
-                            PWDLocationList.get(PWDLocationList.size() - 1).setLastHereDateTime(LocalDateTime.now());
+                            PWDLocationList.get(PWDLocationList.size() - 1).setLastHereDateTime(Calendar.getInstance().getTime());
                             updateUIValues(PWDLocationList.get(PWDLocationList.size() - 1));
                         } else {
                             PWDLocation newLocation = new PWDLocation(location.getLatitude(),

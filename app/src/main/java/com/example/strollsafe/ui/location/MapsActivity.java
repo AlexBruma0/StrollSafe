@@ -103,7 +103,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
                 // show address and last access details when the marker is touched
                 markerOptions.title(location.getAddress());
-                markerOptions.snippet("Last here on " + location.getLastHereDateTime().format(DATE_FORMAT));
+                markerOptions.snippet("Last here on " + location.getLastHereDateTime());
                 // place location as a pin on the map
                 mMap.addMarker(markerOptions);
                 lastLocationPlaced = latLng;

@@ -67,6 +67,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        checkUserAccountType(databaseManager);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkUserAccountType(databaseManager);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_options, menu);

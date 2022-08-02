@@ -44,7 +44,6 @@ public class PwdHomeActivity extends AppCompatActivity{
             public void run() {
                 handler.postDelayed(this, 2 * 60 * 1000); // every 2 minutes
                 updatePWDBattery();
-
                 /* your longer code here */
             }
         }, 0);

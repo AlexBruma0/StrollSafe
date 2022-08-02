@@ -1,4 +1,4 @@
-package com.example.strollsafe;
+package com.example.strollsafe.utils;
 
 import org.bson.types.ObjectId;
 

@@ -67,6 +67,18 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        checkUserAccountType(databaseManager);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        checkUserAccountType(databaseManager);
+    }
+
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.toolbar_options, menu);
@@ -146,13 +158,13 @@ public class MainActivity extends AppCompatActivity {
         if(databaseManager.isUserLoggedIn()) {
             switch(databaseManager.getUserAccountType()) {
                 case DatabaseManager.CAREGIVER_ACCOUNT_TYPE:
-                    Log.i(TAG, "Starting CaregiverHomeActivity form MainActivity");
-                    startActivity(new Intent(MainActivity.this, CaregiverHomeActivity.class));
+                    Log.i(TAG, "Starting CaregiverPwdListActivity form MainActivity");
+                    startActivity(new Intent(MainActivity.this, CaregiverPwdListActivity.class));
                     break;
 
                 case DatabaseManager.PWD_ACCOUNT_TYPE:
-                    Log.i(TAG, "Starting PWDActivity form MainActivity");
-                    startActivity(new Intent(MainActivity.this, PWDActivity.class));
+                    Log.i(TAG, "Starting PwdHomeActivity form MainActivity");
+                    startActivity(new Intent(MainActivity.this, PwdHomeActivity.class));
                     break;
 
                 default:

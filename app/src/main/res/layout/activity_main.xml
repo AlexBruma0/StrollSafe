@@ -5,27 +5,16 @@
     android:layout_height="match_parent"
     android:focusableInTouchMode="true"
     tools:context=".ui.MainActivity">
+    <ImageView
+        android:id="@+id/iv_background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b16" />
 
-    <FrameLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
-
-        <ImageView
-            android:id="@+id/iv_background_image"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:scaleType="centerCrop"
-            android:src="@drawable/b16" />
-
-        <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
-
-
-
-
-    </FrameLayout>
-
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar" />
 
     <LinearLayout
         android:id="@+id/ll_label_Stroll_Safe"
@@ -75,9 +64,6 @@
 
 
     </LinearLayout>
-
-
-
 
     <LinearLayout
         android:layout_width="match_parent"

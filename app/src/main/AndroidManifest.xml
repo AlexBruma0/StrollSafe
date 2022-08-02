@@ -10,7 +10,7 @@
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
-        android:name=".pwd.location.PWDLocations"
+        android:name=".pwd.PWDLocations"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -30,54 +30,50 @@
 <!--            android:value="${MAPS_API_KEY}" />-->
 
         <activity
-            android:name=".GeofencingMapsActivity"
+            android:name=".utils.GeofencingMapsActivity"
             android:exported="false"
             android:label="@string/title_activity_maps"
             android:theme="@style/Theme.StrollSafe.NoActionBar"/>
         <activity
-            android:name=".caregiver.CaregiverActivity"
-            android:exported="false">
-        </activity>
-
-        <activity
             android:name=".ui.location.ShowSavedLocationsList"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.StrollSafe.NoActionBar"/>
         <activity
             android:name=".ui.location.MapsActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.StrollSafe.NoActionBar"/>
         <activity
             android:name=".ui.location.LocationActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.StrollSafe.NoActionBar"/>
         <activity
             android:name=".ui.PWDSignupActivity"
             android:exported="false"
             android:label="@string/title_activity_pwd_signup"
             android:theme="@style/Theme.StrollSafe.NoActionBar" />
         <activity
-            android:name=".ui.PWDListActivity"
-            android:label="@string/pwdListLabel"
-            android:exported="false" />
-        <activity
             android:name=".ui.LoginActivity"
             android:label="@string/loginActivityLabel"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.StrollSafe.NoActionBar"/>
         <activity
-            android:name=".ui.ListOfPWDActivity"
+            android:name=".ui.CaregiverPwdListActivity"
+            android:label="Caregiver Home"
+            android:theme="@style/Theme.StrollSafe.NoActionBar"
             android:exported="false" />
-        <activity
-            android:name=".ui.CaregiverHomeActivity"
-            android:label="@string/caregiverHomeLabel"
-            android:theme="@style/Theme.StrollSafe.NoActionBar" />
         <activity
             android:name=".ui.PWDActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.StrollSafe.NoActionBar"/>
         <activity
             android:name=".ui.location.PWDLocationInformationActivity"
             android:exported="false" />
-            android:label="@string/title_activity_maps" />
+            android:label="@string/title_activity_maps"
+        android:theme="@style/Theme.StrollSafe.NoActionBar"/>
         <activity
-            android:name=".ui.PWDHome_activity"
-            android:exported="false" />
+            android:name=".ui.PwdHomeActivity"
+            android:exported="false"
+            android:theme="@style/Theme.StrollSafe.NoActionBar"/>
         <activity
             android:name=".ui.CaregiverSignupActivity"
             android:label="@string/newCaregiverLabel"
@@ -101,7 +97,7 @@
             </intent-filter>
         </activity>
 
-        <receiver android:name=".GeofenceBroadcastReceiver" />
+        <receiver android:name=".utils.GeofenceBroadcastReceiver" />
     </application>
 
 </manifest>

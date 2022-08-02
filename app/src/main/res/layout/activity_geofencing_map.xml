@@ -15,15 +15,4 @@
         android:layout_height="match_parent"
         android:layout_below="@id/toolbar" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="129dp"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/toolbar"
-        android:background="@drawable/darkbtn"
-        android:onClick="showAllMarkersOnclick"
-        android:text="SHOW MARKERS"
-        android:textColor="@color/white" />
-
-
 </RelativeLayout>

@@ -27,7 +27,6 @@ import androidx.core.app.ActivityCompat;
 import androidx.fragment.app.DialogFragment;
 import android.widget.Toast;
 
-import com.example.strollsafe.GeofencingMapsActivity;
 import com.example.strollsafe.R;
 
 /**

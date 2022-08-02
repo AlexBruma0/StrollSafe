@@ -15,11 +15,10 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.example.strollsafe.GeofenceBroadcastReceiver;
-import com.example.strollsafe.Location;
+import com.example.strollsafe.utils.GeofenceBroadcastReceiver;
+import com.example.strollsafe.utils.Location;
 import com.example.strollsafe.R;
-import com.example.strollsafe.SafezoneManager;
-import com.google.android.gms.common.api.GoogleApiClient;
+import com.example.strollsafe.utils.SafeZoneManager;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofencingClient;
 import com.google.android.gms.location.GeofencingRequest;
@@ -29,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LocationActivity extends AppCompatActivity {
-    SafezoneManager safezoneManager;
+    SafeZoneManager safezoneManager;
     GeofencingClient geofencingClient;
     private List<Geofence> geofenceList = new ArrayList<>();
     private PendingIntent geofencePendingIntent;

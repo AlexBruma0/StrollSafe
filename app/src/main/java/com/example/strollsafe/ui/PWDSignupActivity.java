@@ -1,7 +1,11 @@
 package com.example.strollsafe.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.BatteryManager;
 import android.os.Bundle;
 
 import com.example.strollsafe.R;
@@ -39,22 +43,27 @@ public class PWDSignupActivity extends AppCompatActivity {
     public static final String FIRST_NAME_PREFS_KEY = "FIRSTNAME";
     public static final String LAST_NAME_PREFS_KEY = "LASTNAME";
     public static final String PHONE_NUMBER_PREFS_KEY = "PHONENUMBER";
+    public static final String BATTERY_LIFE_PREFS_KEY = "BATTERY";
     public static final String EMAILS_PREFS_KEY = "EMAIL";
     public static final String PASSWORD_PREFS_KEY = "PASSWORD";
     public static final String REALM_OBJECT_ID_PREFS_KEY = "REALMOBJECTID";
-
     DatabaseManager databaseManager;
     App app;
-    private User user;
     private final String APP_ID = "strollsafe-pjbnn";
     private RealmConfiguration config;
     Realm realmDatabase;
 
     String TAG = "PWDSignupActivity/";
     private Button createPwdAccountButton;
-    private TextView txtMain;
     private EditText editPassword, editEmail, editPhoneNumber, editLastName, editFirstName;
-
+    public int battery;
+    private BroadcastReceiver mBatInfoReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
+            battery = level;
+        }
+    };
     SharedPreferences pwdPreferences;
     SharedPreferences.Editor pwdPreferenceEditor;
 
@@ -63,7 +72,7 @@ public class PWDSignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        registerReceiver(mBatInfoReciever,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         databaseManager = new DatabaseManager(this);
         app = databaseManager.getApp();
 
@@ -77,6 +86,7 @@ public class PWDSignupActivity extends AppCompatActivity {
         editPhoneNumber = (EditText) findViewById(R.id.editPhoneNumber);
         editEmail = (EditText) findViewById(R.id.editEmailAddress);
         editPassword = (EditText) findViewById(R.id.editPassword);
+
 
         configureBackButton();
         configureSignUpButton();
@@ -129,7 +139,7 @@ public class PWDSignupActivity extends AppCompatActivity {
 
 
                                 user.set(app.currentUser());
-                                databaseManager.addCustomerUserData(user.get(), DatabaseManager.PWD_ACCOUNT_TYPE, email, phoneNumber, new Date(), "address", firstName, lastName);
+                                databaseManager.addCustomerUserData(user.get(), DatabaseManager.PWD_ACCOUNT_TYPE, email, phoneNumber, new Date(), "address", firstName, lastName,battery);
                                 // ADD NEWLY CREATED PWD TO USER PREFS PUT IN A FUNCTION LATER
                                 pwdPreferenceEditor.putString(PWD_CODE_PREFS_KEY, pwdCode);
                                 pwdPreferenceEditor.putString(FIRST_NAME_PREFS_KEY, firstName);
@@ -152,7 +162,7 @@ public class PWDSignupActivity extends AppCompatActivity {
                                     public void onSuccess(@NonNull Realm realm) {
                                         Log.v(TAG, "Successfully opened a realm with reads and writes allowed on the UI thread.");
                                         realmDatabase = realm;
-                                        startActivity(new Intent(PWDSignupActivity.this, PWDHome_activity.class));
+                                        startActivity(new Intent(PWDSignupActivity.this, PwdHomeActivity.class));
                                     }
                                 });
                             } else {
@@ -169,144 +179,3 @@ public class PWDSignupActivity extends AppCompatActivity {
         });
     }
 }
-    /*public void configureSignUp(){
-        Button PWD = (Button) findViewById(R.id.btnMain);
-        PWD.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String code = getRandomString(4);
-                editFirstName = (EditText) findViewById(R.id.editFirstNamePWD);
-                editLastName = (EditText) findViewById(R.id.editLastNamePWD);
-                editPhoneNumber = (EditText) findViewById(R.id.editPhoneNumber);
-                editEmail = (EditText) findViewById(R.id.editEmailAddress);
-                editPassword = (EditText) findViewById(R.id.editPassword);
-                String email = editEmail.getText().toString();
-                String password = editPassword.getText().toString();
-                String firstName = editFirstName.getText().toString();
-                String lastName = editLastName.getText().toString();
-                String phoneNumber = editPhoneNumber.getText().toString();
-
-                pwdPreferenceEditor.putString("code",code);
-                pwdPreferenceEditor.putString("F_name",firstName);
-                pwdPreferenceEditor.putString("L_name",lastName);
-                pwdPreferenceEditor.putString("Phone",phoneNumber);
-                pwdPreferenceEditor.putString("email",email);
-                pwdPreferenceEditor.putString("password", password);
-
-                PWD account = new PWD(firstName,lastName,phoneNumber,code,email,password);
-                pwdPreferenceEditor.putString("id",account.get_id().toString());
-                pwdPreferenceEditor.apply();
-
-                createUserLogin(email,password);
-                login(email,password);
-                realmDatabase.executeTransaction(transaction -> {
-                    transaction.insert(account);
-                });
-                startActivity(new Intent(PWDSignupActivity.this, PWDActivity.class));
-            }
-        });
-    }
-    public void setupRealm() {
-        Realm.init(this);
-        app = new App(new AppConfiguration.Builder(APP_ID).build());
-    }
-
-    // Before we can login into an account we must register it first
-    public void createUserLogin(String email, String password) {
-        app.getEmailPassword().registerUserAsync(email, password, it -> {
-            if (it.isSuccess()) {
-                Log.i("EXAMPLE", "Successfully registered user.");
-            } else {
-                Log.e("EXAMPLE", "Failed to register user: " + it.getError().getErrorMessage());
-            }
-        });
-
-    }
-
-    // Logs into the databased given a user name and password
-    public void login(String email, String password) {
-        AtomicReference<User> user = new AtomicReference<User>();
-        Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
-        app.loginAsync(emailPasswordCredentials, it -> {
-            if (it.isSuccess()) {
-                Log.v("AUTH", "Successfully authenticated using an email and password.");
-                user.set(app.currentUser());
-                config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
-                        .name(APP_ID)
-                        .schemaVersion(2)
-                        .allowQueriesOnUiThread(true)
-                        .allowWritesOnUiThread(true)
-                        .build();
-
-                Realm.getInstanceAsync(config, new Realm.Callback() {
-                    @Override
-                    public void onSuccess(@NonNull Realm realm) {
-                        Log.v(
-                                "EXAMPLE",
-                                "Successfully opened a realm with reads and writes allowed on the UI thread."
-                        );
-                        realmDatabase = realm;
-                    }
-                });
-            } else {
-                Log.e("AUTH", it.getError().toString());
-            }
-        });
-    }
-}*/
-    /*public void createUserLoginAndUploadObjectFromFields(View view) {
-        EditText emailEditText = findViewById(R.id.caregiverEmail);
-        EditText passwordEditText = findViewById(R.id.caregiverPassword);
-        EditText firstNameEditText = findViewById(R.id.caregiverFirstName);
-        EditText lastNameEditText = findViewById(R.id.caregiverLastName);
-        EditText phoneNumberEditText = findViewById(R.id.caregiverPhoneNumber);
-
-        String email = emailEditText.getText().toString();
-        String password = passwordEditText.getText().toString();
-        String firstName = firstNameEditText.getText().toString();
-        String lastName = lastNameEditText.getText().toString();
-        String phoneNumber = phoneNumberEditText.getText().toString();
-
-        app.getEmailPassword().registerUserAsync(email, password, createResult -> {
-            if (createResult.isSuccess()) {
-                Log.i(TAG, "Successfully registered user: " + email);
-                Credentials emailPasswordCredentials = Credentials.emailPassword(email, password);
-                AtomicReference<User> user = new AtomicReference<User>();
-
-                app.loginAsync(emailPasswordCredentials, loginResult -> {
-                    if (loginResult.isSuccess()) {
-                        Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
-                        user.set(app.currentUser());
-                        config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
-                                .name(APP_ID)
-                                .schemaVersion(2)
-                                .allowQueriesOnUiThread(true)
-                                .allowWritesOnUiThread(true)
-                                .build();
-
-                        Realm.getInstanceAsync(config, new Realm.Callback() {
-                            @Override
-                            public void onSuccess(@NonNull Realm realm) {
-                                Log.v(TAG, "Successfully opened a realm with reads and writes allowed on the UI thread.");
-                                realmDatabase = realm;
-                                realmDatabase.executeTransaction(transaction -> {
-                                    Caregiver caregiver = transaction.createObject(Caregiver.class, new ObjectId());
-                                    caregiver.setEmail(email);
-                                    caregiver.setFirstName(firstName);
-                                    caregiver.setLastName(lastName);
-                                    caregiver.setPhoneNumber(phoneNumber);
-                                });
-                                startActivity(new Intent(NewCaregiverActivity.this, CaregiverActivity.class));
-                            }
-                        });
-                    } else {
-                        Log.e(TAG + "asyncLoginToRealm", "email: " + loginResult.getError().toString());
-                        Toast.makeText(this, "email: " + loginResult.getError().toString(), Toast.LENGTH_SHORT).show();
-                    }
-                });
-            } else {
-                Log.e(TAG, "Failed to register user: " + email + "\t" + createResult.getError().getErrorMessage());
-                Toast.makeText(this, "Failed to register user: " + email + "\t" + createResult.getError().getErrorMessage(), Toast.LENGTH_SHORT).show();
-            }
-        });
-    }*/;

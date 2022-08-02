@@ -1,14 +1,14 @@
 /*
-* MyLocations.java
-*
-* Description: Store the location of the PWD as list
-*
-* Created on: July 18, 2022
-* Created by: Alvin Tsang
-*
-* */
+ * MyLocations.java
+ *
+ * Description: Store the location of the PWD as list
+ *
+ * Created on: July 18, 2022
+ * Created by: Alvin Tsang
+ *
+ * */
 
-package com.example.strollsafe.pwd.location;
+package com.example.strollsafe.pwd;
 
 import android.app.Application;
 import android.location.Location;

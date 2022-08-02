@@ -1,7 +1,11 @@
 package com.example.strollsafe.ui;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.os.BatteryManager;
 import android.os.Bundle;
 
 import com.example.strollsafe.R;
@@ -39,10 +43,10 @@ public class PWDSignupActivity extends AppCompatActivity {
     public static final String FIRST_NAME_PREFS_KEY = "FIRSTNAME";
     public static final String LAST_NAME_PREFS_KEY = "LASTNAME";
     public static final String PHONE_NUMBER_PREFS_KEY = "PHONENUMBER";
+    public static final String BATTERY_LIFE_PREFS_KEY = "BATTERY";
     public static final String EMAILS_PREFS_KEY = "EMAIL";
     public static final String PASSWORD_PREFS_KEY = "PASSWORD";
     public static final String REALM_OBJECT_ID_PREFS_KEY = "REALMOBJECTID";
-
     DatabaseManager databaseManager;
     App app;
     private final String APP_ID = "strollsafe-pjbnn";
@@ -52,7 +56,14 @@ public class PWDSignupActivity extends AppCompatActivity {
     String TAG = "PWDSignupActivity/";
     private Button createPwdAccountButton;
     private EditText editPassword, editEmail, editPhoneNumber, editLastName, editFirstName;
-
+    public int battery;
+    private BroadcastReceiver mBatInfoReciever = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
+            battery = level;
+        }
+    };
     SharedPreferences pwdPreferences;
     SharedPreferences.Editor pwdPreferenceEditor;
 
@@ -61,7 +72,7 @@ public class PWDSignupActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        registerReceiver(mBatInfoReciever,new IntentFilter(Intent.ACTION_BATTERY_CHANGED));
         databaseManager = new DatabaseManager(this);
         app = databaseManager.getApp();
 
@@ -75,6 +86,7 @@ public class PWDSignupActivity extends AppCompatActivity {
         editPhoneNumber = (EditText) findViewById(R.id.editPhoneNumber);
         editEmail = (EditText) findViewById(R.id.editEmailAddress);
         editPassword = (EditText) findViewById(R.id.editPassword);
+
 
         configureBackButton();
         configureSignUpButton();
@@ -127,7 +139,7 @@ public class PWDSignupActivity extends AppCompatActivity {
 
 
                                 user.set(app.currentUser());
-                                databaseManager.addCustomerUserData(user.get(), DatabaseManager.PWD_ACCOUNT_TYPE, email, phoneNumber, new Date(), "address", firstName, lastName);
+                                databaseManager.addCustomerUserData(user.get(), DatabaseManager.PWD_ACCOUNT_TYPE, email, phoneNumber, new Date(), "address", firstName, lastName,battery);
                                 // ADD NEWLY CREATED PWD TO USER PREFS PUT IN A FUNCTION LATER
                                 pwdPreferenceEditor.putString(PWD_CODE_PREFS_KEY, pwdCode);
                                 pwdPreferenceEditor.putString(FIRST_NAME_PREFS_KEY, firstName);

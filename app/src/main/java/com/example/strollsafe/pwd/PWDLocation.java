@@ -2,6 +2,8 @@ package com.example.strollsafe.pwd;
 
 import android.os.Build;
 
+import org.bson.Document;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
@@ -129,6 +131,16 @@ public class PWDLocation {
                 "Last Here Date: " + this.lastHereDateTime.toString() + "\n"
                 );
     } // end of toString()
+
+    public Document toDocument() {
+        return new Document()
+                .append("latitude", this.latitude)
+                .append("longitude", this.longitude)
+                .append("accuracy", this.accuracy)
+                .append("address", this.address)
+                .append("initialDate", this.initalDateTime.toString())
+                .append("lastHereDate", this.lastHereDateTime.toString());
+    }
 
 } // end of PWDLocation.java
 

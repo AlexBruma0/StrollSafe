@@ -262,7 +262,8 @@ public class DatabaseManager {
                             .append("lastName", lastName)
                             .append("dateOfBirth", dateOfBirth)
                             .append("batteryLife", batteryLife)
-                            .append("safezones", new ArrayList<Double[][]>())
+                            .append("locations", new ArrayList<>())
+                            .append("safezones", new ArrayList<>())
                             .append("caregivers", new ArrayList<String>()))
                     .getAsync(result -> {
                         if (result.isSuccess()) {

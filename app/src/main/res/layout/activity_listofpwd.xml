@@ -17,21 +17,20 @@
         android:src="@drawable/b14" />
 
 
-
-    <ImageButton
+    <Button
 
         android:id="@+id/quit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/app_name"
-        android:foregroundTint="#EBFFFFFF"
+        android:background="@drawable/darkbtn"
+        android:text="back"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintHorizontal_bias="0.037"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"
-        app:srcCompat="@android:drawable/btn_dialog" />
+        app:layout_constraintVertical_bias="0.023" />
 
     <Button
         android:id="@+id/NAME1"
@@ -178,11 +177,12 @@
 
     <TextView
         android:id="@+id/pwdListTitle"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Enter Patient Email"
-        android:textColor="@color/black"
-        android:textSize="18sp"
+        android:textColor="#08304E"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
@@ -197,14 +197,14 @@
         android:backgroundTint="#BDBABA"
         android:foregroundTint="#3949AB"
         android:onClick="add"
-        android:tint="@color/black"
         app:layout_constraintBottom_toTopOf="@+id/Map1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.602"
         app:layout_constraintStart_toEndOf="@+id/pwdListTitle"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.814"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:tint="@color/black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

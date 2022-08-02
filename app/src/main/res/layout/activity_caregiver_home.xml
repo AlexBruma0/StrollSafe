@@ -6,9 +6,6 @@
     android:layout_height="match_parent"
     tools:context=".ui.CaregiverHomeActivity">
 
-    <include
-        android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
 
     <ImageView
         android:id="@+id/iv_background_image"
@@ -16,6 +13,13 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/b15" />
+
+
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
 
 
     <Button
@@ -30,9 +34,10 @@
         android:layout_marginTop="236dp"
         android:layout_marginEnd="234dp"
         android:layout_marginBottom="447dp"
-
-
         android:background="@drawable/darkbtn"
+
+
+        android:fontFamily="@font/calibri"
         android:onClick="myPatientsOnClick"
         android:text="My Patients"
         android:textColor="@color/white" />
@@ -41,8 +46,6 @@
         android:id="@+id/geofencingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@drawable/darkbtn"
-        android:textColor="@color/white"
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_alignParentEnd="true"
@@ -51,8 +54,11 @@
         android:layout_marginTop="237dp"
         android:layout_marginEnd="61dp"
         android:layout_marginBottom="446dp"
+        android:background="@drawable/darkbtn"
+        android:fontFamily="@font/calibri"
         android:onClick="geofencingOnClick"
-        android:text="Geofencing" />
+        android:text="Geofencing"
+        android:textColor="@color/white" />
 
 
 

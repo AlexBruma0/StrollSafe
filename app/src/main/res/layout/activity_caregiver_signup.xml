@@ -5,6 +5,13 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <ImageView
+        android:id="@+id/iv_background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b13" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -112,11 +119,14 @@
         android:id="@+id/caregiverSignUpBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="44dp"
+        android:background="@drawable/buttonshapewhitebg"
+        android:textColor="@color/white"
         android:onClick="createUserLoginAndUploadObjectFromFields"
         android:text="Sign Up"
         app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginBottom="15dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent" />
 
 

@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="centerCrop"
-            android:src="@drawable/good_morning_img" />
+            android:src="@drawable/b16" />
 
         <include
             android:id="@+id/toolbar"
@@ -128,15 +128,16 @@
 
         <Button
             android:id="@+id/button_toLogin"
-            android:layout_width="wrap_content"
+            android:layout_width="276dp"
             android:layout_height="wrap_content"
-            android:text="@string/loginButtonText"
-            android:background="@drawable/buttonshapewhitebg"
             android:layout_marginTop="15dp"
+            android:background="@drawable/darkbtn"
+            android:fontFamily="@font/calibri"
+            android:text="@string/loginButtonText"
             android:textAlignment="center"
             android:textAllCaps="false"
             android:textColor="#ffdddd"
-            android:textSize="12sp" />
+            android:textSize="16sp" />
 
     </LinearLayout>
 

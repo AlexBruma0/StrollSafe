@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- Permission to get last known location -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" tools:remove="android:maxSdkVersion" /> <!-- Internet permission for use of network provider -->
     <uses-permission android:name="android.permission.INTERNET" /> <!-- Requesting background location access -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
 
     <application
@@ -39,10 +40,6 @@
             android:exported="false"
             android:theme="@style/Theme.StrollSafe.NoActionBar"/>
         <activity
-            android:name=".ui.location.MapsActivity"
-            android:exported="false"
-            android:theme="@style/Theme.StrollSafe.NoActionBar"/>
-        <activity
             android:name=".ui.location.LocationActivity"
             android:exported="false"
             android:theme="@style/Theme.StrollSafe.NoActionBar"/>
@@ -61,15 +58,11 @@
             android:label="Caregiver Home"
             android:theme="@style/Theme.StrollSafe.NoActionBar"
             android:exported="false" />
-        <activity
-            android:name=".ui.PWDActivity"
-            android:exported="false"
-            android:theme="@style/Theme.StrollSafe.NoActionBar"/>
-        <activity
-            android:name=".ui.location.PWDLocationInformationActivity"
-            android:exported="false" />
-            android:label="@string/title_activity_maps"
-        android:theme="@style/Theme.StrollSafe.NoActionBar"/>
+        <!--        <![CDATA[-->
+<!--        android:label="@string/title_activity_maps" />-->
+<!--        ]]>-->
+<!--            android:exported="false"-->
+<!--            android:theme="@style/Theme.StrollSafe.NoActionBar"/>-->
         <activity
             android:name=".ui.PwdHomeActivity"
             android:exported="false"

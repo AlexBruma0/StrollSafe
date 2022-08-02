@@ -29,13 +29,13 @@
         app:layout_constraintVertical_bias="0.518" />
 
     <Button
-        android:id="@+id/GPSInfoButton"
-        android:layout_width="131dp"
-        android:layout_height="52dp"
+        android:id="@+id/btn_showMap"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginStart="133dp"
         android:layout_marginTop="194dp"
+        android:text="See Map"
         android:background="@drawable/darkbtn"
-        android:text="See GPS Info"
         android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

@@ -66,8 +66,8 @@ public class PWDHome_activity extends AppCompatActivity{
     public void updatePWDBattery(){
         int battery;
         BroadcastReceiver mBatInfoReciever = new BroadcastReceiver() {
-            @Override
             int battery;
+            @Override
             public void onReceive(Context context, Intent intent) {
                 int level = intent.getIntExtra(BatteryManager.EXTRA_LEVEL,0);
                 battery = level;

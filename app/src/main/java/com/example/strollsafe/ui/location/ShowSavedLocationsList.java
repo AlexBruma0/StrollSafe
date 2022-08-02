@@ -15,14 +15,12 @@ package com.example.strollsafe.ui.location;
 
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.SharedPreferences;
-import android.location.Address;
-import android.location.Geocoder;
 import android.os.Build;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.PWDLocation;
@@ -37,46 +35,51 @@ import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.List;
 
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class ShowSavedLocationsList extends AppCompatActivity {
 
     private static final String SHARED_PREFS = "StrollSafe: LocationList";
     private ArrayList<PWDLocation> PWDLocationList;
-    private ListView lv_wayPoints;
+    private LocationListViewAdapter adapter;
+    private RecyclerView rv_locationList;
 
-    @RequiresApi(api = Build.VERSION_CODES.O)
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_saved_locations_list);
 
-        lv_wayPoints = findViewById(R.id.lv_wayPoints);
+        rv_locationList = findViewById(R.id.rv_locationList);
 
         // get list of saved locations
         loadData();
-
-        // convert locations to a street address if possible
-        ArrayList<String> savedAddresses = new ArrayList<>();
-        for (PWDLocation location: PWDLocationList) {
-            Geocoder geocoder = new Geocoder(ShowSavedLocationsList.this);
-            try {
-                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
-                        location.getLongitude(), 1);
-                savedAddresses.add(addresses.get(0).getAddressLine(0));
-            } catch (Exception e) {
-                String address = "Lat: " + location.getLatitude() + "Lon: " + location.getLongitude() +
-                        "\n" + "Unable to get street address";
-                savedAddresses.add(address);
-            }
-        }
-        // save all locations as a list and display for the user
-        lv_wayPoints.setAdapter(new ArrayAdapter<>(this,
-                android.R.layout.simple_expandable_list_item_1, savedAddresses));
+        buildRecyclerView();
 
     } // end of onCreate()
 
 
+    private void buildRecyclerView() {
+        // initializing our adapter class.
+        adapter = new LocationListViewAdapter(PWDLocationList, ShowSavedLocationsList.this);
+
+        // adding layout manager to our recycler view.
+        LinearLayoutManager manager = new LinearLayoutManager(this);
+        rv_locationList.setHasFixedSize(true);
+
+        // setting layout manager to our recycler view.
+        rv_locationList.setLayoutManager(manager);
+
+        // setting adapter to our recycler view.
+        rv_locationList.setAdapter(adapter);
+    }
+
+
+
+    /**
+     * Description: Read the shared preference folder for the list of saved locations and
+     *              store them in an arraylist
+     * */
     @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
@@ -103,7 +106,4 @@ public class ShowSavedLocationsList extends AppCompatActivity {
             PWDLocationList = new ArrayList<>();
         }
     } // end of loadData()
-
-
-
 } // end of ShowSavedLocationsList.java

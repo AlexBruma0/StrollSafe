@@ -190,6 +190,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/btn_showWayPoints" />
 
+    <Button
+        android:id="@+id/btn_cleanSharedPreferences"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:text="Clean Shared Preferences"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/btn_showMap" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

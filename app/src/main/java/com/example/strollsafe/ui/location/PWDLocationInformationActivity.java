@@ -163,7 +163,8 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                         address = ("Unable to get street address");
                     }
 
-                    if (address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
+                    if ( PWDLocationList.size() > 0 &&
+                            address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
                             !address.equals("Unable to get street address"))
                     {
                         PWDLocation lastLocation = PWDLocationList.get(PWDLocationList.size() - 1);
@@ -188,9 +189,6 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                             notificationManagerCompat = NotificationManagerCompat.from(PWDLocationInformationActivity.this);
                             notificationManagerCompat.notify("idle_alert", 1, notification);
                         }
-
-
-
                     } else {
                         PWDLocation newLocation = new PWDLocation(location.getLatitude(),
                                 location.getLongitude(), location.getAccuracy(), address);
@@ -361,36 +359,7 @@ public class PWDLocationInformationActivity extends AppCompatActivity {
                 @Override
                 public void onSuccess(Location location) {
                     if (location != null) {
-                        Log.d("GPSStatus", "GPS is on");
-
-                        String address;
-                        Geocoder geocoder = new Geocoder(PWDLocationInformationActivity.this);
-                        try {
-                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
-                                    location.getLongitude(), 1);
-                            address = addresses.get(0).getAddressLine(0);
-                        } catch (Exception e) {
-                            address = ("Unable to get street address");
-                        }
-
-                        if (PWDLocationList.size() > 0 &&
-                                address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
-                                !address.equals("Unable to get street address"))
-                        {
-                            PWDLocationList.get(PWDLocationList.size() - 1).setLastHereDateTime(LocalDateTime.now());
-                            updateUIValues(PWDLocationList.get(PWDLocationList.size() - 1));
-                        } else {
-                            PWDLocation newLocation = new PWDLocation(location.getLatitude(),
-                                    location.getLongitude(), location.getAccuracy(), address);
-                            if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
-                                PWDLocationList.remove(0);
-                            }
-                            PWDLocationList.add(newLocation);
-                            updateUIValues(newLocation);
-                        }
-                        saveData();
-                        Log.i("Location", "Location updated");
-
+                        startLocationUpdates();
                     } else {
                         if (ActivityCompat.checkSelfPermission(
                                 PWDLocationInformationActivity.this,

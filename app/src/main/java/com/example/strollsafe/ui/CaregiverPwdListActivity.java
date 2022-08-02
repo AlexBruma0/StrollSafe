@@ -86,7 +86,7 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
         return true;
     }
     public void batteryNotification() {
-        EditText editText = (EditText) findViewById(R.id.pwdListEmailEntry);
+        /*EditText editText = (EditText) findViewById(R.id.pwdListEmailEntry);
         String code = editText.getText().toString();
         MongoCollection userCollection = databaseManager.getUsersCollection();
         userCollection.findOne(new Document("email",code)).getAsync(new App.Callback() {
@@ -97,11 +97,12 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
                     dismissProgressDialog();
                     Toast.makeText(CaregiverPwdListActivity.this, "PWD can not be found.", Toast.LENGTH_SHORT).show();
                     return;
-                }
-                else if(Integer.parseInt(pwdInfo.get("batteryLife").toString())<=15){
+                }*/
+                //if(Integer.parseInt(pwdInfo.get("batteryLife").toString())<=15){
                     builder.setSmallIcon(R.drawable.ic_launcher_background);
                     builder.setContentTitle("Battery Notification");
-                    builder.setContentText(pwdInfo.get("firstName").toString() + " has low battery of "+ pwdInfo.get("batteryLife").toString());builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+                    builder.setContentText( " has low battery of ");
+                    builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
                     builder.setAutoCancel(true);
 
                     NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CaregiverPwdListActivity.this);
@@ -113,10 +114,6 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
                         manager.createNotificationChannel(Channel);
                     }
                 }
-            }
-        });
-    }
-
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()) {

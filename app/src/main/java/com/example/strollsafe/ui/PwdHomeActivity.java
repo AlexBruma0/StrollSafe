@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import com.example.strollsafe.R;
 
 import android.os.Handler;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,14 +29,20 @@ public class PwdHomeActivity extends AppCompatActivity{
     DatabaseManager databaseManager;
     App app;
     BatteryManager batteryManager;
+    SharedPreferences pwdPreferences;
+    SharedPreferences.Editor pwdPreferenceEditor;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
+        pwdPreferenceEditor = pwdPreferences.edit();
         setContentView(R.layout.activity_pwd_home);
         databaseManager = new DatabaseManager(this);
         app = databaseManager.getApp();
         batteryManager = (BatteryManager) this.getSystemService(BATTERY_SERVICE);
+        configureSignout();
 //        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
 //        setSupportActionBar(topBar);
         //callNumber();
@@ -79,6 +87,22 @@ public class PwdHomeActivity extends AppCompatActivity{
         Uri number = Uri.parse("tel:5551234");
         Intent callIntent = new Intent(Intent.ACTION_DIAL, number);
         startActivity(callIntent);
+    }
+    public void configureSignout() {
+        Button PWD = (Button) findViewById(R.id.Signout);
+        PWD.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                pwdPreferenceEditor.remove("email");
+                pwdPreferenceEditor.remove("Phone");
+                pwdPreferenceEditor.remove("L_name");
+                pwdPreferenceEditor.remove("F_name");
+                pwdPreferenceEditor.remove("password");
+                pwdPreferenceEditor.remove("id");
+                databaseManager.logoutOfRealm();
+                finish();
+            }
+        });
     }
 
 }

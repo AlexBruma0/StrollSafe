@@ -15,11 +15,11 @@
     <string name="title_activity_pwd_signup">PWD Signup</string>
     <string name="geofence_transition_invalid_type">INVALID</string>
     <string name="careGiverSignupTitle">Caregiver Signup</string>
-    <string name="phone_number_hint">phone number</string>
+    <string name="phone_number_hint">Phone Number</string>
     <string name="last_name_hint">Last name</string>
     <string name="date_of_birth_hint">Date of Birth</string>
-    <string name="email_address_hint">email address</string>
-    <string name="password_hint">password</string>
+    <string name="email_address_hint">Email Address</string>
+    <string name="password_hint">Password</string>
     <string name="first_name_hint">First name</string>
     <string name="loginButtonText">Already have an account? Login here!</string>
     <string name="settings">Settings</string>
@@ -35,7 +35,7 @@
     <string name="caregiverLoginLabel">Caregiver Login</string>
     <string name="title_activity_maps">Safe Zone Manager</string>
     <string name="pwdListLabel">My Patients</string>
-    <string name="loginActivityLabel">Login</string>
+    <string name="loginActivityLabel">Existing User Login</string>
     <string name="location_permission_denied">Stroll Safe requires precise location permissions to enable the \'location tracking\' features. Please try again and grant access to use precise location.\nIf the permission has been permanently denied, it can be enabled from the System Settings &gt; Apps &gt; \'Stroll Safe\'.</string>
     <string name="permission_required_toast">Precise location permissions are required for this application to function properly.</string>
     <string name="permission_rationale_location">Access to precise location is required for Stroll Safe to accurately track the location of all patients. Please always allow precise location so that we always keep an eye on things.</string>

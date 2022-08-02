@@ -34,6 +34,7 @@ public class CaregiverSignupActivity extends AppCompatActivity {
     private int mYear,mMonth,mDay;
     DatabaseManager databaseManager;
     App app;
+    int battery =100;
     private User user;
     private final String APP_ID = "strollsafe-pjbnn";
     private RealmConfiguration config;
@@ -131,7 +132,7 @@ public class CaregiverSignupActivity extends AppCompatActivity {
                     if (loginResult.isSuccess()) {
                         Log.i(TAG + "asyncLoginToRealm", "Successfully authenticated using an email and password: " + email);
                         user.set(app.currentUser());
-                        databaseManager.addCustomerUserData(user.get(), DatabaseManager.CAREGIVER_ACCOUNT_TYPE, email, phoneNumber, new Date(), address, firstName, lastName);
+                        databaseManager.addCustomerUserData(user.get(), DatabaseManager.CAREGIVER_ACCOUNT_TYPE, email, phoneNumber, new Date(), address, firstName, lastName,battery);
 
                         config = new SyncConfiguration.Builder(Objects.requireNonNull(app.currentUser()), Objects.requireNonNull(app.currentUser()).getId())
                         .name(APP_ID)
@@ -145,7 +146,7 @@ public class CaregiverSignupActivity extends AppCompatActivity {
                             public void onSuccess(@NonNull Realm realm) {
                                 Log.v(TAG, "Successfully opened a realm with reads and writes allowed on the UI thread.");
                                 realmDatabase = realm;
-                                startActivity(new Intent(CaregiverSignupActivity.this, CaregiverHomeActivity.class));
+                                startActivity(new Intent(CaregiverSignupActivity.this, CaregiverPwdListActivity.class));
                             }
                         });
                     } else {

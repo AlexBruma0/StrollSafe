@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
-import com.example.strollsafe.GeofencingMapsActivity;
+import com.example.strollsafe.utils.GeofencingMapsActivity;
 import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.PWD;
 import com.example.strollsafe.ui.location.MapsActivity;
@@ -96,8 +96,6 @@ public class PWDActivity extends AppCompatActivity {
 
 
         setContentView(R.layout.activity_pwd);
-        TextView code = findViewById(R.id.viewPWDCODE);
-        code.setText(pwdPreferences.getString("code","error"));
         configureSignout();
         configureViewMap();
         //was testing an update timer

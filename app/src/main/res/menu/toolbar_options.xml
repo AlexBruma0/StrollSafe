@@ -7,14 +7,6 @@
         app:showAsAction="never"
         app:actionViewClass="android.widget.Spinner">
 
-<!--        <menu>-->
-
-<!--            <item-->
-<!--                android:id="@+id/settingsMenuItem"-->
-<!--                android:title="Settings" />-->
-
-<!--        </menu>-->
-
     </item>
 
 

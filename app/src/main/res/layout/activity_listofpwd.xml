@@ -9,64 +9,84 @@
     android:backgroundTintMode="add"
     android:visibility="visible">
 
+    <include
+        android:id="@+id/toolbar"
+        layout="@layout/toolbar"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageButton
+    <ImageView
+        android:id="@+id/iv_background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b14" />
+
+
+    <Button
 
         android:id="@+id/quit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/app_name"
+        android:background="@drawable/darkbtn"
+        android:text="back"
+        android:textColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintHorizontal_bias="0.037"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.023"
-        app:srcCompat="@android:drawable/btn_dialog" />
+        android:layout_marginTop="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar"
+        app:layout_constraintVertical_bias="0.023" />
+
 
     <Button
         android:id="@+id/NAME1"
         android:layout_width="203dp"
         android:layout_height="83dp"
+        android:onClick="configureName1"
         android:text="CLICK HERE TO ACTIVATE"
         android:textColor="@color/colorAccent"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.418"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.185"
+        app:layout_constraintVertical_bias="0.367"
         app:strokeColor="@color/black" />
 
     <Button
         android:id="@+id/NAME2"
         android:layout_width="203dp"
         android:layout_height="83dp"
+        android:onClick="configureName2"
         android:text="CLICK HERE TO ACTIVATE"
         android:textColor="@color/colorAccent"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.418"
+        app:layout_constraintHorizontal_bias="0.375"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.385"
+        app:layout_constraintVertical_bias="0.552"
         app:strokeColor="@color/black" />
 
     <Button
         android:id="@+id/NAME3"
         android:layout_width="203dp"
         android:layout_height="83dp"
+        android:onClick="configureName3"
         android:text="CLICK HERE TO ACTIVATE"
         android:textColor="@color/colorAccent"
-        android:visibility="visible"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.418"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.574"
+        app:layout_constraintVertical_bias="0.736"
         app:strokeColor="@color/black" />
 
     <ImageButton
@@ -79,7 +99,7 @@
         app:layout_constraintHorizontal_bias="0.109"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.178"
+        app:layout_constraintVertical_bias="0.35"
         app:srcCompat="@android:drawable/ic_delete" />
 
     <ImageButton
@@ -92,7 +112,7 @@
         app:layout_constraintHorizontal_bias="0.109"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.543"
+        app:layout_constraintVertical_bias="0.696"
         app:srcCompat="@android:drawable/ic_delete" />
 
     <ImageButton
@@ -102,10 +122,10 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.919"
+        app:layout_constraintHorizontal_bias="0.895"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.184"
+        app:layout_constraintVertical_bias="0.369"
         app:srcCompat="@android:drawable/ic_dialog_map"
         app:tint="#190505" />
 
@@ -119,9 +139,10 @@
         app:layout_constraintHorizontal_bias="0.919"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.575"
+        app:layout_constraintVertical_bias="0.733"
         app:srcCompat="@android:drawable/ic_dialog_map"
         app:tint="#190505" />
+
 
     <ImageButton
         android:id="@+id/delete2"
@@ -133,7 +154,7 @@
         app:layout_constraintHorizontal_bias="0.109"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.364"
+        app:layout_constraintVertical_bias="0.522"
         app:srcCompat="@android:drawable/ic_delete" />
 
     <ImageButton
@@ -143,39 +164,56 @@
         android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.919"
+        app:layout_constraintHorizontal_bias="0.895"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.384"
+        app:layout_constraintVertical_bias="0.553"
         app:srcCompat="@android:drawable/ic_dialog_map"
         app:tint="#190505" />
 
-
-
     <EditText
-        android:id="@+id/editTextTextPassword"
+        android:id="@+id/pwdListEmailEntry"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:ems="10"
-        android:inputType="textPassword"
+        android:inputType="textEmailAddress"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.862" />
+        app:layout_constraintVertical_bias="0.233" />
 
     <TextView
-        android:id="@+id/textView4"
+        android:id="@+id/pwdListTitle"
+
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Enter PWD code here"
+        android:text="Enter Patient Email"
+        android:textColor="#08304E"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.782" />
+        app:layout_constraintVertical_bias="0.168" />
+
+    <ImageButton
+        android:id="@+id/pwdListAddButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:backgroundTint="#BDBABA"
+        android:foregroundTint="#3949AB"
+        android:onClick="add"
+        app:layout_constraintBottom_toTopOf="@+id/Map1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.602"
+        app:layout_constraintStart_toEndOf="@+id/pwdListTitle"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.814"
+        app:srcCompat="@android:drawable/ic_input_add"
+        app:tint="@color/black" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 

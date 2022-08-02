@@ -1,4 +1,4 @@
-package com.example.strollsafe;
+package com.example.strollsafe.utils;
 
 public class Location {
     private double longitude;

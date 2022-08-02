@@ -6,27 +6,62 @@
     android:layout_height="match_parent"
     tools:context=".ui.CaregiverHomeActivity">
 
+
+    <ImageView
+        android:id="@+id/iv_background_image"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/b15" />
+
+
     <include
         android:id="@+id/toolbar"
-        layout="@layout/toolbar" />
+        layout="@layout/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
 
     <Button
         android:id="@+id/pwdListButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="65dp"
+        android:layout_marginTop="236dp"
+        android:layout_marginEnd="234dp"
+        android:layout_marginBottom="447dp"
+        android:background="@drawable/darkbtn"
+
+
+        android:fontFamily="@font/calibri"
         android:onClick="myPatientsOnClick"
-        android:text="My Patients" />
+        android:text="My Patients"
+        android:textColor="@color/white"
+        android:visibility="visible" />
 
     <Button
         android:id="@+id/geofencingButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/pwdListButton"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="15dp"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="240dp"
+        android:layout_marginTop="237dp"
+        android:layout_marginEnd="61dp"
+        android:layout_marginBottom="446dp"
+        android:background="@drawable/darkbtn"
+        android:fontFamily="@font/calibri"
         android:onClick="geofencingOnClick"
-        android:text="Geofencing" />
+        android:text="Geofencing"
+        android:textColor="@color/white" />
+
+
 
 
 </RelativeLayout>

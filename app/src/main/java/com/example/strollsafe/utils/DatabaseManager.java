@@ -7,6 +7,7 @@ import org.bson.Document;
 
 import androidx.annotation.NonNull;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -73,7 +74,7 @@ public class DatabaseManager {
      * @param email
      * @param password
      */
-    public void createRealmUserAndLoginAsync(String email, String password, String accountType, String phoneNumber, Date dateOfBirth, String address, String firstName, String lastName) {
+    public void createRealmUserAndLoginAsync(String email, String password, String accountType, String phoneNumber, Date dateOfBirth, String address, String firstName, String lastName,int batteryLife) {
         app.getEmailPassword().registerUserAsync(email, password, registerResult -> {
             if (registerResult.isSuccess()) {
                 Log.i(TAG, "Successfully registered user: " + email);
@@ -93,7 +94,7 @@ public class DatabaseManager {
                                     .allowWritesOnUiThread(true)
                                     .build();
                             getRealmInstance(config);
-                            addCustomerUserData(user.get(), accountType, email, phoneNumber, dateOfBirth, address, firstName, lastName);
+                            addCustomerUserData(user.get(), accountType, email, phoneNumber, dateOfBirth, address, firstName, lastName,batteryLife);
                         } else {
                             Log.e(TAG + "asyncLoginToRealm", "email: " + loginResult.getError().toString());
                             isUserLoggedIn = false;
@@ -229,25 +230,49 @@ public class DatabaseManager {
         });
     }
 
-    public void addCustomerUserData(User currentUser, String accountType, String email, String phoneNumber, Date dateOfBirth, String address, String firstName, String lastName) {
+    public void addCustomerUserData(User currentUser, String accountType, String email, String phoneNumber, Date dateOfBirth, String address, String firstName, String lastName,int batteryLife) {
         MongoClient mongoClient = currentUser.getMongoClient("user-data");
         MongoDatabase mongoDatabase = mongoClient.getDatabase("strollSafeTest");
         MongoCollection<Document> mongoCollection = mongoDatabase.getCollection("users");
-        mongoCollection.insertOne(new Document("userId", currentUser.getId())
-                        .append("accountType", accountType)
-                        .append("email", email)
-                        .append("phoneNumber", phoneNumber)
-                        .append("address", address)
-                        .append("firstName", firstName)
-                        .append("lastName", lastName)
-                        .append("dateOfBirth", dateOfBirth))
-                .getAsync(result -> {
-                    if (result.isSuccess()) {
-                        Log.d(TAG, String.format("User %s has been added to the database", email));
-                    } else {
-                        Log.e(TAG, String.format("Unable to insert custom user data for user %s. Error: %s", email, result.getError()));
-                    }
-                });
+        if(accountType == CAREGIVER_ACCOUNT_TYPE) {
+            mongoCollection.insertOne(new Document("userId", currentUser.getId())
+                            .append("accountType", accountType)
+                            .append("email", email)
+                            .append("phoneNumber", phoneNumber)
+                            .append("address", address)
+                            .append("firstName", firstName)
+                            .append("lastName", lastName)
+                            .append("dateOfBirth", dateOfBirth)
+                            .append("patients", new ArrayList<String>()))
+                    .getAsync(result -> {
+                        if (result.isSuccess()) {
+                            Log.d(TAG, String.format("User %s has been added to the database", email));
+                        } else {
+                            Log.e(TAG, String.format("Unable to insert custom user data for user %s. Error: %s", email, result.getError()));
+                        }
+                    });
+
+        } else if(accountType == PWD_ACCOUNT_TYPE) {
+            mongoCollection.insertOne(new Document("userId", currentUser.getId())
+                            .append("accountType", accountType)
+                            .append("email", email)
+                            .append("phoneNumber", phoneNumber)
+                            .append("address", address)
+                            .append("firstName", firstName)
+                            .append("lastName", lastName)
+                            .append("dateOfBirth", dateOfBirth)
+                            .append("batteryLife", batteryLife)
+                            .append("safezones", new ArrayList<Double[][]>())
+                            .append("caregivers", new ArrayList<String>()))
+                    .getAsync(result -> {
+                        if (result.isSuccess()) {
+                            Log.d(TAG, String.format("User %s has been added to the database", email));
+                        } else {
+                            Log.e(TAG, String.format("Unable to insert custom user data for user %s. Error: %s", email, result.getError()));
+                        }
+                    });
+        }
+
     }
 
     /**
@@ -256,15 +281,25 @@ public class DatabaseManager {
      */
     public String getUserAccountType() {
         String accountType = getLoggedInUser().getCustomData().getString("accountType");
-        switch (accountType.toLowerCase()) {
-            case DatabaseManager.CAREGIVER_ACCOUNT_TYPE:
-                return DatabaseManager.CAREGIVER_ACCOUNT_TYPE;
+        if(isUserLoggedIn() && accountType != null) {
+            switch (accountType.toLowerCase()) {
+                case DatabaseManager.CAREGIVER_ACCOUNT_TYPE:
+                    return DatabaseManager.CAREGIVER_ACCOUNT_TYPE;
 
-            case DatabaseManager.PWD_ACCOUNT_TYPE:
-                return DatabaseManager.PWD_ACCOUNT_TYPE;
+                case DatabaseManager.PWD_ACCOUNT_TYPE:
+                    return DatabaseManager.PWD_ACCOUNT_TYPE;
 
-            default:
-                return "null";
+                default:
+                    return "null";
+            }
         }
+        return "null";
     }
+
+    public MongoCollection getUsersCollection() {
+        MongoClient mongoClient = app.currentUser().getMongoClient("user-data");
+        MongoDatabase mongoDatabase = mongoClient.getDatabase("strollSafeTest");
+        return mongoDatabase.getCollection("users");
+    }
+
 }

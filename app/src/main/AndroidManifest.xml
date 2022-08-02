@@ -71,11 +71,9 @@
             android:theme="@style/Theme.StrollSafe.NoActionBar" />
         <activity
             android:name=".ui.PWDActivity"
-            android:exported="false" />
-        <activity
-            android:name=".ui.location.PWDLocationInformationActivity"
-            android:exported="false" />
-            android:label="@string/title_activity_maps" />
+            android:exported="false" /><![CDATA[
+        android:label="@string/title_activity_maps" />
+        ]]>
         <activity
             android:name=".ui.PWDHome_activity"
             android:exported="false" />

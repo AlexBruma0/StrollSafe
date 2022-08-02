@@ -94,28 +94,23 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
 
-        if (PWDLocationList.size() < 1) { // if no saved locations, map will not display
-            Toast.makeText(MapsActivity.this, "No locations saved",
-                    Toast.LENGTH_SHORT).show();
-            finish();
-        } else {
-            // convert all locations to LatLng
-            for (PWDLocation location : PWDLocationList) {
-                LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
+        // convert last location to LatLng
+        PWDLocation location = PWDLocationList.get(PWDLocationList.size() - 1);
+        LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
 
-                MarkerOptions markerOptions = new MarkerOptions();
-                markerOptions.position(latLng);
+        MarkerOptions markerOptions = new MarkerOptions();
+        markerOptions.position(latLng);
 
-                // show address and last access details when the marker is touched
-                markerOptions.title(location.getAddress());
-                markerOptions.snippet("Last here on " + location.getLastHereDateTime().format(DATE_FORMAT));
-                // place location as a pin on the map
-                mMap.addMarker(markerOptions);
-                lastLocationPlaced = latLng;
-            }
-            // when maps is opened, zoom in to the last saved location
-            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocationPlaced, ZOOM_FACTOR));
-        }
+        // show address and last access details when the marker is touched
+        markerOptions.title(location.getAddress());
+        markerOptions.snippet("Last here on " + location.getLastHereDateTime().format(DATE_FORMAT));
+        // place location as a pin on the map
+        mMap.addMarker(markerOptions);
+        lastLocationPlaced = latLng;
+
+        // when maps is opened, zoom in to the last saved location
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(lastLocationPlaced, ZOOM_FACTOR));
+
     } // end of onMapReady()
 
 

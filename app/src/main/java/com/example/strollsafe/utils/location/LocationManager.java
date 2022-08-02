@@ -26,7 +26,6 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.PWDLocation;
-import com.example.strollsafe.ui.location.PWDLocationInformationActivity;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationCallback;
@@ -50,7 +49,6 @@ import com.google.gson.stream.JsonWriter;
 import java.io.IOException;
 import java.lang.reflect.Type;
 import java.time.Duration;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;

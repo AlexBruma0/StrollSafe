@@ -1,18 +1,12 @@
 package com.example.strollsafe.ui;
 
 import android.Manifest;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Bundle;
-
-import com.example.strollsafe.R;
-
 import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
@@ -26,6 +20,7 @@ import androidx.work.OneTimeWorkRequest;
 import androidx.work.WorkManager;
 import androidx.work.WorkRequest;
 
+import com.example.strollsafe.R;
 import com.example.strollsafe.utils.DatabaseManager;
 import com.example.strollsafe.utils.location.BackgroundLocationWork;
 import com.example.strollsafe.utils.location.LocationManager;

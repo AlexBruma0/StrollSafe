@@ -58,6 +58,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 import io.realm.mongodb.App;
 import io.realm.mongodb.mongo.MongoCollection;
@@ -66,6 +67,7 @@ import io.realm.mongodb.mongo.MongoCollection;
 public class GeofencingMapsActivity extends AppCompatActivity implements GoogleMap.OnMyLocationButtonClickListener, GoogleMap.OnMyLocationClickListener, OnMapReadyCallback, ActivityCompat.OnRequestPermissionsResultCallback {
 
     private DatabaseManager databaseManager;
+    private App app;
     private GoogleMap map;
     private MongoCollection userCollection;
 
@@ -101,10 +103,13 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
         loadLocationData();
 
         Intent intent = getIntent();
-        userId = intent.getStringExtra("userId");
+//        userId = intent.getStringExtra("userId");
         databaseManager = new DatabaseManager(this);
+        app = databaseManager.getApp();
         userCollection = databaseManager.getUsersCollection();
-        userCollection.findOne(new Document("userId", userId)).getAsync(callback -> {
+//        userCollection.findOne(new Document("userId", userId)).getAsync(callback -> {
+        userCollection.findOne(new Document("userId",
+                Objects.requireNonNull(app.currentUser()).getId())).getAsync(callback -> {
             if(callback.isSuccess()) {
                 Document userInfo = (Document) callback.get();
                 setTitle((String) userInfo.get("firstName") + " " + userInfo.get("lastName") + "' Safe Zones");
@@ -167,8 +172,13 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
     }
 
     public void showAllMarkersOnclick() {
-        CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(allMarkers.build(), 200);
-        map.animateCamera(cu);
+        if (markerList.size() > 0) { // there are markers to show on the map
+            CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(allMarkers.build(), 200);
+            map.animateCamera(cu);
+        } else { // marker list is empty
+            Toast.makeText(GeofencingMapsActivity.this,
+                    "No geofence have been set", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -194,6 +204,7 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
         }
 
         map.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
+            @SuppressLint("DefaultLocale")
             @Override
             public void onCircleClick(@NonNull Circle circle) {
                 SafeZone selectedSafeZone = findSafeZoneFromCircle(circle);
@@ -210,13 +221,13 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
                         .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                userCollection.findOne(new Document("userId", userId)).getAsync(findResult -> {
+                                userCollection.findOne(new Document("userId", Objects.requireNonNull(app.currentUser()).getId())).getAsync(findResult -> {
                                     if (findResult.isSuccess()) {
                                         Document patientUser = (Document) findResult.get();
                                         ArrayList<Document> safezones = (ArrayList<Document>) patientUser.get("safezones");
                                         for(Document safeZone : safezones) {
                                             if(circle.getCenter().latitude == (Double) safeZone.get("lat") && circle.getCenter().longitude == (Double) safeZone.get("lng")) {
-                                                Document pwdData = new Document("userId", userId);
+                                                Document pwdData = new Document("userId", Objects.requireNonNull(app.currentUser()).getId());
                                                 userCollection.updateOne(pwdData, new Document("$pull", new Document("safezones", safeZone))).getAsync(new App.Callback() {
 
                                                     @Override
@@ -271,7 +282,7 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
                         EditText safeZoneRadiusInput = (EditText) dialogView.findViewById(R.id.safezoneRadiusInput);
 
                         // Find our pwds existing safezones
-                        userCollection.findOne(new Document("userId", userId)).getAsync(findResult -> {
+                        userCollection.findOne(new Document("userId", Objects.requireNonNull(app.currentUser()).getId())).getAsync(findResult -> {
                             if(findResult.isSuccess()) {
                                 Document patientUser = (Document) findResult.get();
                                 ArrayList<Document> safezones = (ArrayList<Document>) patientUser.get("safezones");
@@ -284,7 +295,7 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
                                         return;
                                     }
                                 }
-                                Document pwdData = new Document("userId", userId);
+                                Document pwdData = new Document("userId", Objects.requireNonNull(app.currentUser()).getId());
                                 Document newSafeZone = new Document().append("name", safeZoneNameInput.getText().toString()).append("lat", (Double) latLng.latitude).append("lng", (Double) latLng.longitude).append("radius", Double.parseDouble(safeZoneRadiusInput.getText().toString()));
                                 Document update =  new Document("safezones", newSafeZone);
 

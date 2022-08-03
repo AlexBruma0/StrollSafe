@@ -1,16 +1,3 @@
-/**
- * ShowSavedLocationsList.java
- *
- * Description: Show the list of saved locations as addresses
- *
- * Created on: July 18, 2022
- * Created by: Alvin Tsang
- *
- * Last modified on; July 21, 2022
- * Last modified by: Alvin Tsang
- *
- * */
-
 package com.example.strollsafe.ui.location;
 
 import androidx.annotation.RequiresApi;
@@ -36,6 +23,18 @@ import java.lang.reflect.Type;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+/**
+ * ShowSavedLocationsList.java
+ *
+ * Description: Show the list of saved locations as addresses
+ *
+ * @since July 18, 2022
+ * @author Alvin Tsang
+ *
+ * Last modified on; July 21, 2022
+ * Last modified by: Alvin Tsang
+ * */
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class ShowSavedLocationsList extends AppCompatActivity {
 
@@ -52,35 +51,34 @@ public class ShowSavedLocationsList extends AppCompatActivity {
 
         rv_locationList = findViewById(R.id.rv_locationList);
 
-        // get list of saved locations
+        // get list of saved locations from shared preferences
         loadData();
         buildRecyclerView();
-
     } // end of onCreate()
 
-
+    /**
+     * Description: Initialize adapter and the recycler view
+     * */
     private void buildRecyclerView() {
-        // initializing our adapter class.
+        // initializing adapter class
         adapter = new LocationListViewAdapter(PWDLocationList, ShowSavedLocationsList.this);
 
-        // adding layout manager to our recycler view.
+        // adding layout manager to our recycler view
         LinearLayoutManager manager = new LinearLayoutManager(this);
         rv_locationList.setHasFixedSize(true);
 
-        // setting layout manager to our recycler view.
+        // setting layout manager to our recycler view
         rv_locationList.setLayoutManager(manager);
 
-        // setting adapter to our recycler view.
+        // setting adapter to our recycler view
         rv_locationList.setAdapter(adapter);
-    }
-
+    } // end of buildRecyclerView()
 
 
     /**
      * Description: Read the shared preference folder for the list of saved locations and
      *              store them in an arraylist
      * */
-    @RequiresApi(api = Build.VERSION_CODES.O)
     private void loadData() {
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFS, MODE_PRIVATE);
 

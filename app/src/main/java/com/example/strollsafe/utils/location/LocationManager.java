@@ -146,7 +146,20 @@ public class LocationManager {
                             Duration duration = Duration.between(lastLocation.getInitialDateTime(),
                                     lastLocation.getLastHereDateTime());
                             if (duration.toMinutes() == IDLE_MINUTES) {
-                                sendNotification(duration.toMinutes());
+                                NotificationChannel channel = new NotificationChannel("idle_alert",
+                                        "PWD Idle", NotificationManager.IMPORTANCE_DEFAULT);
+                                NotificationManager manager = context.getSystemService(NotificationManager.class);
+                                manager.createNotificationChannel(channel);
+
+                                NotificationCompat.Builder builder = new NotificationCompat.Builder(
+                                        context, "idle_alert");
+                                builder.setSmallIcon(R.drawable.ic_launcher_background);
+                                builder.setContentTitle("PWD Idle Alert");
+                                builder.setContentText("PWD has been idle for " + IDLE_MINUTES + " minutes!");
+
+                                notification = builder.build();
+                                notificationManagerCompat = NotificationManagerCompat.from(context);
+                                notificationManagerCompat.notify("idle_alert", 1, notification);
                             }
                         } else {
                             PWDLocation newLocation = new PWDLocation(location.getLatitude(),
@@ -166,27 +179,6 @@ public class LocationManager {
             }
         };
     }
-
-    /**
-     * Description: If IDLE_MINUTES is exceeded, send a flag to the database and notify the caregiver
-     *
-     * @param idleTime length of idleTime
-     * */
-    private void sendNotification(long idleTime) {
-        Document pwdData = new Document("userId", Objects.requireNonNull(app.currentUser()).getId());
-        Document update =  new Document("idleTime", idleTime);
-        MongoCollection userCollection = databaseManager.getUsersCollection();
-        userCollection.updateOne(pwdData, new Document("$set", update)).getAsync(new App.Callback() {
-            @Override
-            public void onResult(App.Result result) {
-                if(result.isSuccess()) {
-                    Log.d("sendNotification", "notification sent to caregiver");
-                } else {
-                    Log.d("sendNotification", "notification NOT sent to caregiver");
-                }
-            }
-        });
-    } // end of sendNotification()
 
 
     protected void createLocationRequest() {
@@ -294,6 +286,7 @@ public class LocationManager {
         }
         Document update =  new Document("locations", docList);
 
+        // Add the new safezone to the pwds safezone array
         MongoCollection userCollection = databaseManager.getUsersCollection();
         userCollection.updateOne(pwdData, new Document("$set", update)).getAsync(new App.Callback() {
             @Override

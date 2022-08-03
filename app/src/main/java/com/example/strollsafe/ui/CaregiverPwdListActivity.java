@@ -31,19 +31,26 @@ import com.example.strollsafe.utils.DatabaseManager;
 
 import org.bson.Document;
 
+import java.time.Duration;
 import java.util.ArrayList;
+import java.util.Objects;
 
 import io.realm.mongodb.App;
 import io.realm.mongodb.mongo.MongoCollection;
 
 
 public class CaregiverPwdListActivity extends AppCompatActivity {
+
+    private static final long IDLE_MINUTES = (60 * 12); // 12 hours
+
     App app;
     DatabaseManager databaseManager;
     String TAG = "ListOfPWDActivity";
     SharedPreferences pwdPreferences;
     SharedPreferences.Editor pwdPreferenceEditor;
     ProgressDialog progressDialog;
+
+
     public NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"Battery Notification");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,6 +77,7 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
             manager.createNotificationChannel(Channel);
         }*/
         batteryNotification();
+        idleNotification();
         configureMap1();
         configureMap2();
         configureMap3();
@@ -115,6 +123,39 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
             manager.createNotificationChannel(Channel);
         }
     }
+
+    public void idleNotification() {
+
+        Objects.requireNonNull(app.currentUser()).refreshCustomData(refreshResult -> {
+            if(refreshResult.isSuccess()) {
+                ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
+                String userId = patientsList.get(0);
+
+
+                // after IDLE_MINUTES, if the location has not changed, notify user
+//                Duration duration = Duration.between(lastLocation.getInitialDateTime(),
+//                        lastLocation.getLastHereDateTime());
+//                if (duration.toMinutes() == IDLE_MINUTES) {
+//                    NotificationChannel channel = new NotificationChannel("idle_alert",
+//                            "PWD Idle", NotificationManager.IMPORTANCE_DEFAULT);
+//                    NotificationManager manager = context.getSystemService(NotificationManager.class);
+//                    manager.createNotificationChannel(channel);
+//
+//                    NotificationCompat.Builder builder = new NotificationCompat.Builder(
+//                            context, "idle_alert");
+//                    builder.setSmallIcon(R.drawable.ic_launcher_background);
+//                    builder.setContentTitle("PWD Idle Alert");
+//                    builder.setContentText("PWD has been idle for " + IDLE_MINUTES + " minutes!");
+//
+//                    notification = builder.build();
+//                    notificationManagerCompat = NotificationManagerCompat.from(context);
+//                    notificationManagerCompat.notify("idle_alert", 1, notification);
+//                }
+            }
+
+        });
+    }
+
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {

@@ -68,7 +68,7 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
     private DatabaseManager databaseManager;
     private GoogleMap map;
     private MongoCollection userCollection;
-    private String userId = "";
+
     private List<SafeZone> safeZoneList = new ArrayList<>();
     private List<Marker> markerList = new ArrayList<>();
     LatLngBounds.Builder allMarkers;

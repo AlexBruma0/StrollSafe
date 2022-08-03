@@ -112,6 +112,8 @@ public class PwdHomeActivity extends AppCompatActivity{
         });
     }
 
+
+
     public void SOS(View view){
         Uri number = Uri.parse("tel:9111");
         Intent callIntent = new Intent(Intent.ACTION_DIAL, number);

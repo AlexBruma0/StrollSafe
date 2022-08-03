@@ -13,9 +13,11 @@ import android.content.pm.PackageManager;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
+import android.os.BatteryManager;
 import android.os.Build;
 import android.os.Looper;
 import android.util.Log;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -28,6 +30,7 @@ import io.realm.mongodb.mongo.MongoCollection;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.pwd.PWDLocation;
+import com.example.strollsafe.ui.PwdHomeActivity;
 import com.example.strollsafe.utils.DatabaseManager;
 import com.google.android.gms.common.api.ResolvableApiException;
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -59,6 +62,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Description: Get the location of the PWD and save it in an arraylist
+ *
+ * @since July 31, 2022
+ * @author Alvin Tsang
+ *
+ * Last modified on; August 2, 2022
+ * Last modified by: Alvin Tsang
+ * */
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class LocationManager {
     private static LocationManager instance = null;
@@ -79,7 +92,7 @@ public class LocationManager {
 
     private static final String SHARED_PREFS = "StrollSafe: LocationList";
     private static final int MAX_SAVED_LOCATIONS = 5;
-    private static final long IDLE_MINUTES = 2L;
+    private static final long IDLE_MINUTES = (60 * 12); // 12 hours
 
     private ArrayList<PWDLocation> PWDLocationList;
 
@@ -133,39 +146,47 @@ public class LocationManager {
                             Duration duration = Duration.between(lastLocation.getInitialDateTime(),
                                     lastLocation.getLastHereDateTime());
                             if (duration.toMinutes() == IDLE_MINUTES) {
-                                NotificationChannel channel = new NotificationChannel("idle_alert",
-                                        "PWD Idle", NotificationManager.IMPORTANCE_DEFAULT);
-                                NotificationManager manager = context.getSystemService(NotificationManager.class);
-                                manager.createNotificationChannel(channel);
-
-                                NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                                        context, "idle_alert");
-                                builder.setSmallIcon(R.drawable.ic_launcher_background);
-                                builder.setContentTitle("PWD Idle Alert");
-                                builder.setContentText("PWD has been idle for " + IDLE_MINUTES + " minutes!");
-
-                                notification = builder.build();
-                                notificationManagerCompat = NotificationManagerCompat.from(context);
-                                notificationManagerCompat.notify("idle_alert", 1, notification);
-                            } else {
-                                PWDLocation newLocation = new PWDLocation(location.getLatitude(),
-                                        location.getLongitude(), location.getAccuracy(), address);
-                                if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
-                                    PWDLocationList.remove(0);
-                                }
-                                PWDLocationList.add(newLocation);
-
+                                sendNotification(duration.toMinutes());
                             }
-                            Log.i("Location", "Location updated");
-                            instance.saveData();
-                            LocalBroadcastManager.getInstance(context).sendBroadcast(backgroundLocationIntent);
+                        } else {
+                            PWDLocation newLocation = new PWDLocation(location.getLatitude(),
+                                    location.getLongitude(), location.getAccuracy(), address);
+                            if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
+                                PWDLocationList.remove(0);
+                            }
+                            PWDLocationList.add(newLocation);
                         }
+                        Log.i("Location", "Location updated");
+                        instance.saveData();
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(backgroundLocationIntent);
+
                     }
                     createLocationRequest();
                 }
             }
         };
     }
+
+    /**
+     * Description: If IDLE_MINUTES is exceeded, send a flag to the database and notify the caregiver
+     *
+     * @param idleTime length of idleTime
+     * */
+    private void sendNotification(long idleTime) {
+        Document pwdData = new Document("userId", Objects.requireNonNull(app.currentUser()).getId());
+        Document update =  new Document("idleTime", idleTime);
+        MongoCollection userCollection = databaseManager.getUsersCollection();
+        userCollection.updateOne(pwdData, new Document("$set", update)).getAsync(new App.Callback() {
+            @Override
+            public void onResult(App.Result result) {
+                if(result.isSuccess()) {
+                    Log.d("sendNotification", "notification sent to caregiver");
+                } else {
+                    Log.d("sendNotification", "notification NOT sent to caregiver");
+                }
+            }
+        });
+    } // end of sendNotification()
 
 
     protected void createLocationRequest() {
@@ -273,7 +294,6 @@ public class LocationManager {
         }
         Document update =  new Document("locations", docList);
 
-        // Add the new safezone to the pwds safezone array
         MongoCollection userCollection = databaseManager.getUsersCollection();
         userCollection.updateOne(pwdData, new Document("$set", update)).getAsync(new App.Callback() {
             @Override

@@ -124,34 +124,36 @@ public class LocationManager {
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
-                for (Location location : locationResult.getLocations()) {
-                    if (location != null) {
-                        String address;
-                        Geocoder geocoder = new Geocoder(context);
-                        try {
-                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
-                                    location.getLongitude(), 1);
-                            address = addresses.get(0).getAddressLine(0);
-                        } catch (Exception e) {
-                            address = ("Unable to get street address");
-                        }
-
-                        if (PWDLocationList.size() > 0 &&
-                                address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
-                                !address.equals("Unable to get street address")) {
-                            PWDLocation lastLocation = PWDLocationList.get(PWDLocationList.size() - 1);
-                            lastLocation.setLastHereDateTime(LocalDateTime.now());
-                        } else {
-                            PWDLocation newLocation = new PWDLocation(location.getLatitude(),
-                                    location.getLongitude(), location.getAccuracy(), address);
-                            if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
-                                PWDLocationList.remove(0);
+                if(databaseManager.isUserLoggedIn()) {
+                    for (Location location : locationResult.getLocations()) {
+                        if (location != null) {
+                            String address;
+                            Geocoder geocoder = new Geocoder(context);
+                            try {
+                                List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
+                                        location.getLongitude(), 1);
+                                address = addresses.get(0).getAddressLine(0);
+                            } catch (Exception e) {
+                                address = ("Unable to get street address");
                             }
-                            PWDLocationList.add(newLocation);
+
+                            if (PWDLocationList.size() > 0 &&
+                                    address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
+                                    !address.equals("Unable to get street address")) {
+                                PWDLocation lastLocation = PWDLocationList.get(PWDLocationList.size() - 1);
+                                lastLocation.setLastHereDateTime(LocalDateTime.now());
+                            } else {
+                                PWDLocation newLocation = new PWDLocation(location.getLatitude(),
+                                        location.getLongitude(), location.getAccuracy(), address);
+                                if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
+                                    PWDLocationList.remove(0);
+                                }
+                                PWDLocationList.add(newLocation);
+                            }
+                            Log.i("Location", "Location updated");
+                            instance.saveData();
+                            LocalBroadcastManager.getInstance(context).sendBroadcast(backgroundLocationIntent);
                         }
-                        Log.i("Location", "Location updated");
-                        instance.saveData();
-                        LocalBroadcastManager.getInstance(context).sendBroadcast(backgroundLocationIntent);
                     }
                 }
             }

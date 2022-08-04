@@ -5,8 +5,7 @@
     <item android:id="@+id/refreshCurrentLocation"
         android:title="Refresh"
         android:icon="@drawable/ic_baseline_refresh_24"
-        app:showAsAction="always"
-        app:actionViewClass="android.widget.Spinner">
+        app:showAsAction="always">
     </item>
 
     <item android:id="@+id/showAllMarkersOption"

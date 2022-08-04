@@ -32,6 +32,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.strollsafe.utils.DatabaseManager;
+import com.example.strollsafe.utils.GeofencingNotification;
+import com.google.android.gms.location.Geofence;
 
 import org.bson.Document;
 
@@ -53,9 +55,11 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
     ProgressDialog progressDialog;
     private final String BATTERY_NOTIFICATION_CHANNEL = "Battery Notifications";
     private final String IDLE_NOTIFICATION_CHANNEL = "Idle Device Notifications";
+    private final String SAFEZONE_NOTIFICATION_CHANNEL = "Safe Zone Notifications";
     private final int BATTERY_CHECK_TIMER = 2 * 60 * 1000; // The first number is the amount of minutes
-    private final int LOCATION_CHECK_TIMER = 45 * 1000; // Will check for updated patient locations every 45 seconds
-    private static final long IDLE_MINUTES = (1); // 12 hours
+    private final int LOCATION_CHECK_TIMER = 10 * 1000; // Will check for updated patient locations every 45 seconds
+    private static final long IDLE_MINUTES = 60 * 12; // 12 hours
+    private GeofencingNotification recentNotification;
     int id = 0;
 
 
@@ -78,7 +82,6 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
             public void run() {
                 handler.postDelayed(this, BATTERY_CHECK_TIMER);
                 checkPatientsBatteryLevel();
-                /* your longer code here */
             }
         }, 0);
 
@@ -88,6 +91,7 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
             public void run() {
                 handler.postDelayed(this, LOCATION_CHECK_TIMER);
                 idleNotification();
+                safeZoneNotification();
             }
         }, 0);
 
@@ -222,6 +226,60 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
 
             }
         });
+    }
+
+    public void safeZoneNotification() {
+        Objects.requireNonNull(app.currentUser()).refreshCustomData(refreshResult -> {
+            if(refreshResult.isSuccess()) {
+                ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
+                for(String userId : patientsList) {
+                    MongoCollection userCollection = databaseManager.getUsersCollection();
+                    userCollection.findOne(new Document("userId", userId)).getAsync(result -> {
+                        if(result.isSuccess()) {
+                            Document pwdData = (Document) result.get();
+                            ArrayList<Document> pwdSafeZoneNotifications = (ArrayList<Document>) pwdData.get("safezoneNotifications");
+
+                            if(pwdSafeZoneNotifications != null) {
+                                GeofencingNotification geofencingNotification = new GeofencingNotification(pwdSafeZoneNotifications.get(pwdSafeZoneNotifications.size() - 1));
+
+                                if(recentNotification != null) {
+                                    if(geofencingNotification.getTimestamp() == recentNotification.getTimestamp()) {
+                                        return;
+                                    }
+                                }
+                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                                    NotificationChannel Channel = new NotificationChannel(SAFEZONE_NOTIFICATION_CHANNEL,"Safe Zone Notifications",NotificationManager.IMPORTANCE_HIGH);
+
+                                    NotificationManager manager = getSystemService(NotificationManager.class);
+                                    manager.createNotificationChannel(Channel);
+
+                                    String transitionType = "";
+                                    switch(geofencingNotification.getTransition()) {
+                                        case Geofence.GEOFENCE_TRANSITION_ENTER:
+                                            transitionType = "entered";
+                                            break;
+
+                                        case Geofence.GEOFENCE_TRANSITION_EXIT:
+                                            transitionType = "exited";
+                                            break;
+
+                                        case Geofence.GEOFENCE_TRANSITION_DWELL:
+                                            transitionType = "dwelled";
+                                            break;
+                                    }
+                                    String title = pwdData.get("firstName") + " " + pwdData.get("lastName") + " has " + transitionType + " " + geofencingNotification.getSafeZoneName() + "!";
+                                    manager.notify(0, buildNotification(CaregiverPwdListActivity.this, SAFEZONE_NOTIFICATION_CHANNEL, title, ""));
+
+                                }
+                                recentNotification = geofencingNotification;
+                            }
+
+                        }
+                    });
+                }
+            }
+        });
+
     }
 
 

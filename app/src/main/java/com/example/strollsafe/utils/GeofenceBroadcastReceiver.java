@@ -6,19 +6,33 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.ContactsContract;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.strollsafe.ui.CaregiverPwdListActivity;
+import com.example.strollsafe.ui.PwdHomeActivity;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingEvent;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Stack;
 
 import androidx.core.app.NotificationCompat;
+
+import org.bson.Document;
+
+import io.realm.mongodb.App;
+import io.realm.mongodb.mongo.MongoCollection;
 
 public class GeofenceBroadcastReceiver extends BroadcastReceiver {
     private final String TAG = "GBR";
@@ -43,12 +57,12 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
             // Get the geofences that were triggered. A single event can trigger
             // multiple geofences.
             List<Geofence> triggeringGeofences = geofencingEvent.getTriggeringGeofences();
+            for(Geofence gf : triggeringGeofences) {
+                sendNotification(context, gf, geofencingEvent.getGeofenceTransition());
 
-            // Get the transition details as a String.
+            }
+
             String geofenceTransitionDetails = getGeofenceTransitionDetails(geofencingEvent);
-
-            // Send notification and log the transition details.
-            //sendNotification(geofenceTransitionDetails);
             Log.i(TAG, geofenceTransitionDetails);
         } else {
             // Log the error.
@@ -78,24 +92,31 @@ public class GeofenceBroadcastReceiver extends BroadcastReceiver {
         return String.format("%s: %s", transitionString, TextUtils.join(", ", triggeringIDs));
     }
 
-//    private void sendNotification(String notificationDetails) {
-//
-//        Intent notificationIntent = new Intent(Intent.ACTION_VIEW);
-//        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-////
-////        NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-////
-////        builder.setColor(Notification.COLOR_DEFAULT)
-////                .setContentTitle(notificationDetails)
-////                .setContentText("Click notification to remove")
-////                .setContentIntent(pendingIntent)
-////                .setDefaults(Notification.DEFAULT_SOUND)
-////                .setSmallIcon(R.mipmap.ic_launcher)
-////                .setVibrate(new long[]{1000, 1000})
-////                .setAutoCancel(true);
-//
-////        NotificationManager notificationManager =
-////                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-////        notificationManager.notify(generateRandom(), builder.build());
-//    }
+    private void sendNotification(Context context, Geofence geofence, int transitionType) {
+        DatabaseManager databaseManager = new DatabaseManager(context);
+        App app = databaseManager.getApp();
+
+        app.currentUser().refreshCustomData(result -> {
+            if (result.isSuccess()) {
+                Document userData = result.get();
+                ArrayList<Document> safeZoneNotification = (ArrayList<Document>) userData.get("safezoneNotifications");
+
+                Document pwdData = new Document("userId", app.currentUser().getId());
+                Document newSafeZoneNotification = new Document().append("name", geofence.getRequestId()).append("transition", transitionType).append("timestamp", System.currentTimeMillis());
+                Document update = new Document("safezoneNotifications", newSafeZoneNotification);
+
+                // Add the new safezone to the pwds safezone array
+                MongoCollection userCollection = databaseManager.getUsersCollection();
+                userCollection.updateOne(pwdData, new Document("$push", update)).getAsync(new App.Callback() {
+
+                    @Override
+                    public void onResult(App.Result result) {
+                        if (result.isSuccess()) {
+                            Log.e(TAG, "upladed safezone notificaito");
+                        }
+                    }
+                });
+            }
+        });
+    }
 }

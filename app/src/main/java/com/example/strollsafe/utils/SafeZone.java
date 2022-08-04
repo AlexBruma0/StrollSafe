@@ -2,6 +2,8 @@ package com.example.strollsafe.utils;
 
 import com.google.android.gms.maps.model.LatLng;
 
+import org.bson.Document;
+
 public class SafeZone {
     private String safeZoneName;
     private double lat;
@@ -27,6 +29,14 @@ public class SafeZone {
         this.lat = latLng.latitude;
         this.lng = latLng.longitude;
         this.radius = radius;
+    }
+
+    public SafeZone(Document document) {
+        this.safeZoneName = (String) document.get("name");
+        this.lat = (double) document.get("lat");
+        this.lng = (double) document.get("lng");
+        this.radius = (double) document.get("radius");;
+        this.latLng = new LatLng(lat, lng);
     }
 
     public double getLat() {

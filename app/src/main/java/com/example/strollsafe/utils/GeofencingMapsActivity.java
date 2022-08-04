@@ -12,6 +12,8 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.Circle;
 import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
@@ -27,10 +29,14 @@ import com.google.gson.stream.JsonWriter;
 
 import android.Manifest;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -78,6 +84,8 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
     private String customSafeZoneName = "";
     private final int CIRCLE_FILL_COLOUR = 0x750000FF;
     private String userId;
+    private PWDLocation lastKnownPwdLocation;
+    private Marker pwdMarker;
 
     // pwd location
     public static final DateTimeFormatter DATE_FORMAT = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
@@ -114,12 +122,14 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
                 setTitle((String) userInfo.get("firstName") + " " + userInfo.get("lastName") + "' Safe Zones");
 
                 ArrayList<Document> safeZones = (ArrayList<Document>) userInfo.get("safezones");
-                PWDLocationList = (ArrayList<Document>) userInfo.get("locations");
                 if(safeZones != null && safeZones.size() > 0) {
                     for(Document safeZone : safeZones) {
                         safeZoneList.add(new SafeZone((String) safeZone.get("name"), (Double) safeZone.get("lat"), (Double) safeZone.get("lng"), (Double) safeZone.get("radius")));
                     }
                 }
+
+                PWDLocationList = (ArrayList<Document>) userInfo.get("locations");
+                lastKnownPwdLocation = new PWDLocation(PWDLocationList.get(PWDLocationList.size() - 1));
 
                 setContentView(R.layout.activity_geofencing_map);
                 Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
@@ -160,11 +170,13 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
                 return true;
 
             case R.id.refreshCurrentLocation:
-                // call refresh on the database for more recent information
+                refreshPwdLocation();
                 break;
 
             case R.id.item_seeLocationList:
-                startActivity(new Intent(GeofencingMapsActivity.this, ShowSavedLocationsList.class));
+                Intent intent = new Intent(GeofencingMapsActivity.this, ShowSavedLocationsList.class);
+                intent.putExtra("userId", userId);
+                startActivity(intent);
                 break;
 
         }
@@ -181,29 +193,52 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
         }
     }
 
+    private void refreshPwdLocation() {
+        userCollection.findOne(new Document("userId", userId)).getAsync(callback -> {
+            if (callback.isSuccess()) {
+                Document userInfo = (Document) callback.get();
+
+                ArrayList<Document> safeZones = (ArrayList<Document>) userInfo.get("safezones");
+                if (safeZones != null && safeZones.size() > 0) {
+                    for (Document safeZone : safeZones) {
+                        safeZoneList.add(new SafeZone((String) safeZone.get("name"), (Double) safeZone.get("lat"), (Double) safeZone.get("lng"), (Double) safeZone.get("radius")));
+                    }
+                }
+
+                PWDLocationList = (ArrayList<Document>) userInfo.get("locations");
+                lastKnownPwdLocation = new PWDLocation(PWDLocationList.get(PWDLocationList.size() - 1));
+                placePwdMarkerOnMap();
+            }
+        });
+    }
+
+    private void placePwdMarkerOnMap() {
+        // Add the pwd location to the map as a marker
+        if (lastKnownPwdLocation != null) {
+            if(pwdMarker != null) {
+                pwdMarker.remove();
+            }
+            LatLng latLng = new LatLng(lastKnownPwdLocation.getLatitude(), lastKnownPwdLocation.getLongitude());
+
+            MarkerOptions markerOptions = new MarkerOptions();
+            markerOptions.position(latLng);
+
+            // show address and last access details when the marker is touched
+            markerOptions.title(lastKnownPwdLocation.getAddress());
+            markerOptions.snippet("Last here on " + lastKnownPwdLocation.getLastHereDateTime().format(DATE_FORMAT));
+            markerOptions.icon(bitmapDescriptorFromVector(this, R.drawable.retirement_home2));
+            // place location as a pin on the map
+            pwdMarker = map.addMarker(markerOptions);
+            map.moveCamera(getBoundsAllSafeZones());
+        }
+    }
+
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
         map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
         map.setOnMyLocationButtonClickListener(this);
         map.setOnMyLocationClickListener(this);
-
-        // convert last location to LatLng
-
-//        PWDLocation location = PWDLocationList.get(PWDLocationList.size() - 1);
-//        if (location != null) {
-//            LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-//
-//            MarkerOptions markerOptions = new MarkerOptions();
-//            markerOptions.position(latLng);
-//
-//            // show address and last access details when the marker is touched
-//            markerOptions.title(location.getAddress());
-//            markerOptions.snippet("Last here on " + location.getLastHereDateTime().format(DATE_FORMAT));
-//            // place location as a pin on the map
-//            map.addMarker(markerOptions);
-//        }
-
         map.setOnCircleClickListener(new GoogleMap.OnCircleClickListener() {
             @SuppressLint("DefaultLocale")
             @Override
@@ -222,13 +257,13 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
                         .setNegativeButton("Delete", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialogInterface, int i) {
-                                userCollection.findOne(new Document("userId", Objects.requireNonNull(app.currentUser()).getId())).getAsync(findResult -> {
+                                userCollection.findOne(new Document("userId", userId)).getAsync(findResult -> {
                                     if (findResult.isSuccess()) {
                                         Document patientUser = (Document) findResult.get();
                                         ArrayList<Document> safezones = (ArrayList<Document>) patientUser.get("safezones");
                                         for(Document safeZone : safezones) {
                                             if(circle.getCenter().latitude == (Double) safeZone.get("lat") && circle.getCenter().longitude == (Double) safeZone.get("lng")) {
-                                                Document pwdData = new Document("userId", Objects.requireNonNull(app.currentUser()).getId());
+                                                Document pwdData = new Document("userId", userId);
                                                 userCollection.updateOne(pwdData, new Document("$pull", new Document("safezones", safeZone))).getAsync(new App.Callback() {
 
                                                     @Override
@@ -283,7 +318,7 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
                         EditText safeZoneRadiusInput = (EditText) dialogView.findViewById(R.id.safezoneRadiusInput);
 
                         // Find our pwds existing safezones
-                        userCollection.findOne(new Document("userId", Objects.requireNonNull(app.currentUser()).getId())).getAsync(findResult -> {
+                        userCollection.findOne(new Document("userId", userId)).getAsync(findResult -> {
                             if(findResult.isSuccess()) {
                                 Document patientUser = (Document) findResult.get();
                                 ArrayList<Document> safezones = (ArrayList<Document>) patientUser.get("safezones");
@@ -296,7 +331,7 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
                                         return;
                                     }
                                 }
-                                Document pwdData = new Document("userId", Objects.requireNonNull(app.currentUser()).getId());
+                                Document pwdData = new Document("userId", userId);
                                 Document newSafeZone = new Document().append("name", safeZoneNameInput.getText().toString()).append("lat", (Double) latLng.latitude).append("lng", (Double) latLng.longitude).append("radius", Double.parseDouble(safeZoneRadiusInput.getText().toString()));
                                 Document update =  new Document("safezones", newSafeZone);
 
@@ -324,13 +359,29 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
             }
         });
 
+        placePwdMarkerOnMap();
         drawSafeZonesAndMarkers();
         enableMyLocation();
 
         CameraUpdate allSafeZonesCamUpdate = getBoundsAllSafeZones();
         if(allSafeZonesCamUpdate != null) {
-            map.moveCamera(allSafeZonesCamUpdate);
+            map.animateCamera(allSafeZonesCamUpdate);
         }
+    }
+
+    /**
+     * from https://stackoverflow.com/questions/42365658/custom-marker-in-google-maps-in-android-with-vector-asset-icon
+     * @param context
+     * @param vectorResId
+     * @return
+     */
+    private BitmapDescriptor bitmapDescriptorFromVector(Context context, int vectorResId) {
+        Drawable vectorDrawable = ContextCompat.getDrawable(context, vectorResId);
+        vectorDrawable.setBounds(0, 0, vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight());
+        Bitmap bitmap = Bitmap.createBitmap(vectorDrawable.getIntrinsicWidth(), vectorDrawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(bitmap);
+        vectorDrawable.draw(canvas);
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
     private SafeZone findSafeZoneFromCircle(Circle circle) {
@@ -353,6 +404,9 @@ public class GeofencingMapsActivity extends AppCompatActivity implements GoogleM
 
     private CameraUpdate getBoundsAllSafeZones() {
         allMarkers = new LatLngBounds.Builder();
+        if(lastKnownPwdLocation != null) {
+            allMarkers.include(new LatLng(lastKnownPwdLocation.getLatitude(), lastKnownPwdLocation.getLongitude()));
+        }
         if(safeZoneList.size() < 1) {
             return null;
         }

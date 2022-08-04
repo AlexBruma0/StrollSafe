@@ -264,7 +264,8 @@ public class DatabaseManager {
                             .append("batteryLife", batteryLife)
                             .append("locations", new ArrayList<>())
                             .append("safezones", new ArrayList<>())
-                            .append("caregivers", new ArrayList<String>()))
+                            .append("caregivers", new ArrayList<String>())
+                            .append("safezoneNotifications", new ArrayList<>()))
                     .getAsync(result -> {
                         if (result.isSuccess()) {
                             Log.d(TAG, String.format("User %s has been added to the database", email));

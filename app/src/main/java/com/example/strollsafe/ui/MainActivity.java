@@ -21,14 +21,16 @@ import io.realm.mongodb.App;
 
 import com.example.strollsafe.R;
 import com.example.strollsafe.utils.DatabaseManager;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GooglePlayServicesUtil;
+import com.google.android.gms.common.api.GoogleApiClient;
+import com.google.android.gms.location.LocationServices;
 
 
 public class MainActivity extends AppCompatActivity {
     // Global variables for the database access
     Realm database;
-    App app;
     private final String appId = "strollsafe-pjbnn";
-    RealmConfiguration config;
     DatabaseManager databaseManager;
 
     private final String TAG = "MainActivity/";
@@ -65,6 +67,34 @@ public class MainActivity extends AppCompatActivity {
         pwdPreferences = getSharedPreferences("PWD", MODE_PRIVATE);
         pwdPreferenceEditor = pwdPreferences.edit();
     }
+
+//    private boolean checkGooglePlayServices(){
+//        int checkGooglePlayServices = GooglePlayServicesUtil
+//                .isGooglePlayServicesAvailable(this);
+//        if (checkGooglePlayServices != ConnectionResult.SUCCESS) {
+//            /*
+//             * Google Play Services is missing or update is required
+//             *  return code could be
+//             * SUCCESS,
+//             * SERVICE_MISSING, SERVICE_VERSION_UPDATE_REQUIRED,
+//             * SERVICE_DISABLED, SERVICE_INVALID.
+//             */
+//            GooglePlayServicesUtil.getErrorDialog(checkGooglePlayServices,
+//                    mContext, REQUEST_CODE_RECOVER_PLAY_SERVICES).show();
+//
+//            return false;
+//        }
+//
+//        return true;
+//    }
+//
+//    protected synchronized void buildGoogleApiClient() {
+//        mGoogleApiClient = new GoogleApiClient.Builder(this)
+//                .addConnectionCallbacks(this)
+//                .addOnConnectionFailedListener(this)
+//                .addApi(LocationServices.API)
+//                .build();
+//    }
 
     @Override
     protected void onRestart() {

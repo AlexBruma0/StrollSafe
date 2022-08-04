@@ -2,6 +2,8 @@ package com.example.strollsafe.pwd;
 
 import android.os.Build;
 
+import org.bson.Document;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 
@@ -47,6 +49,16 @@ public class PWDLocation {
         this.initalDateTime = LocalDateTime.now();
         this.lastHereDateTime = initalDateTime;
     } // end of constructor
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public PWDLocation(Document document) {
+        this.latitude = (double) document.get("latitude");
+        this.longitude = (double) document.get("longitude");
+        this.accuracy = Float.parseFloat(document.get("accuracy").toString());
+        this.address = (String) document.get("address");
+        this.initalDateTime = LocalDateTime.parse((CharSequence) document.get("initialDate"));
+        this.lastHereDateTime = LocalDateTime.parse((CharSequence) document.get("lastHereDate"));
+    }
 
     /**
      * Description: Returns the latitude of the PWD's location in degrees
@@ -129,6 +141,16 @@ public class PWDLocation {
                 "Last Here Date: " + this.lastHereDateTime.toString() + "\n"
                 );
     } // end of toString()
+
+    public Document toDocument() {
+        return new Document()
+                .append("latitude", this.latitude)
+                .append("longitude", this.longitude)
+                .append("accuracy", this.accuracy)
+                .append("address", this.address)
+                .append("initialDate", this.initalDateTime.toString())
+                .append("lastHereDate", this.lastHereDateTime.toString());
+    }
 
 } // end of PWDLocation.java
 

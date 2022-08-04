@@ -100,7 +100,7 @@ public class BackgroundLocationWork extends Worker {
     BroadcastReceiver backgroundLocationBroadcastReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d("Broadcast", "Broadcasted");
+            //Log.d("Broadcast", "Broadcasted");
             progress = intent.getStringExtra("location");
             updateNotification(progress);
         }

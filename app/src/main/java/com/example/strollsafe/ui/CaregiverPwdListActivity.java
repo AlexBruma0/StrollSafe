@@ -16,6 +16,7 @@ import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.example.strollsafe.pwd.PWDLocation;
 import com.example.strollsafe.utils.GeofencingMapsActivity;
 import com.example.strollsafe.R;
 
@@ -34,6 +35,7 @@ import com.example.strollsafe.utils.DatabaseManager;
 
 import org.bson.Document;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -43,8 +45,6 @@ import io.realm.mongodb.mongo.MongoCollection;
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class CaregiverPwdListActivity extends AppCompatActivity {
 
-    private static final long IDLE_MINUTES = (60 * 12); // 12 hours
-
     App app;
     DatabaseManager databaseManager;
     String TAG = "ListOfPWDActivity";
@@ -52,12 +52,13 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
     SharedPreferences.Editor pwdPreferenceEditor;
     ProgressDialog progressDialog;
     private final String BATTERY_NOTIFICATION_CHANNEL = "Battery Notifications";
+    private final String IDLE_NOTIFICATION_CHANNEL = "Idle Device Notifications";
     private final int BATTERY_CHECK_TIMER = 2 * 60 * 1000; // The first number is the amount of minutes
     private final int LOCATION_CHECK_TIMER = 45 * 1000; // Will check for updated patient locations every 45 seconds
+    private static final long IDLE_MINUTES = (1); // 12 hours
     int id = 0;
 
 
-    public NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"Battery Notification");
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -70,26 +71,27 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
         setSupportActionBar(topBar);
 
         final Handler handler = new Handler();
+
+        // check for pwd battery percentage
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                handler.postDelayed(this, BATTERY_CHECK_TIMER); // every 10 seconds
+                handler.postDelayed(this, BATTERY_CHECK_TIMER);
                 checkPatientsBatteryLevel();
                 /* your longer code here */
             }
         }, 0);
 
-        // Timer check for
+        // Check for idle pwds
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                handler.postDelayed(this, LOCATION_CHECK_TIMER); // every 2 minutes
-
+                handler.postDelayed(this, LOCATION_CHECK_TIMER);
+                idleNotification();
             }
         }, 0);
 
         checkPatientsBatteryLevel();
-        idleNotification();
         configureMap1();
         configureMap2();
         configureMap3();
@@ -159,47 +161,66 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
     }
 
     public void idleNotification() {
-
         Objects.requireNonNull(app.currentUser()).refreshCustomData(refreshResult -> {
             if(refreshResult.isSuccess()) {
                 ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
-                String userId = patientsList.get(0);
+                for(String userId : patientsList) {
+                    MongoCollection userCollection = databaseManager.getUsersCollection();
+                    userCollection.findOne(new Document("userId", userId)).getAsync(result -> {
+                        if(result.isSuccess()) {
+                            Document pwdData = (Document) result.get();
+                            ArrayList<Document> pwdLocations = (ArrayList<Document>) pwdData.get("locations");
 
-                /*builder.setSmallIcon(R.drawable.ic_launcher_background);
-        builder.setContentTitle("Battery Notification");
-        builder.setContentText(" has low battery of ");builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        builder.setAutoCancel(true);
+                            if(pwdLocations != null) {
+                                PWDLocation lastLocation = new PWDLocation(pwdLocations.get(pwdLocations.size() - 1));
 
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CaregiverPwdListActivity.this);
-        managerCompat.notify(1, builder.build());
+                                Duration duration = Duration.between(lastLocation.getInitialDateTime(), lastLocation.getLastHereDateTime());
+                                if (duration.toMinutes() >= IDLE_MINUTES) {
+                                    if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                                        NotificationChannel Channel = new NotificationChannel(IDLE_NOTIFICATION_CHANNEL,"Idle Device Notifications",NotificationManager.IMPORTANCE_HIGH);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel Channel = new NotificationChannel("Battery Notification","Battery notification",NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(Channel);
-        }*/
+                                        NotificationManager manager = getSystemService(NotificationManager.class);
+                                        manager.createNotificationChannel(Channel);
 
-                // after IDLE_MINUTES, if the location has not changed, notify user
-//                Duration duration = Duration.between(lastLocation.getInitialDateTime(),
-//                        lastLocation.getLastHereDateTime());
-//                if (duration.toMinutes() == IDLE_MINUTES) {
-//                    NotificationChannel channel = new NotificationChannel("idle_alert",
-//                            "PWD Idle", NotificationManager.IMPORTANCE_DEFAULT);
-//                    NotificationManager manager = context.getSystemService(NotificationManager.class);
-//                    manager.createNotificationChannel(channel);
+                                        manager.notify(0, buildNotification(CaregiverPwdListActivity.this, IDLE_NOTIFICATION_CHANNEL, pwdData.get("firstName") + " " + pwdData.get("lastName") + "'s device is idle", "Please check on your patient"));
+
+                                    }
+
+//                                    NotificationChannel channel = new NotificationChannel("idle_alert",
+//                                            "PWD Idle", NotificationManager.IMPORTANCE_DEFAULT);
+//                                    NotificationManager manager = context.getSystemService(NotificationManager.class);
+//                                    manager.createNotificationChannel(channel);
 //
-//                    NotificationCompat.Builder builder = new NotificationCompat.Builder(
-//                            context, "idle_alert");
-//                    builder.setSmallIcon(R.drawable.ic_launcher_background);
-//                    builder.setContentTitle("PWD Idle Alert");
-//                    builder.setContentText("PWD has been idle for " + IDLE_MINUTES + " minutes!");
+//                                    NotificationCompat.Builder builder = new NotificationCompat.Builder(
+//                                            context, "idle_alert");
+//                                    builder.setSmallIcon(R.drawable.ic_launcher_background);
+//                                    builder.setContentTitle("PWD Idle Alert");
+//                                    builder.setContentText("PWD has been idle for " + IDLE_MINUTES + " minutes!");
 //
-//                    notification = builder.build();
-//                    notificationManagerCompat = NotificationManagerCompat.from(context);
-//                    notificationManagerCompat.notify("idle_alert", 1, notification);
+//                                    notification = builder.build();
+//                                    notificationManagerCompat = NotificationManagerCompat.from(context);
+//                                    notificationManagerCompat.notify("idle_alert", 1, notification);
+                                }
+                            }
+
+                        }
+                    });
+                }
+//                String userId = patientsList.get(0);
+//
+//
+//                NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CaregiverPwdListActivity.this);
+//                managerCompat.notify(1, builder.build());
+//
+//                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+//                    NotificationChannel Channel = new NotificationChannel("Battery Notification","Battery notification",NotificationManager.IMPORTANCE_DEFAULT);
+//                    NotificationManager manager = getSystemService(NotificationManager.class);
+//                    manager.createNotificationChannel(Channel);
 //                }
-            }
 
+                 //after IDLE_MINUTES, if the location has not changed, notify user
+
+            }
         });
     }
 

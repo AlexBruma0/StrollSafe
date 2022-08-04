@@ -50,6 +50,16 @@ public class PWDLocation {
         this.lastHereDateTime = initalDateTime;
     } // end of constructor
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public PWDLocation(Document document) {
+        this.latitude = (double) document.get("latitude");
+        this.longitude = (double) document.get("longitude");
+        this.accuracy = Float.parseFloat(document.get("accuracy").toString());
+        this.address = (String) document.get("address");
+        this.initalDateTime = LocalDateTime.parse((CharSequence) document.get("initialDate"));
+        this.lastHereDateTime = LocalDateTime.parse((CharSequence) document.get("lastHereDate"));
+    }
+
     /**
      * Description: Returns the latitude of the PWD's location in degrees
      *

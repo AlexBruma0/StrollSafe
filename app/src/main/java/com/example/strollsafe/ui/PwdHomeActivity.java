@@ -93,23 +93,25 @@ public class PwdHomeActivity extends AppCompatActivity{
     }
 
     public void updatePWDBattery() {
-        app.currentUser().refreshCustomData(refreshResult -> {
-            if(refreshResult.isSuccess()) {
-                MongoCollection userCollection = databaseManager.getUsersCollection();
-                Document pwdData = new Document("userId", app.currentUser().getId());
-                Document update =  new Document("batteryLife", batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
-                userCollection.updateOne(pwdData, new Document("$set", update)).getAsync(new App.Callback() {
-                    @Override
-                    public void onResult(App.Result result) {
-                        if(result.isSuccess()) {
-                            Toast.makeText(PwdHomeActivity.this, "Battery % has been updated.", Toast.LENGTH_SHORT).show();
-                        } else {
-                            Toast.makeText(PwdHomeActivity.this, "Battery % could not be updated.", Toast.LENGTH_LONG).show();
+        if(app.currentUser() != null) {
+            app.currentUser().refreshCustomData(refreshResult -> {
+                if(refreshResult.isSuccess()) {
+                    MongoCollection userCollection = databaseManager.getUsersCollection();
+                    Document pwdData = new Document("userId", app.currentUser().getId());
+                    Document update =  new Document("batteryLife", batteryManager.getIntProperty(BatteryManager.BATTERY_PROPERTY_CAPACITY));
+                    userCollection.updateOne(pwdData, new Document("$set", update)).getAsync(new App.Callback() {
+                        @Override
+                        public void onResult(App.Result result) {
+                            if(result.isSuccess()) {
+                                Toast.makeText(PwdHomeActivity.this, "Battery % has been updated.", Toast.LENGTH_SHORT).show();
+                            } else {
+                                Toast.makeText(PwdHomeActivity.this, "Battery % could not be updated.", Toast.LENGTH_LONG).show();
+                            }
                         }
-                    }
-                });
-            }
-        });
+                    });
+                }
+            });
+        }
     }
 
 
@@ -137,6 +139,7 @@ public class PwdHomeActivity extends AppCompatActivity{
                 pwdPreferenceEditor.remove("password");
                 pwdPreferenceEditor.remove("id");
                 databaseManager.logoutOfRealm();
+                startActivity(new Intent(PwdHomeActivity.this, MainActivity.class));
                 finish();
             }
         });

@@ -80,7 +80,7 @@ public class LocationManager {
     private App app;
 
     public static final int DEFAULT_UPDATE_INTERVAL = 10; // seconds
-    public static final int FAST_UPDATE_INTERVAL = 1; // seconds
+    public static final int FAST_UPDATE_INTERVAL = 5; // seconds
 
     private FusedLocationProviderClient fusedLocationProviderClient;
     private static int REQUEST_CHECK_SETTINGS = 200;
@@ -156,6 +156,7 @@ public class LocationManager {
                 }
             }
         };
+        createLocationRequest();
     }
 
 

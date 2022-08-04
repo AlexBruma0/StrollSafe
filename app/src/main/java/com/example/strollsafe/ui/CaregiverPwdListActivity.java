@@ -40,7 +40,7 @@ import java.util.Objects;
 import io.realm.mongodb.App;
 import io.realm.mongodb.mongo.MongoCollection;
 
-
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class CaregiverPwdListActivity extends AppCompatActivity {
 
     private static final long IDLE_MINUTES = (60 * 12); // 12 hours

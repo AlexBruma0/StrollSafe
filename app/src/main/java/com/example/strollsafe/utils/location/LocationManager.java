@@ -124,58 +124,36 @@ public class LocationManager {
         locationCallback = new LocationCallback() {
             @Override
             public void onLocationResult(@NonNull LocationResult locationResult) {
-            for (Location location : locationResult.getLocations()) {
-                if (location != null) {
-                    String address;
-                    Geocoder geocoder = new Geocoder(context);
-                    try {
-                        List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
-                                location.getLongitude(), 1);
-                        address = addresses.get(0).getAddressLine(0);
-                    } catch (Exception e) {
-                        address = ("Unable to get street address");
-                    }
-
-                    if (PWDLocationList.size() > 0 &&
-                            address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
-                            !address.equals("Unable to get street address")) {
-                        PWDLocation lastLocation = PWDLocationList.get(PWDLocationList.size() - 1);
-                        lastLocation.setLastHereDateTime(LocalDateTime.now());
-
-                        // after IDLE_MINUTES, if the location has not changed, notify user
-                        Duration duration = Duration.between(lastLocation.getInitialDateTime(),
-                                lastLocation.getLastHereDateTime());
-                        if (duration.toMinutes() == IDLE_MINUTES) {
-                            NotificationChannel channel = new NotificationChannel("idle_alert",
-                                    "PWD Idle", NotificationManager.IMPORTANCE_DEFAULT);
-                            NotificationManager manager = context.getSystemService(NotificationManager.class);
-                            manager.createNotificationChannel(channel);
-
-                            NotificationCompat.Builder builder = new NotificationCompat.Builder(
-                                    context, "idle_alert");
-                            builder.setSmallIcon(R.drawable.ic_launcher_background);
-                            builder.setContentTitle("PWD Idle Alert");
-                            builder.setContentText("PWD has been idle for " + IDLE_MINUTES + " minutes!");
-
-                            notification = builder.build();
-                            notificationManagerCompat = NotificationManagerCompat.from(context);
-                            notificationManagerCompat.notify("idle_alert", 1, notification);
+                for (Location location : locationResult.getLocations()) {
+                    if (location != null) {
+                        String address;
+                        Geocoder geocoder = new Geocoder(context);
+                        try {
+                            List<Address> addresses = geocoder.getFromLocation(location.getLatitude(),
+                                    location.getLongitude(), 1);
+                            address = addresses.get(0).getAddressLine(0);
+                        } catch (Exception e) {
+                            address = ("Unable to get street address");
                         }
-                    } else {
-                        PWDLocation newLocation = new PWDLocation(location.getLatitude(),
-                                location.getLongitude(), location.getAccuracy(), address);
-                        if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
-                            PWDLocationList.remove(0);
-                        }
-                        PWDLocationList.add(newLocation);
-                    }
-                    Log.i("Location", "Location updated");
-                    instance.saveData();
-                    LocalBroadcastManager.getInstance(context).sendBroadcast(backgroundLocationIntent);
 
+                        if (PWDLocationList.size() > 0 &&
+                                address.equals(PWDLocationList.get(PWDLocationList.size() - 1).getAddress()) &&
+                                !address.equals("Unable to get street address")) {
+                            PWDLocation lastLocation = PWDLocationList.get(PWDLocationList.size() - 1);
+                            lastLocation.setLastHereDateTime(LocalDateTime.now());
+                        } else {
+                            PWDLocation newLocation = new PWDLocation(location.getLatitude(),
+                                    location.getLongitude(), location.getAccuracy(), address);
+                            if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
+                                PWDLocationList.remove(0);
+                            }
+                            PWDLocationList.add(newLocation);
+                        }
+                        Log.i("Location", "Location updated");
+                        instance.saveData();
+                        LocalBroadcastManager.getInstance(context).sendBroadcast(backgroundLocationIntent);
+                    }
                 }
-                createLocationRequest();
-            }
             }
         };
     }

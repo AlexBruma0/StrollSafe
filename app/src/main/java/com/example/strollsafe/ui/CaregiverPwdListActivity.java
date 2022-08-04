@@ -5,12 +5,12 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -34,7 +34,6 @@ import com.example.strollsafe.utils.DatabaseManager;
 
 import org.bson.Document;
 
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -52,6 +51,10 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
     SharedPreferences pwdPreferences;
     SharedPreferences.Editor pwdPreferenceEditor;
     ProgressDialog progressDialog;
+    private final String BATTERY_NOTIFICATION_CHANNEL = "Battery Notifications";
+    private final int BATTERY_CHECK_TIMER = 2 * 60 * 1000; // The first number is the amount of minutes
+    private final int LOCATION_CHECK_TIMER = 45 * 1000; // Will check for updated patient locations every 45 seconds
+    int id = 0;
 
 
     public NotificationCompat.Builder builder = new NotificationCompat.Builder(this,"Battery Notification");
@@ -63,33 +66,29 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
         databaseManager = new DatabaseManager(this);
         app = databaseManager.getApp();
         setContentView(R.layout.activity_listofpwd);
-        Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar topBar = findViewById(R.id.toolbar);
         setSupportActionBar(topBar);
 
         final Handler handler = new Handler();
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                handler.postDelayed(this, 10 * 1000); // every 2 minutes
-                batteryNotification();
+                handler.postDelayed(this, BATTERY_CHECK_TIMER); // every 10 seconds
+                checkPatientsBatteryLevel();
                 /* your longer code here */
             }
         }, 0);
 
-        /*builder.setSmallIcon(R.drawable.ic_launcher_background);
-        builder.setContentTitle("Battery Notification");
-        builder.setContentText(" has low battery of ");builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        builder.setAutoCancel(true);
+        // Timer check for
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handler.postDelayed(this, LOCATION_CHECK_TIMER); // every 2 minutes
 
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CaregiverPwdListActivity.this);
-        managerCompat.notify(1, builder.build());
+            }
+        }, 0);
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel Channel = new NotificationChannel("Battery Notification","Battery notification",NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(Channel);
-        }*/
-        batteryNotification();
+        checkPatientsBatteryLevel();
         idleNotification();
         configureMap1();
         configureMap2();
@@ -107,7 +106,7 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
         return true;
     }
 
-    public void batteryNotification() {
+    public void checkPatientsBatteryLevel() {
         app.currentUser().refreshCustomData(refreshResult -> {
             if(refreshResult.isSuccess()) {
                 ArrayList<String> linkedPwds = (ArrayList<String>) refreshResult.get().get("patients");
@@ -120,39 +119,43 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
                             if(result.isSuccess()) {
                                 Document pwdInfo = (Document) result.get();
                                 int batLevel = (int) pwdInfo.get("batteryLife");
-                                String batteryMessage = "";
-                                if(batLevel < 25 && batLevel > 20) {
-                                    batteryMessage = "Battery is getting low!";
-                                } else if(batLevel <= 20 && batLevel >= 10) {
-                                    batteryMessage = "Battery is LOW!";
-                                } else if(batLevel <= 10 && batLevel >= 5) {
-                                    batteryMessage = "Battery is getting critically low!";
-                                } else if(batLevel <= 5) {
-                                    batteryMessage = "Battery is critically low!";
-                                }
-
+                                String notificationTitle = pwdInfo.get("firstName") + "'s device has a low battery!";
                                 if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-                                    NotificationChannel Channel = new NotificationChannel("Battery Notification","Battery notification",NotificationManager.IMPORTANCE_DEFAULT);
+                                    NotificationChannel Channel = new NotificationChannel(BATTERY_NOTIFICATION_CHANNEL,"Battery Notifications",NotificationManager.IMPORTANCE_HIGH);
+
                                     NotificationManager manager = getSystemService(NotificationManager.class);
                                     manager.createNotificationChannel(Channel);
                                 }
 
-                                builder.setSmallIcon(R.drawable.ic_launcher_background);
-                                builder.setContentTitle(pwdInfo.get("firstName") + "'s device has a low battery!");
-                                builder.setContentText(batteryMessage);
-                                builder.setPriority(NotificationCompat.PRIORITY_HIGH);
-                                builder.setDefaults(Notification.DEFAULT_ALL);
-                                builder.setAutoCancel(true);
-
-                                NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CaregiverPwdListActivity.this);
-                                managerCompat.notify(1, builder.build());
-
+                                NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                                if(batLevel < 25 && batLevel > 20) {
+                                    notificationManager.notify(0, buildNotification(CaregiverPwdListActivity.this, BATTERY_NOTIFICATION_CHANNEL, notificationTitle, "Battery is getting low!"));
+                                } else if(batLevel <= 20 && batLevel >= 10) {
+                                    notificationManager.notify(1, buildNotification(CaregiverPwdListActivity.this, BATTERY_NOTIFICATION_CHANNEL, notificationTitle, "Battery is LOW!"));
+                                } else if(batLevel <= 10 && batLevel >= 5) {
+                                    notificationManager.notify(2, buildNotification(CaregiverPwdListActivity.this, BATTERY_NOTIFICATION_CHANNEL, notificationTitle, "Battery is getting critically low!"));
+                                } else if(batLevel <= 5) {
+                                    notificationManager.notify(3, buildNotification(CaregiverPwdListActivity.this, BATTERY_NOTIFICATION_CHANNEL, notificationTitle, "Battery is critically low!"));
+                                }
+                                id++;
                             }
                         }
                     });
                 }
             }
         });
+    }
+
+    private Notification buildNotification(Context context, String channelId, String title, String content) {
+        Notification builder = new NotificationCompat.Builder(context, channelId)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle(title)
+                .setContentText(content)
+                .setDefaults(Notification.DEFAULT_ALL)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)   // heads-up
+                .setAutoCancel(false)
+                .build();
+        return builder;
     }
 
     public void idleNotification() {
@@ -162,6 +165,19 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
                 ArrayList<String> patientsList = (ArrayList<String>) app.currentUser().getCustomData().get("patients");
                 String userId = patientsList.get(0);
 
+                /*builder.setSmallIcon(R.drawable.ic_launcher_background);
+        builder.setContentTitle("Battery Notification");
+        builder.setContentText(" has low battery of ");builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+        builder.setAutoCancel(true);
+
+        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CaregiverPwdListActivity.this);
+        managerCompat.notify(1, builder.build());
+
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+            NotificationChannel Channel = new NotificationChannel("Battery Notification","Battery notification",NotificationManager.IMPORTANCE_DEFAULT);
+            NotificationManager manager = getSystemService(NotificationManager.class);
+            manager.createNotificationChannel(Channel);
+        }*/
 
                 // after IDLE_MINUTES, if the location has not changed, notify user
 //                Duration duration = Duration.between(lastLocation.getInitialDateTime(),

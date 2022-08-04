@@ -141,7 +141,7 @@ public class LocationManager {
                                 !address.equals("Unable to get street address")) {
                             PWDLocation lastLocation = PWDLocationList.get(PWDLocationList.size() - 1);
                             lastLocation.setLastHereDateTime(LocalDateTime.now());
-                         } else {
+                        } else {
                             PWDLocation newLocation = new PWDLocation(location.getLatitude(),
                                     location.getLongitude(), location.getAccuracy(), address);
                             if (PWDLocationList.size() >= MAX_SAVED_LOCATIONS) {
@@ -152,9 +152,7 @@ public class LocationManager {
                         Log.i("Location", "Location updated");
                         instance.saveData();
                         LocalBroadcastManager.getInstance(context).sendBroadcast(backgroundLocationIntent);
-
                     }
-                    createLocationRequest();
                 }
             }
         };
@@ -176,7 +174,7 @@ public class LocationManager {
         task.addOnSuccessListener( new OnSuccessListener<LocationSettingsResponse>() {
             @Override
             public void onSuccess(LocationSettingsResponse response) {
-
+                response.toString();
             }
         });
 

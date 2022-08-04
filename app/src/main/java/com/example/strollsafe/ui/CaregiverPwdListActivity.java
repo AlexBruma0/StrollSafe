@@ -1,11 +1,13 @@
 package com.example.strollsafe.ui;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 
+import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.ProgressDialog;
@@ -17,6 +19,7 @@ import android.os.Bundle;
 import com.example.strollsafe.utils.GeofencingMapsActivity;
 import com.example.strollsafe.R;
 
+import android.os.Handler;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,7 +41,7 @@ import java.util.Objects;
 import io.realm.mongodb.App;
 import io.realm.mongodb.mongo.MongoCollection;
 
-
+@RequiresApi(api = Build.VERSION_CODES.O)
 public class CaregiverPwdListActivity extends AppCompatActivity {
 
     private static final long IDLE_MINUTES = (60 * 12); // 12 hours
@@ -62,6 +65,16 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
         setContentView(R.layout.activity_listofpwd);
         Toolbar topBar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(topBar);
+
+        final Handler handler = new Handler();
+        handler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                handler.postDelayed(this, 10 * 1000); // every 2 minutes
+                batteryNotification();
+                /* your longer code here */
+            }
+        }, 0);
 
         /*builder.setSmallIcon(R.drawable.ic_launcher_background);
         builder.setContentTitle("Battery Notification");
@@ -95,33 +108,51 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
     }
 
     public void batteryNotification() {
-        /*EditText editText = (EditText) findViewById(R.id.pwdListEmailEntry);
-        String code = editText.getText().toString();
-        MongoCollection userCollection = databaseManager.getUsersCollection();
-        userCollection.findOne(new Document("email",code)).getAsync(new App.Callback() {
-            @Override
-            public void onResult(App.Result result) {
-                Document pwdInfo = (Document) result.get();
-                if (pwdInfo == null) {
-                    dismissProgressDialog();
-                    Toast.makeText(CaregiverPwdListActivity.this, "PWD can not be found.", Toast.LENGTH_SHORT).show();
-                    return;
-                }*/
-                //if(Integer.parseInt(pwdInfo.get("batteryLife").toString())<=15){
-        builder.setSmallIcon(R.drawable.ic_launcher_background);
-        builder.setContentTitle("Battery Notification");
-        builder.setContentText( " has low battery of ");
-        builder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        builder.setAutoCancel(true);
+        app.currentUser().refreshCustomData(refreshResult -> {
+            if(refreshResult.isSuccess()) {
+                ArrayList<String> linkedPwds = (ArrayList<String>) refreshResult.get().get("patients");
+                MongoCollection userCollection = databaseManager.getUsersCollection();
 
-        NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CaregiverPwdListActivity.this);
-        managerCompat.notify(1, builder.build());
+                for(String userId : linkedPwds) {
+                    userCollection.findOne(new Document("userId", userId)).getAsync(new App.Callback() {
+                        @Override
+                        public void onResult(App.Result result) {
+                            if(result.isSuccess()) {
+                                Document pwdInfo = (Document) result.get();
+                                int batLevel = (int) pwdInfo.get("batteryLife");
+                                String batteryMessage = "";
+                                if(batLevel < 25 && batLevel > 20) {
+                                    batteryMessage = "Battery is getting low!";
+                                } else if(batLevel <= 20 && batLevel >= 10) {
+                                    batteryMessage = "Battery is LOW!";
+                                } else if(batLevel <= 10 && batLevel >= 5) {
+                                    batteryMessage = "Battery is getting critically low!";
+                                } else if(batLevel <= 5) {
+                                    batteryMessage = "Battery is critically low!";
+                                }
 
-        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
-            NotificationChannel Channel = new NotificationChannel("Battery Notification","Battery notification",NotificationManager.IMPORTANCE_DEFAULT);
-            NotificationManager manager = getSystemService(NotificationManager.class);
-            manager.createNotificationChannel(Channel);
-        }
+                                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O){
+                                    NotificationChannel Channel = new NotificationChannel("Battery Notification","Battery notification",NotificationManager.IMPORTANCE_DEFAULT);
+                                    NotificationManager manager = getSystemService(NotificationManager.class);
+                                    manager.createNotificationChannel(Channel);
+                                }
+
+                                builder.setSmallIcon(R.drawable.ic_launcher_background);
+                                builder.setContentTitle(pwdInfo.get("firstName") + "'s device has a low battery!");
+                                builder.setContentText(batteryMessage);
+                                builder.setPriority(NotificationCompat.PRIORITY_HIGH);
+                                builder.setDefaults(Notification.DEFAULT_ALL);
+                                builder.setAutoCancel(true);
+
+                                NotificationManagerCompat managerCompat = NotificationManagerCompat.from(CaregiverPwdListActivity.this);
+                                managerCompat.notify(1, builder.build());
+
+                            }
+                        }
+                    });
+                }
+            }
+        });
     }
 
     public void idleNotification() {
@@ -172,6 +203,7 @@ public class CaregiverPwdListActivity extends AppCompatActivity {
     public void configureMap1(){
         ImageButton PWD = (ImageButton) findViewById(R.id.Map1);
         PWD.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View view) {
                 startProgressDialog("Opening Safe Zone Manager...", false);
